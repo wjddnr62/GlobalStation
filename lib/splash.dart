@@ -8,6 +8,7 @@ void main() {
 
   runApp(new MaterialApp(
     debugShowCheckedModeBanner: false,
+    title: "LMS Splash Page",
     home: new SplashScreen(),
     routes: <String, WidgetBuilder>{
       '/Login': (BuildContext context) => Login()
@@ -35,26 +36,28 @@ class _SplashScreenState extends State<SplashScreen> {
     startTime();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    return new MaterialApp(
-        title: 'LMS Splash Page',
-        debugShowCheckedModeBanner: false,
-        home: new Material(
-          child: SafeArea(
-            child: new Container(
-              child: new Center(
-                child: new Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      new Container(
-                        child: Text("Splash View"),
-                      )
-                    ]),
-              ),
+  Widget body() {
+    return Scaffold(
+      backgroundColor: Color(0xFFFFFFFF),
+      body: new Container(
+        child: new Container(
+          child: new Center(
+            child: new Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  new Container(
+                    child: Image.asset('assets/splash/icon_splash.png',),
+                  )
+                ]
             ),
           ),
-        ));
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return body();
   }
 }
