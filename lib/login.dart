@@ -6,14 +6,6 @@ import 'package:lms_flutter/main.dart';
 void main() {
 //  SystemChrome.setEnabledSystemUIOverlays([]);
 
-  runApp(new MaterialApp(
-    debugShowCheckedModeBanner: false,
-    title: 'LMS Login Page',
-    home: new Login(),
-    routes: <String, WidgetBuilder>{
-      '/Main': (BuildContext context) => Main(),
-    },
-  ));
 }
 
 class Login extends StatefulWidget {
@@ -40,8 +32,9 @@ class _LoginState extends State<Login> {
       gravity: ToastGravity.BOTTOM,
       timeInSecForIos: 1,
     );
-    Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => Main()),);
+//    Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => Main()),);
 //    Navigator.of(context).pushReplacementNamed('/Main');
+  Navigator.of(context).pushNamed('/Main');
   }
 
   Widget body() {

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:lms_flutter/login.dart';
+import 'package:lms_flutter/main.dart';
 
 void main() {
 //  SystemChrome.setEnabledSystemUIOverlays([]);
@@ -11,7 +12,8 @@ void main() {
     title: "LMS Splash Page",
     home: new SplashScreen(),
     routes: <String, WidgetBuilder>{
-      '/Login': (BuildContext context) => Login()
+      '/Login': (BuildContext context) => Login(),
+      '/Main': (BuildContext context) => Main(),
     },
   ));
 }

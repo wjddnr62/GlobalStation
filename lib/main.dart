@@ -3,12 +3,6 @@ import 'package:flutter/services.dart';
 
 void main() {
   SystemChrome.setEnabledSystemUIOverlays([]);
-
-  runApp(new MaterialApp(
-    debugShowCheckedModeBanner: false,
-    title: "LMS Main Page",
-    home: new Main(),
-  ));
 }
 
 class Main extends StatefulWidget {
@@ -24,26 +18,28 @@ class _MainState extends State<Main> {
   var level_end = "2018/01/01";
   bool attendance = false;
   var attendance_today_check = false;
+  var mainContext = null;
+  var tabclick = false;
 
   Future<bool> _backdialog() {
     return showDialog(
-        context: context,
-        builder: (context) =>
-        new AlertDialog(
-            title: new Text("로그아웃 알림"),
-            content: new Text("로그아웃 하시겠습니까?"),
-            actions: <Widget>[
-              new FlatButton(
-                  onPressed: () {
-                    Navigator.of(context).pop(true);
-                  },
-                  child: new Text("로그아웃")),
-              new FlatButton(
-                  onPressed: () {
-                    Navigator.of(context).pop(false);
-                  },
-                  child: new Text("취소"))
-            ])) ??
+            context: context,
+            builder: (context) => new AlertDialog(
+                    title: new Text("로그아웃 알림"),
+                    content: new Text("로그아웃 하시겠습니까?"),
+                    actions: <Widget>[
+                      new FlatButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            Navigator.of(context).pop();
+                          },
+                          child: new Text("로그아웃")),
+                      new FlatButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: new Text("취소"))
+                    ])) ??
         false;
   }
 
@@ -53,10 +49,7 @@ class _MainState extends State<Main> {
         print("MyPage");
       },
       child: Container(
-        width: MediaQuery
-            .of(context)
-            .size
-            .width / 1.5,
+        width: MediaQuery.of(context).size.width / 1.5,
         padding: EdgeInsets.symmetric(vertical: 8.0),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20.0),
@@ -71,10 +64,7 @@ class _MainState extends State<Main> {
                 children: <Widget>[
                   Padding(
                     padding: EdgeInsets.only(
-                        left: MediaQuery
-                            .of(context)
-                            .size
-                            .width / 5),
+                        left: MediaQuery.of(context).size.width / 5),
                     child: Text(
                       "마이 페이지",
                       style: TextStyle(
@@ -106,10 +96,7 @@ class _MainState extends State<Main> {
         print("Coin");
       },
       child: Container(
-        width: MediaQuery
-            .of(context)
-            .size
-            .width / 1.5,
+        width: MediaQuery.of(context).size.width / 1.5,
         padding: EdgeInsets.symmetric(vertical: 3.0),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20.0),
@@ -150,10 +137,7 @@ class _MainState extends State<Main> {
 
   Widget drawer_level() {
     return Container(
-      width: MediaQuery
-          .of(context)
-          .size
-          .width / 1.5,
+      width: MediaQuery.of(context).size.width / 1.5,
       padding: EdgeInsets.symmetric(vertical: 8.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20.0),
@@ -184,66 +168,108 @@ class _MainState extends State<Main> {
           }
         });
       },
-      child: attendance ? Container(
-        width: MediaQuery
-            .of(context)
-            .size
-            .width / 1.5,
-        padding: EdgeInsets.symmetric(vertical: 3.0),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20.0),
-          border: Border.all(color: Colors.transparent),
-          color: Color(0xFF2aa787),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              "출석 체크 완료",
-              style: TextStyle(
+      child: attendance
+          ? Container(
+              width: MediaQuery.of(context).size.width / 1.5,
+              padding: EdgeInsets.symmetric(vertical: 3.0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20.0),
+                border: Border.all(color: Colors.transparent),
+                color: Color(0xFF2aa787),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    "출석 체크 완료",
+                    style: TextStyle(
+                      color: Color(0xFFffffff),
+                      fontSize: 20,
+                    ),
+                  ),
+                  Icon(
+                    Icons.check,
+                    color: Colors.white,
+                    size: 35.0,
+                  ),
+                ],
+              ),
+            )
+          : Container(
+              width: MediaQuery.of(context).size.width / 1.5,
+              padding: EdgeInsets.symmetric(vertical: 8.0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20.0),
+                border: Border.all(color: Color(0xFFe6e6e6)),
                 color: Color(0xFFffffff),
-                fontSize: 20,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    "출석 체크",
+                    style: TextStyle(
+                      color: Color(0xFF000000),
+                      fontSize: 20,
+                    ),
+                  ),
+                ],
               ),
             ),
-            Icon(Icons.check, color: Colors.white, size: 35.0,),
-          ],
-        ),
-      ) : Container(
-        width: MediaQuery
-            .of(context)
-            .size
-            .width / 1.5,
-        padding: EdgeInsets.symmetric(vertical: 8.0),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20.0),
-          border: Border.all(color: Color(0xFFe6e6e6)),
-          color: Color(0xFFffffff),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              "출석 체크",
-              style: TextStyle(
-                color: Color(0xFF000000),
-                fontSize: 20,
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 
+  Widget attendance_check () {
+    return attendance
+        ? attendance_today_check
+        ? Padding(
+        padding: EdgeInsets.only(top: 10.0),
+        child: Text(
+          "이미 출석 체크를 하였습니다.",
+          style: TextStyle(
+              fontSize: 15, color: Color(0xFF000000)),
+        ))
+        : Padding(
+      padding: EdgeInsets.only(top: 10.0),
+      child: Container(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              "출석 체크가 완료 되었습니다!",
+              style: TextStyle(
+                  fontSize: 15, color: Color(0xFF2aa787)),
+            ),
+            Text(
+              "+10 Coin",
+              style: TextStyle(
+                  fontSize: 15, color: Color(0xFF2aa787)),
+            )
+          ],
+        ),
+      ),
+    )
+        : Text(".", style: TextStyle(fontSize: 0),);
+  }
+  
   //main 1 body drawer
   Widget drawer() {
     return Drawer(
       child: Padding(
         padding: EdgeInsets.only(top: 70.0),
         child: Container(
-          width: MediaQuery.of(context).size.width,
           child: Column(
             children: <Widget>[
+              Padding(
+                padding: EdgeInsets.only(left: MediaQuery.of(context).size.width / 1.5),
+                child: GestureDetector (
+                  onTap: (){ 
+                    Navigator.pop(context);
+                  },
+                  child: Icon(Icons.close),
+                ),
+              ),
               Text(
                 "Name",
                 style: TextStyle(
@@ -284,25 +310,16 @@ class _MainState extends State<Main> {
                 padding: EdgeInsets.only(top: 10.0),
                 child: drawer_attendance_check(),
               ),
-              attendance ? attendance_today_check ? Padding(
-                  padding: EdgeInsets.only(top: 10.0),
-                  child: Text("이미 출석 체크를 하였습니다.", style: TextStyle(fontSize: 15, color: Color(0xFF000000)),)
-              ) : Padding(
-                padding: EdgeInsets.only(top: 10.0),
-                child: Container(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Text("출석 체크가 완료 되었습니다!",
-                        style: TextStyle(fontSize: 15, color: Color(0xFF2aa787)),)
-                      ,
-                      Text("+10 Coin",
-                        style: TextStyle(fontSize: 15, color: Color(0xFF2aa787)),)
-                    ],
-                  ),
+              attendance_check(),
+              Padding(
+                padding: EdgeInsets.only(top: 20.0),
+                child: GestureDetector(
+                  onTap: () {
+                    print("Book Box");
+                  },
+                  child:  Text("Book Box", style: TextStyle(fontSize: 15, color: Colors.black),),
                 ),
-              ) : Text("")
+              ),
             ],
           ),
         ),
@@ -326,17 +343,17 @@ class _MainState extends State<Main> {
       actions: <Widget>[
         Center(
             child: Padding(
-              padding: EdgeInsets.only(right: 10.0),
-              child: GestureDetector(
-                onTap: () {
-                  _backdialog();
-                },
-                child: Text(
-                  "로그아웃",
-                  style: TextStyle(fontSize: 12, color: Colors.black),
-                ),
-              ),
-            ))
+          padding: EdgeInsets.only(right: 10.0),
+          child: GestureDetector(
+            onTap: () {
+              _backdialog();
+            },
+            child: Text(
+              "로그아웃",
+              style: TextStyle(fontSize: 12, color: Colors.black),
+            ),
+          ),
+        ))
       ],
     );
   }
@@ -349,10 +366,7 @@ class _MainState extends State<Main> {
       child: Padding(
         padding: EdgeInsets.only(bottom: 10.0),
         child: Container(
-          width: MediaQuery
-              .of(context)
-              .size
-              .width,
+          width: MediaQuery.of(context).size.width,
           padding: EdgeInsets.symmetric(vertical: 20.0),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10.0),
@@ -388,10 +402,7 @@ class _MainState extends State<Main> {
         child: Padding(
           padding: EdgeInsets.only(right: 5.0),
           child: Container(
-            width: MediaQuery
-                .of(context)
-                .size
-                .width / 2 - 15,
+            width: MediaQuery.of(context).size.width / 2 - 15,
             padding: EdgeInsets.symmetric(vertical: 20.0),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10.0),
@@ -426,10 +437,7 @@ class _MainState extends State<Main> {
         child: Padding(
           padding: EdgeInsets.only(left: 5.0),
           child: Container(
-            width: MediaQuery
-                .of(context)
-                .size
-                .width / 2 - 15,
+            width: MediaQuery.of(context).size.width / 2 - 15,
             padding: EdgeInsets.symmetric(vertical: 20.0),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10.0),
@@ -464,10 +472,7 @@ class _MainState extends State<Main> {
       child: Padding(
         padding: EdgeInsets.only(top: 10.0),
         child: Container(
-          width: MediaQuery
-              .of(context)
-              .size
-              .width,
+          width: MediaQuery.of(context).size.width,
           padding: EdgeInsets.symmetric(vertical: 30.0),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10.0),
@@ -541,6 +546,7 @@ class _MainState extends State<Main> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
+    mainContext = context;
     return body();
   }
 }
