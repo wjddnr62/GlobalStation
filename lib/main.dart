@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lms_flutter/api_call.dart';
+import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
@@ -20,7 +21,7 @@ class _MainState extends State<Main> {
   var member_name = "";
   var member_id = "";
   var member_coin = 0;
-  var member_level = "";
+  var member_level = 0;
   var level_start = "2018/01/01";
   var level_end = "2018/01/01";
   bool attendance = false;
@@ -28,25 +29,77 @@ class _MainState extends State<Main> {
   var mainContext = null;
   var tabclick = false;
   List<User> users;
+  List<DetailUser> detailUser;
+  List<String> level_list = new List();
   bool users_check = false;
+  bool drawer_check = false;
+  final _idController = TextEditingController();
+  final _nameController = TextEditingController();
 
-  toListData() {
+  GlobalKey<ScaffoldState> _key = new GlobalKey<ScaffoldState>();
+
+
+
+  @override
+  void initState() {
+    toDataSet();
+  }
+
+  toDataSet() {
+    level_list.add("Phonics 1");
+    level_list.add("Phonics 2");
+    level_list.add("Phonics 3");
+    level_list.add("Bronze 1");
+    level_list.add("Bronze 2");
+    level_list.add("Bronze 3");
+    level_list.add("Silver 1");
+    level_list.add("Silver 2");
+    level_list.add("Silver 3");
+    level_list.add("Gold 1");
+    level_list.add("Gold 2");
+    level_list.add("Gold 3");
+    level_list.add("Diamond 1");
+    level_list.add("Diamond 2");
+    level_list.add("Diamond 3");
+
     users = json.decode(widget.userData)['data'].map<User>((json) => User.fromJson(json)).toList();
-    print(users.length);
+
     if (users.length == 1) {
       users_check = false;
     } else if (users.length == 2) {
       users_check = true;
     }
+
+    member_id = users[0].user_id;
+    member_name = users[0].child_name;
+    print(widget.userData);
+//    var result = await Api_Call().fetchDetailUser(http.Client(), json.decode(widget.userData)['data'][0]['child_key']);
+//    print(result);
+//    detailUser = json.decode(result).map<DetailUser>((json) => DetailUser.fromJson(json)).toList();
+
+    Api_Call().fetchDetailUser(http.Client(), json.decode(widget.userData)['data'][0]['child_key']).then((result){
+      setState(() {
+        member_coin = json.decode(result)['data']['coin'];
+        print(level_list[json.decode(result)['data']['level']]);
+        member_level = json.decode(result)['data']['level'] - 1;
+      });
+    });
+
+
+//      member_level = level_list[json.decode(result)['data']['level']];
+    print(member_level);
   }
 
-  getData(String wantData) {
-    if (wantData == "id") {
-      return json.decode(widget.userData)['data'][0]['user_id'];
-    } else if (wantData == "email") {
-      return json.decode(widget.userData)['data'][0]['child_name'];
-    }
-  }
+
+
+//  getData(String wantData) {
+//    if (wantData == "id") {
+//      return json.decode(widget.userData)['data'][0]['user_id'];
+//    } else if (wantData == "email") {
+//      return json.decode(widget.userData)['data'][0]['child_name'];
+//    }
+//  }
+
 
   Future<bool> _backdialog() {
     return showDialog(
@@ -57,9 +110,8 @@ class _MainState extends State<Main> {
                     actions: <Widget>[
                       new FlatButton(
                           onPressed: () {
-                            print(Navigator.canPop(context));
-                            Navigator.of(context).pop();
-                            Navigator.of(context).pop();
+                            Navigator.of(context).pushNamedAndRemoveUntil('/Login', (Route<dynamic> route)=> false);
+//
                           },
                           child: new Text("로그아웃")),
                       new FlatButton(
@@ -177,7 +229,7 @@ class _MainState extends State<Main> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Text(
-            "Phonics 1",
+            level_list[member_level],
             style: TextStyle(
               color: Color(0xFF000000),
               fontSize: 20,
@@ -350,7 +402,7 @@ class _MainState extends State<Main> {
                 ),
               ),
               Text(
-                getData("id"),
+                member_id,
                 style: TextStyle(
                   fontSize: 25,
                   fontStyle: FontStyle.normal,
@@ -359,7 +411,7 @@ class _MainState extends State<Main> {
               Padding(
                 padding: EdgeInsets.only(top: 2.0),
                 child: Text(
-                  getData("email"),
+                  member_name,
                   style: TextStyle(
                     fontSize: 20,
                     color: Color(0xFF969696),
@@ -373,7 +425,7 @@ class _MainState extends State<Main> {
               )
                   : new Container(),
               Padding(
-                padding: EdgeInsets.only(top: 15.0),
+                padding: EdgeInsets.only(top: 10.0),
                 child: drawer_mypage(),
               ),
               Padding(
@@ -651,10 +703,25 @@ class _MainState extends State<Main> {
   // main 1 body
   Widget body() {
     return WillPopScope(
-      onWillPop: _backdialog,
+      onWillPop: () {
+//        if (_key.currentState.isDrawerOpen == false) {
+//          drawer_check = false;
+//        } else {
+//          drawer_check = true;
+//        }
+//        print(321321);
+//        print(_key.currentState.isDrawerOpen);
+//        print(212121);
+//        print(_key.currentState.isEndDrawerOpen);
+//        print(515151);
+//        print(drawer_check);
+//        drawer_check ? Navigator.of(context).pop() : _backdialog();
+      _backdialog();
+      },
       child: Scaffold(
         backgroundColor: Color(0xFFFFFFFF),
         appBar: appBar(),
+        key: _key,
         //드로어 들어가기전 회원 정보 체크 후 생성
         drawer: SizedBox(
           width: double.infinity,
@@ -671,7 +738,7 @@ class _MainState extends State<Main> {
   Widget build(BuildContext context) {
     // TODO: implement build
     mainContext = context;
-    toListData();
+
 //    print(widget.users);
     return body();
   }

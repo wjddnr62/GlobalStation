@@ -33,7 +33,6 @@ class _LoginState extends State<Login> {
     });
   }
 
-
   Widget body(buildContext) {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
@@ -61,7 +60,7 @@ class _LoginState extends State<Login> {
                         child: new TextFormField(
                           controller: _idController,
                           decoration: new InputDecoration(
-                            labelText: "아이디",
+                            hintText: "아이디",
                             labelStyle: TextStyle(color: Color(0xFF969696)),
                             fillColor: Colors.white,
                             filled: true,
@@ -93,7 +92,7 @@ class _LoginState extends State<Login> {
                         child: new TextFormField(
                           controller: _passController,
                           decoration: new InputDecoration(
-                            labelText: "비밀번호",
+                            hintText: "비밀번호",
                             labelStyle: TextStyle(color: Color(0xFF969696)),
                             fillColor: Colors.white,
                             filled: true,
@@ -139,17 +138,10 @@ class _LoginState extends State<Login> {
                                     http.Client(),
                                     _idController.text,
                                     _passController.text);
-                                print(23131);
-                                print(result);
                                 if (json.decode(result)['result'] == 0) {
-                                  print("test" +
-                                      json
-                                          .decode(result)['resultCode']
-                                          .toString());
                                   if (json
                                       .decode(result)['resultCode']
                                       .contains("user_not_found")) {
-                                    print("test");
                                     Fluttertoast.showToast(
                                         msg: "아이디 또는 비밀번호가 틀립니다.",
                                         toastLength: Toast.LENGTH_SHORT,
@@ -163,11 +155,12 @@ class _LoginState extends State<Login> {
                                         gravity: ToastGravity.BOTTOM);
                                   }
                                 } else if (json.decode(result)['result'] == 1) {
-                                  print(result.length);
-//                                  Navigator.of(context)
-//                                      .pushReplacementNamed('/Main');
-                                Navigator.push(mainContext, MaterialPageRoute(builder: (context) => Main(result) ));
-
+                                  _idController.text = "";
+                                  _passController.text = "";
+                                  Navigator.push(
+                                      mainContext,
+                                      MaterialPageRoute(
+                                          builder: (context) => Main(result)));
                                 }
                               }
                             },
@@ -176,60 +169,6 @@ class _LoginState extends State<Login> {
                             color: Color(0xFFFFFFFF),
                             child: new Text("로그인"),
                           )),
-//                      _isLogin
-//                          ? StreamBuilder<String>(
-//                              stream: Stream.fromFuture(Api_Call().fetchUser(http.Client(),
-//                                  _idController.text, _passController.text, context)),
-//                              builder: (context, snapshot) {
-//                                if (snapshot.hasData) {
-//                                  _isLogin = false;
-//                                  if (json.decode(snapshot.data)['result'] ==
-//                                      0) {
-//                                    print("test" +
-//                                        json
-//                                            .decode(snapshot.data)['resultCode']
-//                                            .toString());
-//                                    if (json
-//                                        .decode(snapshot.data)['resultCode']
-//                                        .contains("user_not_found")) {
-//                                      print("test");
-//                                      Fluttertoast.showToast(
-//                                          msg: "아이디 또는 비밀번호가 틀립니다.",
-//                                          toastLength: Toast.LENGTH_SHORT,
-//                                          gravity: ToastGravity.BOTTOM);
-//                                    } else if (json
-//                                        .decode(snapshot.data)['resultCode']
-//                                        .contains("unknown")) {
-//                                      Fluttertoast.showToast(
-//                                          msg: "잠시 후 다시시도해주세요.",
-//                                          toastLength: Toast.LENGTH_SHORT,
-//                                          gravity: ToastGravity.BOTTOM);
-//                                    }
-//                                  } else if (json
-//                                          .decode(snapshot.data)['result'] ==
-//                                      1) {
-//                                    print(snapshot.data.length);
-//                                    setState(() {
-//                                      _nextPage = !_nextPage;
-//                                    });
-//
-////                                    nextView();
-////                                    Future.
-////                                      Navigator.pushReplacementNamed(context, '/Main');
-////                                  Navigator.pushReplacementNamed(context, '/Main'););
-////                                    List<User> users = json.decode(snapshot.data)['data'].map<User>((json) => User.fromJson(json)).toList();
-////                                    Navigator.of(context).pushReplacementNamed('/Main', arguments: json.decode(snapshot.data));
-////                                      Navigator.push(context, MaterialPageRoute(builder: (context) => Main(json.decode(snapshot.data))));
-//                                  }
-//                                } else if (snapshot.hasError) {
-//                                  _isLogin = false;
-//                                  print("error : " + snapshot.error);
-//                                }
-//
-//                                return Center(child : CircularProgressIndicator());
-//                              },
-//                            )
-//                          : new Container(),
                     ],
                   ),
                 ),
