@@ -13,7 +13,7 @@ void main() {
     home: new SplashScreen(),
     routes: <String, WidgetBuilder>{
       '/Login': (BuildContext context) => Login(),
-      '/Main': (BuildContext context) => Main(),
+//      '/Main': (BuildContext context) => Main(),
     },
   ));
 }

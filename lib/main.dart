@@ -1,11 +1,18 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:lms_flutter/api_call.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   SystemChrome.setEnabledSystemUIOverlays([]);
 }
 
 class Main extends StatefulWidget {
+  final String userData;
+  Main(this.userData);
+
   _MainState createState() => new _MainState();
 }
 
@@ -20,6 +27,26 @@ class _MainState extends State<Main> {
   var attendance_today_check = false;
   var mainContext = null;
   var tabclick = false;
+  List<User> users;
+  bool users_check = false;
+
+  toListData() {
+    users = json.decode(widget.userData)['data'].map<User>((json) => User.fromJson(json)).toList();
+    print(users.length);
+    if (users.length == 1) {
+      users_check = false;
+    } else if (users.length == 2) {
+      users_check = true;
+    }
+  }
+
+  getData(String wantData) {
+    if (wantData == "id") {
+      return json.decode(widget.userData)['data'][0]['user_id'];
+    } else if (wantData == "email") {
+      return json.decode(widget.userData)['data'][0]['child_name'];
+    }
+  }
 
   Future<bool> _backdialog() {
     return showDialog(
@@ -30,12 +57,14 @@ class _MainState extends State<Main> {
                     actions: <Widget>[
                       new FlatButton(
                           onPressed: () {
+                            print(Navigator.canPop(context));
                             Navigator.of(context).pop();
                             Navigator.of(context).pop();
                           },
                           child: new Text("로그아웃")),
                       new FlatButton(
                           onPressed: () {
+                            print(Navigator.canPop(context));
                             Navigator.of(context).pop();
                           },
                           child: new Text("취소"))
@@ -219,40 +248,89 @@ class _MainState extends State<Main> {
     );
   }
 
-  Widget attendance_check () {
+  Widget attendance_check() {
     return attendance
         ? attendance_today_check
-        ? Padding(
-        padding: EdgeInsets.only(top: 10.0),
-        child: Text(
-          "이미 출석 체크를 하였습니다.",
-          style: TextStyle(
-              fontSize: 15, color: Color(0xFF000000)),
-        ))
-        : Padding(
-      padding: EdgeInsets.only(top: 10.0),
+            ? Padding(
+                padding: EdgeInsets.only(top: 10.0),
+                child: Text(
+                  "이미 출석 체크를 하였습니다.",
+                  style: TextStyle(fontSize: 15, color: Color(0xFF000000)),
+                ))
+            : Padding(
+                padding: EdgeInsets.only(top: 10.0),
+                child: Container(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        "출석 체크가 완료 되었습니다!",
+                        style:
+                            TextStyle(fontSize: 15, color: Color(0xFF2aa787)),
+                      ),
+                      Text(
+                        "+10 Coin",
+                        style:
+                            TextStyle(fontSize: 15, color: Color(0xFF2aa787)),
+                      )
+                    ],
+                  ),
+                ),
+              )
+        : Text(
+            ".",
+            style: TextStyle(fontSize: 0),
+          );
+  }
+
+  Widget Children_User_Change () {
+    return GestureDetector(
+      onTap: () {
+        print("children_user_change");
+      },
       child: Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
+        width: MediaQuery.of(context).size.width / 1.5,
+        padding: EdgeInsets.symmetric(vertical: 8.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20.0),
+          border: Border.all(color: Color(0xFFe6e6e6)),
+          color: Color(0xFFf6f6f6),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Text(
-              "출석 체크가 완료 되었습니다!",
-              style: TextStyle(
-                  fontSize: 15, color: Color(0xFF2aa787)),
+            Container(
+              child: Row(
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.only(
+                        left: MediaQuery.of(context).size.width / 5),
+                    child: Text(
+                      "계정 선택",
+                      style: TextStyle(
+                        color: Color(0xFF8a8a8a),
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-            Text(
-              "+10 Coin",
-              style: TextStyle(
-                  fontSize: 15, color: Color(0xFF2aa787)),
-            )
+            Padding(
+              padding: EdgeInsets.only(right: 5.0),
+              child: Icon(
+                Icons.chevron_right,
+                color: Color(0xFF8a8a8a),
+                size: 20,
+              ),
+            ),
           ],
         ),
       ),
-    )
-        : Text(".", style: TextStyle(fontSize: 0),);
+    );
   }
-  
+
   //main 1 body drawer
   Widget drawer() {
     return Drawer(
@@ -262,16 +340,17 @@ class _MainState extends State<Main> {
           child: Column(
             children: <Widget>[
               Padding(
-                padding: EdgeInsets.only(left: MediaQuery.of(context).size.width / 1.5),
-                child: GestureDetector (
-                  onTap: (){ 
+                padding: EdgeInsets.only(
+                    left: MediaQuery.of(context).size.width / 1.5),
+                child: GestureDetector(
+                  onTap: () {
                     Navigator.pop(context);
                   },
                   child: Icon(Icons.close),
                 ),
               ),
               Text(
-                "Name",
+                getData("id"),
                 style: TextStyle(
                   fontSize: 25,
                   fontStyle: FontStyle.normal,
@@ -280,13 +359,19 @@ class _MainState extends State<Main> {
               Padding(
                 padding: EdgeInsets.only(top: 2.0),
                 child: Text(
-                  "ID",
+                  getData("email"),
                   style: TextStyle(
                     fontSize: 20,
                     color: Color(0xFF969696),
                   ),
                 ),
               ),
+              users_check ?
+              Padding(
+                padding: EdgeInsets.only(top: 15.0),
+                child: Children_User_Change(),
+              )
+                  : new Container(),
               Padding(
                 padding: EdgeInsets.only(top: 15.0),
                 child: drawer_mypage(),
@@ -317,7 +402,46 @@ class _MainState extends State<Main> {
                   onTap: () {
                     print("Book Box");
                   },
-                  child:  Text("Book Box", style: TextStyle(fontSize: 15, color: Colors.black),),
+                  child: Text(
+                    "Book Box",
+                    style: TextStyle(fontSize: 15, color: Colors.black),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 20.0),
+                child: GestureDetector(
+                  onTap: () {
+                    print("Master Box");
+                  },
+                  child: Text(
+                    "Master Box",
+                    style: TextStyle(fontSize: 15, color: Colors.black),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 20.0),
+                child: GestureDetector(
+                  onTap: () {
+                    print("Mystery Box");
+                  },
+                  child: Text(
+                    "Mystery Box",
+                    style: TextStyle(fontSize: 15, color: Colors.black),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 20.0),
+                child: GestureDetector(
+                  onTap: () {
+                    print("Game Box");
+                  },
+                  child: Text(
+                    "Game Box",
+                    style: TextStyle(fontSize: 15, color: Colors.black),
+                  ),
                 ),
               ),
             ],
@@ -547,6 +671,8 @@ class _MainState extends State<Main> {
   Widget build(BuildContext context) {
     // TODO: implement build
     mainContext = context;
+    toListData();
+//    print(widget.users);
     return body();
   }
 }
