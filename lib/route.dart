@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'UI/login.dart';
-
-
 import 'UI/gamebox/gmabox_main.dart';
+import 'UI/bookbox/bookbox_main.dart';
 
 final routes = {
   '/Login': (BuildContext context) => Login(),
@@ -11,5 +10,9 @@ final routes = {
 
   //-------------GameBox----------------
   '/GameBox' : (BuildContext context) => GameBox(),
+
+
+  //-------------BookBox----------------
+  '/BookBox' : (BuildContext context) => BookBox(),
 
 };

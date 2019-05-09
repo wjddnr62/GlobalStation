@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:lms_flutter/api_call.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:lms_flutter/model/user.dart';
 
 //
 //void main() {
@@ -453,6 +454,7 @@ class _MainState extends State<Main> {
                 child: GestureDetector(
                   onTap: () {
                     print("Book Box");
+                    Navigator.of(context).pushNamed('/BookBox');
                   },
                   child: Text(
                     "Book Box",
@@ -539,6 +541,7 @@ class _MainState extends State<Main> {
     return GestureDetector(
       onTap: () {
         print("Book Box");
+        Navigator.of(context).pushNamed('/BookBox');
       },
       child: Padding(
         padding: EdgeInsets.only(bottom: 10.0),

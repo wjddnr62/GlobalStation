@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
-import 'package:lms_flutter/api_call.dart';
 import 'package:lms_flutter/UI/main.dart';
+import 'package:lms_flutter/model/user.dart';
+import 'package:lms_flutter/api_call.dart';
+import 'package:lms_flutter/model/UserInfo.dart';
+import 'package:lms_flutter/model/user.dart';
 import '../bloc/login_bloc.dart';
 
 class Login extends StatefulWidget {
@@ -14,11 +17,26 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
 
-  void ttt(){
+  UserInfo userInfo = UserInfo();
+
+  void login(){
     bloc.submit().then((value){
-
+      print("value : " + value);
+      List<User> userData = json.decode(value)['data'].map<User>((json) => User.fromJson(json)).toList();
+      if (userData.length == 1) {
+        userInfo.child_key = userData[0].child_key;
+        userInfo.child_name = userData[0].child_name;
+        userInfo.child_user_id = userData[0].child_user_id;
+        userInfo.user_id = userData[0].user_id;
+      } else if (userData.length == 2) {
+        userInfo.userData = userData.cast<User>();
+        userInfo.child_key = userData[0].child_key;
+        userInfo.child_name = userData[0].child_name;
+        userInfo.child_user_id = userData[0].child_user_id;
+        userInfo.user_id = userData[0].user_id;
+      }
     }).catchError((error){
-
+      print("error : " + error);
     });
   }
 
@@ -145,6 +163,10 @@ class _LoginState extends State<Login> {
                                     toastLength: Toast.LENGTH_SHORT,
                                     gravity: ToastGravity.BOTTOM);
                               } else {
+                                bloc.changeId(_idController.text);
+                                bloc.changePw(_passController.text);
+                                login();
+
                                 var result = await Api_Call().fetchUser(
                                     http.Client(),
                                     _idController.text,
