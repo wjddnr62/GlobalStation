@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'UI/login.dart';
 
 
-import 'UI/gamebox/gmabox_main.dart';
+import 'UI/gamebox/gamebox_main.dart';
+import 'UI/gamebox/lobby.dart';
 
 final routes = {
   '/Login': (BuildContext context) => Login(),
@@ -11,5 +12,5 @@ final routes = {
 
   //-------------GameBox----------------
   '/GameBox' : (BuildContext context) => GameBox(),
-
+  '/Lobby' : (BuildContext context) => LobbyPage(),
 };

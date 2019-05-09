@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
 class GameBox extends StatelessWidget {
-
-
   Widget body(size) {
     return Container(
       width: size.width,
@@ -14,15 +12,20 @@ class GameBox extends StatelessWidget {
     );
   }
 
-  Widget btn(size) {
+  Widget btn(size,context) {
     return Container(
       width: size.width,
       child: Center(
-        child: Image.asset(
-          "assets/gamebox/img/main/main_button.png",
-          width: 100,
-          height: 100,
-          fit: BoxFit.scaleDown,
+        child: InkWell(
+          onTap: (){
+            Navigator.of(context).pushNamed('/Lobby');
+          },
+          child: Image.asset(
+            "assets/gamebox/img/main/main_button.png",
+            width: 100,
+            height: 100,
+            fit: BoxFit.scaleDown,
+          ),
         ),
       ),
     );
@@ -32,12 +35,12 @@ class GameBox extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      body:  Stack(
+      body: Stack(
         children: <Widget>[
           body(size),
           Positioned(
             bottom: 20,
-            child: btn(size),
+            child: btn(size,context),
           ),
         ],
       ),
