@@ -5,13 +5,25 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:lms_flutter/api_call.dart';
-import 'package:lms_flutter/main.dart';
+import 'package:lms_flutter/UI/main.dart';
+import '../bloc/login_bloc.dart';
 
 class Login extends StatefulWidget {
   _LoginState createState() => new _LoginState();
 }
 
 class _LoginState extends State<Login> {
+  final _bloc = LoginBloc();
+
+  void ttt(){
+    _bloc.submit().then((value){
+
+    }).catchError((error){
+
+    });
+  }
+
+
   bool _obscureText = true;
   bool _isLogin = false;
 
