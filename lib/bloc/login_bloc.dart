@@ -4,7 +4,6 @@ import 'package:http/http.dart' as http;
 
 class LoginBloc{
   final _repository = Repository();
-  final bloc = LoginBloc();
 
   final _id = BehaviorSubject<String>();
   final _pw = BehaviorSubject<String>();
@@ -18,8 +17,12 @@ class LoginBloc{
   Future<String> submit(){
     return _repository.fetchUser(http.Client(), _id.value, _pw.value);
   }
-
-
+  void dispose(){
+    _id.close();
+    _pw.close();
+  }
 }
+
+final bloc = LoginBloc();
 
 

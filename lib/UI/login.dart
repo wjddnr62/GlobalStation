@@ -13,10 +13,9 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  final _bloc = LoginBloc();
 
   void ttt(){
-    _bloc.submit().then((value){
+    bloc.submit().then((value){
 
     }).catchError((error){
 

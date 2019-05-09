@@ -6,9 +6,10 @@ import 'package:lms_flutter/api_call.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
-  SystemChrome.setEnabledSystemUIOverlays([]);
-}
+//
+//void main() {
+//  SystemChrome.setEnabledSystemUIOverlays([]);
+//}
 
 class Main extends StatefulWidget {
   final String userData;
@@ -488,6 +489,7 @@ class _MainState extends State<Main> {
                 child: GestureDetector(
                   onTap: () {
                     print("Game Box");
+                    Navigator.of(context).pushNamed('/GameBox');
                   },
                   child: Text(
                     "Game Box",
@@ -643,6 +645,7 @@ class _MainState extends State<Main> {
     return GestureDetector(
       onTap: () {
         print("Game Box");
+        Navigator.of(context).pushNamed('/GameBox');
       },
       child: Padding(
         padding: EdgeInsets.only(top: 10.0),
