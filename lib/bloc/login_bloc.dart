@@ -9,6 +9,7 @@ class LoginBloc{
   final _pw = BehaviorSubject<String>();
 
   Observable<String> get id => _id.stream;
+  Observable<String> get pw => _pw.stream;
 
   Function(String) get changeId => _id.sink.add;
 
@@ -17,6 +18,7 @@ class LoginBloc{
   Future<String> submit(){
     return _repository.fetchUser(http.Client(), _id.value, _pw.value);
   }
+
   void dispose(){
     _id.close();
     _pw.close();

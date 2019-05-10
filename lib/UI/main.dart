@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lms_flutter/api_call.dart';
 import 'package:http/http.dart' as http;
+import 'package:lms_flutter/model/UserInfo.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:lms_flutter/model/user.dart';
+import '../bloc/member_bloc.dart';
 
 //
 //void main() {
@@ -37,8 +40,10 @@ class _MainState extends State<Main> {
   final _idController = TextEditingController();
   final _nameController = TextEditingController();
 
+
   GlobalKey<ScaffoldState> _key = new GlobalKey<ScaffoldState>();
 
+  UserInfo userInfo = UserInfo();
 
   @override
   void initState() {
@@ -62,6 +67,8 @@ class _MainState extends State<Main> {
     level_list.add("Diamond 2");
     level_list.add("Diamond 3");
 
+    userInfo.levelList = level_list;
+
     users = json.decode(widget.userData)['data'].map<User>((json) => User.fromJson(json)).toList();
 
     if (users.length == 1) {
@@ -80,7 +87,7 @@ class _MainState extends State<Main> {
     Api_Call().fetchDetailUser(http.Client(), json.decode(widget.userData)['data'][0]['child_key']).then((result){
       setState(() {
         member_coin = json.decode(result)['data']['coin'];
-        print(level_list[json.decode(result)['data']['level']]);
+        print(level_list[json.decode(result)['data']['level'] - 1]);
         member_level = json.decode(result)['data']['level'] - 1;
       });
     });
@@ -88,6 +95,13 @@ class _MainState extends State<Main> {
 
 //      member_level = level_list[json.decode(result)['data']['level']];
     print(member_level);
+
+    bloc.changeuserno(userInfo.child_key);
+    bloc.getMember().then((value) {
+      print("memberValue : " + value);
+      userInfo.member_coin = json.decode(value)['data']['coin'];
+      userInfo.member_level = json.decode(value)['data']['level'] - 1;
+    });
   }
 
 
@@ -453,6 +467,7 @@ class _MainState extends State<Main> {
                 child: GestureDetector(
                   onTap: () {
                     print("Book Box");
+                    Navigator.of(context).pushNamed('/BookBox');
                   },
                   child: Text(
                     "Book Box",
@@ -539,6 +554,7 @@ class _MainState extends State<Main> {
     return GestureDetector(
       onTap: () {
         print("Book Box");
+        Navigator.of(context).pushNamed('/BookBox');
       },
       child: Padding(
         padding: EdgeInsets.only(bottom: 10.0),

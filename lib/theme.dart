@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+
 //---size-----------------------------
 final defaultFontSize = 16.0;
 //------------------------------------
@@ -31,6 +32,12 @@ final quizTitleTextStyle = TextStyle(
   fontSize: defaultFontSize + 8, color: black, fontWeight: FontWeight.bold
 );
 
+//color
+final WhiteColor = Color(0xFFFFFFFF);
+final bookboxmainColor = Color(0xFFFB6969);
+final backgroudDefaultColor = Color(0xFFF6F6F6);
+final lineColor = Color(0xFFDDDDDD);
+final greenColor = Color(0xFF2AA787);
 //------------------------------------
 
 //---boxDecoration--------------------

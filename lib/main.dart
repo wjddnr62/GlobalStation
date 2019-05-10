@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:lms_flutter/UI/login.dart';
 import 'package:lms_flutter/UI/main.dart';
-import 'package:lms_flutter/route.dart' as prefix0;
 import 'route.dart';
 void main() {
 //  SystemChrome.setEnabledSystemUIOverlays([]);
