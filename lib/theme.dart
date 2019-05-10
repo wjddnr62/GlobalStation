@@ -10,6 +10,11 @@ final white = Colors.white;
 final dialogBoxColor = Color.fromARGB(255, 253, 209, 64);
 final dialogBoxShadow = Color.fromARGB(255, 225, 148, 53);
 final dialogBackground = Color.fromARGB(255, 214, 233, 234);
+final quizPhonicsColor = Color.fromARGB(255, 254, 227, 77);
+final quizBronzeColor = Color.fromARGB(255, 247, 81, 86);
+final quizSilverColor = Color.fromARGB(255, 44, 173, 151);
+final quizGoldColor = Color.fromARGB(255, 51, 143, 208);
+final quizDiamondColor = Color.fromARGB(255, 117, 65, 180);
 
 //------------------------------------
 
@@ -17,6 +22,14 @@ final dialogBackground = Color.fromARGB(255, 214, 233, 234);
 final defaultTextStyle = TextStyle(fontSize: defaultFontSize, color: black);
 final dialogTextStyle = TextStyle(
     fontSize: defaultFontSize, color: black, fontWeight: FontWeight.bold); // + 주아체
+final questionTextStyle = TextStyle(
+  fontSize: defaultFontSize, color: black,fontWeight: FontWeight.w500);
+final titleTextStyle = TextStyle(
+  fontSize: defaultFontSize - 2, color: black,fontWeight: FontWeight.bold
+);
+final quizTitleTextStyle = TextStyle(
+  fontSize: defaultFontSize + 8, color: black, fontWeight: FontWeight.bold
+);
 
 //------------------------------------
 
@@ -30,4 +43,29 @@ final dialogContainerDeco = BoxDecoration(
         offset: Offset(0.0, 10.0),
       )
     ]);
+
+final quizPhonicsBoxContainer = BoxDecoration(
+  color: quizPhonicsColor,
+  borderRadius: BorderRadius.circular(5.0),
+);
+
+final quizBronzeBoxContainer = BoxDecoration(
+  color: quizBronzeColor,
+  borderRadius: BorderRadius.circular(5.0),
+);
+
+final quizSilverBoxContainer = BoxDecoration(
+  color: quizSilverColor,
+  borderRadius: BorderRadius.circular(5.0),
+);
+
+final quizGoldBoxContainer = BoxDecoration(
+  color: quizGoldColor,
+  borderRadius: BorderRadius.circular(5.0),
+);
+
+final quizDiamondBoxContainer = BoxDecoration(
+  color: quizDiamondColor,
+  borderRadius: BorderRadius.circular(5.0),
+);
 //------------------------------------

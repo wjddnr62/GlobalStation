@@ -1,7 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lms_flutter/theme.dart';
+
 import 'Game/Speed/phonics.dart';
+import 'Game/Speed/bronze.dart';
+import 'Game/Speed/silver.dart';
+import 'Game/Speed/gold.dart';
+import 'Game/Speed/diamond.dart';
+
+import 'Game/Quiz/Phonics/phonics.dart';
+import 'Game/Quiz/Bronze//bronze.dart';
+import 'Game/Quiz/Silver/silver.dart';
+import 'Game/Quiz/Gold/gold.dart';
+import 'Game/Quiz/Diamond/diamond.dart';
+
+import 'Game/Matching/Phonics/phonics.dart';
 
 class GameDialog extends StatefulWidget {
   @override
@@ -11,6 +24,8 @@ class GameDialog extends StatefulWidget {
 class GameDialogState extends State<GameDialog> {
   String dialogType = "";
   String selectGame = "";
+
+  bool startGame = false;
 
   @override
   void initState() {
@@ -22,8 +37,38 @@ class GameDialogState extends State<GameDialog> {
 
   @override
   Widget build(BuildContext context) {
+    if (startGame) {
+      if (selectGame == "S") {
+        return Scaffold(
+            backgroundColor: Colors.black.withOpacity(0.5),
+            body: SafeArea(
+              child: Padding(
+                child: SpeedDiamond(),
+                padding: const EdgeInsets.all(10),
+              ),
+            ));
+      } else if (selectGame == "Q") {
+        return Scaffold(
+            backgroundColor: Colors.black.withOpacity(0.5),
+            body: SafeArea(
+              child: Padding(
+                child: QuizDiamond(),
+                padding: const EdgeInsets.all(10),
+              ),
+            ));
+      } else if (selectGame == "M") {
+        return Scaffold(
+            backgroundColor: Colors.black.withOpacity(0.5),
+            body: SafeArea(
+              child: Padding(
+                child: MatchPhonics(),
+                padding: const EdgeInsets.all(10),
+              ),
+            ));
+      }
+    }
     return Scaffold(
-        backgroundColor: Colors.black.withOpacity(0.85),
+        backgroundColor: Colors.black.withOpacity(0.5),
         body: dialogType == "K"
             ? SafeArea(
                 child: Padding(
@@ -157,7 +202,14 @@ class GameDialogState extends State<GameDialog> {
                     child: Container(
                       width: double.infinity,
                       height: 150,
-                      child: dialogView("STAGE " + (idx + 1).toString()),
+                      child: InkWell(
+                        onTap: () {
+                          setState(() {
+                            startGame = true;
+                          });
+                        },
+                        child: dialogView("STAGE " + (idx + 1).toString()),
+                      ),
                     ),
                   );
                 },
