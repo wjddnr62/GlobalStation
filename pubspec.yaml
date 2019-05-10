@@ -67,6 +67,7 @@ flutter:
     - assets/gamebox/img/main/
     - assets/gamebox/img/lobby/
     - assets/gamebox/img/speed/
+    - assets/level/
 
 
   #  - images/a_dot_burr.jpeg

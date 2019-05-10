@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:lms_flutter/bloc/book_bloc.dart';
 import 'package:lms_flutter/model/UserInfo.dart';
+import 'package:lms_flutter/model/book.dart';
 import 'package:lms_flutter/theme.dart';
 
 class BookBox extends StatefulWidget {
@@ -40,6 +44,31 @@ class _BookBoxState extends State<BookBox> {
   List<String> level_list = new List();
   AppBar appBar_height;
   TabBar tabBar_height;
+  List<Book> sb_book = new List();
+  List<Book> wb_book = new List();
+
+  bool setBook = false;
+  bool getBook = false;
+
+  List<String> levelIcons = [
+    'assets/level/phonics_1.png',
+    'assets/level/phonics_2.png',
+    'assets/level/phonics_3.png',
+    'assets/level/bronze_1.png',
+    'assets/level/bronze_2.png',
+    'assets/level/bronze_3.png',
+    'assets/level/silver_1.png',
+    'assets/level/silver_2.png',
+    'assets/level/silver_3.png',
+    'assets/level/gold_1.png',
+    'assets/level/gold_2.png',
+    'assets/level/gold_3.png',
+    'assets/level/diamond_1.png',
+    'assets/level/diamond_2.png',
+    'assets/level/diamond_3.png',
+  ];
+
+  var levelIcon;
 
   @override
   void initState() {
@@ -47,15 +76,50 @@ class _BookBoxState extends State<BookBox> {
     user_name = userInfo.child_name;
     user_level = userInfo.member_level;
     level_list = userInfo.levelList;
-    print("check_user : " +
-        userInfo.user_id +
-        ", " +
-        userInfo.child_user_id +
-        ", " +
-        userInfo.child_name +
-        ", " +
-        userInfo.member_level.toString());
-    print(userInfo.levelList);
+
+    levelIcon = levelIcons[userInfo.member_level];
+
+    bloc.changeclass_str(level_list[user_level].toLowerCase());
+    bloc.getBookList().then((value) {
+      List<dynamic> bookList = json.decode(value)['data'];
+      print("getBookList : " + bookList.toString());
+      setState(() {
+        for (int i = 0; i < bookList.length; i++) {
+          if (json
+              .decode(value)['data'][i]['book_key']
+              .toString()
+              .contains("SB")) {
+            sb_book.add(Book(
+                json.decode(value)['data'][i]['book_key'],
+                json.decode(value)['data'][i]['class_str'],
+                json.decode(value)['data'][i]['unit_name'],
+                json.decode(value)['data'][i]['sub_name'],
+                json.decode(value)['data'][i]['unit_order'],
+                json.decode(value)['data'][i]['amount']));
+          } else if (json
+              .decode(value)['data'][i]['book_key']
+              .toString()
+              .contains("WB")) {
+            wb_book.add(Book(
+                json.decode(value)['data'][i]['book_key'],
+                json.decode(value)['data'][i]['class_str'],
+                json.decode(value)['data'][i]['unit_name'],
+                json.decode(value)['data'][i]['sub_name'],
+                json.decode(value)['data'][i]['unit_order'],
+                json.decode(value)['data'][i]['amount']));
+          }
+        }
+        sb_book.sort((a, b) {
+          return a.unit_order.compareTo(b.unit_order);
+        });
+
+        wb_book.sort((a, b) {
+          return a.unit_order.compareTo(b.unit_order);
+        });
+
+        getBook = true;
+      });
+    });
   }
 
   Widget header() {
@@ -97,8 +161,97 @@ class _BookBoxState extends State<BookBox> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text("수강가능일자", style: TextStyle(color: Colors.white),),
-                    Text("2019/01/01 - 2019/01/01", style: TextStyle(color: Colors.white),),
+                    Text(
+                      "수강가능일자",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    Text(
+                      "2019/01/01 - 2019/01/01",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 15.0, left: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          if (setBook == true) {
+                            setBook = false;
+                          }
+                        });
+                      },
+                      child: setBook
+                          ? Container(
+                              width: 50,
+                              height: 30,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  border: Border.all(color: Colors.white)),
+                              child: Center(
+                                  child: Text(
+                                "SB",
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 12),
+                              )),
+                            )
+                          : Container(
+                              width: 50,
+                              height: 30,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  border: Border.all(color: greenColor)),
+                              child: Center(
+                                  child: Text(
+                                "SB",
+                                style:
+                                    TextStyle(color: greenColor, fontSize: 12),
+                              )),
+                            ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 5.0),
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            if (setBook == false) {
+                              setBook = true;
+                            }
+                          });
+                        },
+                        child: setBook
+                            ? Container(
+                                width: 50,
+                                height: 30,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                    border: Border.all(color: greenColor)),
+                                child: Center(
+                                    child: Text(
+                                  "WB",
+                                  style: TextStyle(
+                                      color: greenColor, fontSize: 12),
+                                )),
+                              )
+                            : Container(
+                                width: 50,
+                                height: 30,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                    border: Border.all(color: Colors.white)),
+                                child: Center(
+                                    child: Text(
+                                  "WB",
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 12),
+                                )),
+                              ),
+                      ),
+                    )
                   ],
                 ),
               )
@@ -130,7 +283,7 @@ class _BookBoxState extends State<BookBox> {
                         tabs: [
                           Tab(
                             child: Text(
-                              "전체 교재 (0)",
+                              "전체 교재 (8)",
                               style:
                                   TextStyle(color: Colors.black, fontSize: 12),
                             ),
@@ -169,7 +322,52 @@ class _BookBoxState extends State<BookBox> {
                   Expanded(
                     child: TabBarView(
                       children: <Widget>[
-                        Text("test"),
+                        ListView.builder(
+                            itemCount: 8,
+                            itemBuilder: (context, position) {
+                              return Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Card(
+                                    child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: <Widget>[
+                                    Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Image.asset(
+                                        levelIcon,
+                                        width: 140,
+                                        height: 140,
+                                        fit: BoxFit.fill,
+                                      ),
+                                    ),
+                                    Container(
+                                      width: 1.0,
+                                      height: 150.0,
+                                      color: lineColor,
+                                    ),
+                                    Column(
+                                      children: <Widget>[
+                                        Container(
+                                          width: 100,
+                                          height: 30,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(20.0),
+                                          ),
+                                          child: Center(
+                                              child: getBook ? Text(
+                                            sb_book[position].unit_order,
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 12),
+                                          ) : Text("")),
+                                        )
+                                      ],
+                                    )
+                                  ],
+                                )),
+                              );
+                            }),
                         Text("test"),
                         Text("test"),
                       ],
@@ -195,6 +393,7 @@ class _BookBoxState extends State<BookBox> {
   Widget appBar() {
     return appBar_height = AppBar(
       backgroundColor: bookboxmainColor,
+      elevation: 0.0,
       iconTheme: IconThemeData(color: Colors.white),
       title: Row(
         children: <Widget>[
