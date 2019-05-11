@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 //---size-----------------------------
 final defaultFontSize = 16.0;
 //------------------------------------
@@ -22,14 +21,35 @@ final quizDiamondColor = Color.fromARGB(255, 117, 65, 180);
 //---textStyle------------------------
 final defaultTextStyle = TextStyle(fontSize: defaultFontSize, color: black);
 final dialogTextStyle = TextStyle(
-    fontSize: defaultFontSize, color: black, fontWeight: FontWeight.bold); // + 주아체
+    fontSize: defaultFontSize,
+    color: black,
+    fontFamily: 'Jua',
+    fontWeight: FontWeight.bold); // + 주아체
 final questionTextStyle = TextStyle(
-  fontSize: defaultFontSize, color: black,fontWeight: FontWeight.w500);
+  fontSize: defaultFontSize,
+  color: black,
+  fontFamily: 'Jua',
+  fontWeight: FontWeight.w500,
+);
 final titleTextStyle = TextStyle(
-  fontSize: defaultFontSize - 2, color: black,fontWeight: FontWeight.bold
+  fontSize: defaultFontSize - 2,
+  color: black,
+  fontFamily: 'Jua',
+  fontWeight: FontWeight.bold,
+
 );
 final quizTitleTextStyle = TextStyle(
-  fontSize: defaultFontSize + 8, color: black, fontWeight: FontWeight.bold
+  fontSize: defaultFontSize + 8,
+  color: black,
+  fontFamily: 'Jua',
+  fontWeight: FontWeight.bold,
+);
+
+final levelTextStyle = TextStyle(
+  fontSize: defaultFontSize - 2,
+  color: black,
+  fontFamily: 'Jua',
+  fontWeight: FontWeight.bold,
 );
 
 //color

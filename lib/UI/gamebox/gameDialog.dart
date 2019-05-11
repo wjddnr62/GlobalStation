@@ -1,6 +1,11 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:lms_flutter/model/stage.dart';
 import 'package:lms_flutter/theme.dart';
+import 'package:lms_flutter/model/UserInfo.dart';
+
+import 'package:lms_flutter/bloc/game_public_bloc.dart';
 
 import 'Game/Speed/phonics.dart';
 import 'Game/Speed/bronze.dart';
@@ -17,6 +22,12 @@ import 'Game/Quiz/Diamond/diamond.dart';
 import 'Game/Matching/Phonics/phonics.dart';
 
 class GameDialog extends StatefulWidget {
+  int idx;
+  String lev;
+  int cap;
+
+  GameDialog({Key key, this.idx, this.lev, this.cap}) : super(key: key);
+
   @override
   GameDialogState createState() => GameDialogState();
 }
@@ -26,14 +37,13 @@ class GameDialogState extends State<GameDialog> {
   String selectGame = "";
 
   bool startGame = false;
+  List<String> list = UserInfo().levelList;
 
   @override
   void initState() {
     super.initState();
     dialogType = "K"; // K == GameKind | S == GameState
   }
-
-  int idx;
 
   @override
   Widget build(BuildContext context) {
@@ -95,13 +105,33 @@ class GameDialogState extends State<GameDialog> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Image.asset(
-            "assets/gamebox/img/lobby_logo.png",
-            width: 120,
+          Container(
+            width: double.infinity,
+            child: Stack(
+              children: <Widget>[
+                Align(
+                  alignment: AlignmentDirectional.center,
+                  child: Image.asset(
+                    "assets/gamebox/img/lobby_logo.png",
+                    width: 120,
+                  ),
+                ),
+                Positioned(
+                  top: 0,
+                  right: 0,
+                  child: InkWell(
+                    child: Text("x"),
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
           Text(
-            "Phonics 1",
-            style: defaultTextStyle,
+            list[widget.idx],
+            style: levelTextStyle,
           ),
           SizedBox(
             height: 15,
@@ -169,6 +199,14 @@ class GameDialogState extends State<GameDialog> {
   }
 
   Widget selectGameStage() {
+    gameBloc.changeLevel(widget.lev);
+    gameBloc.changeChapter(widget.cap);
+
+    gameBloc.getStageList(selectGame).then((value) {
+      gameBloc.response = value;
+      gameBloc.changeStage(true);
+    });
+
     return Container(
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5), color: dialogBackground),
@@ -179,9 +217,29 @@ class GameDialogState extends State<GameDialog> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Image.asset(
-            "assets/gamebox/img/lobby_logo.png",
-            width: 120,
+          Container(
+            width: double.infinity,
+            child: Stack(
+              children: <Widget>[
+                Align(
+                  alignment: AlignmentDirectional.center,
+                  child: Image.asset(
+                    "assets/gamebox/img/lobby_logo.png",
+                    width: 120,
+                  ),
+                ),
+                Positioned(
+                  top: 0,
+                  right: 0,
+                  child: InkWell(
+                    child: Text("x"),
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
           SizedBox(
             height: 15,
@@ -195,26 +253,40 @@ class GameDialogState extends State<GameDialog> {
                 borderRadius: BorderRadius.circular(5),
               ),
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-              child: ListView.builder(
-                itemBuilder: (context, idx) {
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 20),
-                    child: Container(
-                      width: double.infinity,
-                      height: 150,
-                      child: InkWell(
-                        onTap: () {
-                          setState(() {
-                            startGame = true;
-                          });
-                        },
-                        child: dialogView("STAGE " + (idx + 1).toString()),
-                      ),
-                    ),
+              child: StreamBuilder(
+                stream: gameBloc.stage,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    List<Stage> stages = gameBloc.jsonToList(gameBloc.response);
+                    return ListView.builder(
+                      itemCount: stages.length,
+                      itemBuilder: (context, idx) {
+                        print("1");
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 20),
+                          child: Container(
+                            width: double.infinity,
+                            height: 150,
+                            child: InkWell(
+                              onTap: () {
+                                setState(() {
+                                  startGame = true;
+                                });
+                              },
+                              child: dialogView(
+                                  "STAGE " + stages[idx].stage.toString()),
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  }
+                  return Center(
+                    child: CircularProgressIndicator(),
                   );
                 },
-                itemCount: 8,
               ),
+
             ),
           ),
         ],

@@ -40,9 +40,9 @@ dev_dependencies:
 
 
 flutter_icons:
-    image_path: "assets/splash/icon_splash.png"
-    android: true
-    ios: true
+  image_path: "assets/splash/icon_splash.png"
+  android: true
+  ios: true
 
 
 # For information on the generic Dart part of this file, see the
@@ -71,7 +71,10 @@ flutter:
     - assets/gamebox/img/match/
     - assets/level/
 
-
+fonts:
+  - family: Jua
+    fonts:
+      - asset: fonts/BMJUA_ttf.ttf
   #  - images/a_dot_burr.jpeg
   #  - images/a_dot_ham.jpeg
 
@@ -100,3 +103,6 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.io/custom-fonts/#from-packages
+
+
+
