@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'gameDialog.dart';
+import 'package:lms_flutter/model/UserInfo.dart';
+import 'package:lms_flutter/model/user.dart';
 
 class LobbyPage extends StatefulWidget {
   @override
@@ -8,6 +10,8 @@ class LobbyPage extends StatefulWidget {
 }
 
 class LobbyHomePage extends State<LobbyPage> {
+  int level = UserInfo().member_level;
+
   List<String> lobbyImg = [
     "assets/gamebox/img/lobby/english_basic.png",
     "assets/gamebox/img/lobby/cambodia_lobby_basic.png",
@@ -63,14 +67,50 @@ class LobbyHomePage extends State<LobbyPage> {
       itemBuilder: (context, idx) {
         return InkWell(
           onTap: () {
-            gameStart(idx);
+            if (idx < level) {
+              var lev = "";
+              var cap = 0;
+              if (idx <= 2) {
+                lev = "P";
+                cap = idx + 1; // 0,1,2
+              } else if (idx <= 5) {
+                lev = "B";
+                cap = idx - 2;
+              } else if (idx <= 8) {
+                lev = "S";
+                cap = idx - 5;
+              } else if (idx <= 11) {
+                lev = "G";
+                cap = idx - 8;
+              } else if (idx <= 14) {
+                lev = "D";
+                cap = idx - 11;
+              }
+
+              gameStart(idx, lev, cap);
+            }
           },
           child: Container(
             width: size.width,
             height: size.height,
-            child: Image.asset(
-              lobbyImg[idx],
-              fit: BoxFit.cover,
+            child: Stack(
+              children: <Widget>[
+                Positioned.fill(
+                  child: Image.asset(
+                    lobbyImg[idx],
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                (idx + 1 > level)
+                    ? Positioned.fill(
+                        child: Container(
+                          color: Color.fromARGB(100, 0, 0, 0),
+                        ),
+                      )
+                    : SizedBox(
+                        width: 0,
+                      ),
+              ],
             ),
           ),
         );
@@ -82,10 +122,14 @@ class LobbyHomePage extends State<LobbyPage> {
     );
   }
 
-  void gameStart(int idx) {
+  void gameStart(int idx, String lev, int cap) {
     Navigator.of(context).push(PageRouteBuilder(
         opaque: false,
-        pageBuilder: (BuildContext context, _, __) => GameDialog()));
+        pageBuilder: (BuildContext context, _, __) => GameDialog(
+              idx: idx,
+              lev: lev,
+              cap: cap,
+            )));
   }
 
   @override
@@ -96,6 +140,7 @@ class LobbyHomePage extends State<LobbyPage> {
   @override
   void initState() {
     super.initState();
+    print("level = ${level}");
   }
 
   @override

@@ -1,0 +1,56 @@
+import 'package:http/http.dart' as http;
+import 'dart:async';
+
+class SpeedProvider {
+  static final String defaultUrl = "https://ga.oig.kr/laon_api/api/speed/";
+  String getStage = defaultUrl + "stageList?";
+  String getQuest = defaultUrl + "questList";
+  String getAnswer = defaultUrl + "answerList?";
+  String answerO =
+      defaultUrl + "answer_o"; // level chapter stage question_num answer
+
+  http.Client client = http.Client();
+
+  Future<String> getStageList(String level, int chapter) async {
+    final response = await client
+        .get(getStage + 'level=' + level + '&chapter=' + chapter.toString());
+
+    return response.body;
+  }
+
+  Future<String> getQuestList(String level, int chapter, int stage) async {
+    final response = await client.post(getQuest,
+        body: {'level': level, 'chapter': chapter, 'stage': stage});
+    return response.body;
+  }
+
+  Future<String> getAnswerList(
+      String level, int chapter, int stage, int question_num) async {
+    final response = await client.get(getAnswer +
+        'level=' +
+        level +
+        '&chapter=' +
+        chapter.toString() +
+        "&stage=" +
+        stage.toString() +
+        "&question_num=" +
+        question_num.toString());
+
+    return response.body;
+  }
+
+  Future<String> getAnswerO(String level, int chapter, int stage,
+      int question_num, int answer) async {
+    final response = await client.post(answerO, body: {
+      'level': level,
+      'chapter': chapter,
+      'stage': stage,
+      'question_num': question_num,
+      'answer': answer
+    });
+
+    return response.body;
+  }
+
+
+}
