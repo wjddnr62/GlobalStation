@@ -3,6 +3,8 @@ import 'package:lms_flutter/theme.dart';
 import 'package:lms_flutter/model/Speed/answerList.dart';
 import 'package:lms_flutter/bloc/speed_game_bloc.dart';
 
+int answer = 0;
+
 class BronzeB extends StatefulWidget {
   final String level;
   final int chapter;
@@ -19,7 +21,6 @@ class BronzeB extends StatefulWidget {
 
 class Bronze extends State<BronzeB> {
 
-
   final String A_POSTIT = "assets/gamebox/img/speed/postitA.png";
   final String B_POSTIT = "assets/gamebox/img/speed/postitB.png";
 
@@ -28,6 +29,7 @@ class Bronze extends State<BronzeB> {
     speedBloc.getLevel(widget.level);
     speedBloc.getChapter(widget.chapter);
     speedBloc.getStage(widget.stage);
+    speedBloc.question_num = widget.question_num;
     return body(MediaQuery.of(context).size);
   }
 
@@ -38,11 +40,8 @@ class Bronze extends State<BronzeB> {
         child: StreamBuilder(
           stream: speedBloc.getAnswerList(widget.question_num),
           builder: (context, snapshot){
-            print("BB");
-            print(snapshot.hasData);
             if(snapshot.hasData){
               String jsonValue = snapshot.data;
-              print(jsonValue);
               List<AnswerList> answerList = speedBloc.answerListToList(jsonValue);
 
               return Stack(
@@ -68,22 +67,22 @@ class Bronze extends State<BronzeB> {
                   Positioned(
                     left: 20,
                     top: size.height / 2.5,
-                    child: postIt("A", answerList[0].contents),
+                    child: postIt("A", answerList[0].contents,1),
                   ),
                   Positioned(
                     right: 20,
                     top: size.height / 2.5,
-                    child: postIt("B", answerList[1].contents),
+                    child: postIt("B", answerList[1].contents,2),
                   ),
                   Positioned(
                     left: 20,
                     top: size.height / 1.6,
-                    child: postIt("B", answerList[2].contents),
+                    child: postIt("B", answerList[2].contents,3),
                   ),
                   Positioned(
                     right: 20,
                     top: size.height / 1.6,
-                    child: postIt("A", answerList[3].contents),
+                    child: postIt("A", answerList[3].contents,4),
                   ),
 
 //                Align(
@@ -100,20 +99,34 @@ class Bronze extends State<BronzeB> {
     );
   }
 
-  Widget postIt(String type, String text) {
+  List<double> postItSize = [150,150,150,150];
+
+  Widget postIt(String type, String text,int idx) {
     return Container(
       width: 150,
       height: 160,
-      child: Stack(
-        children: <Widget>[
-          Image.asset(
-            (type == "A") ? A_POSTIT : B_POSTIT,
-            width: 150,
-            height: 150,
-            fit: BoxFit.cover,
-          ),
-          Center(child: Text(text),)
-        ],
+      child: InkWell(
+        onTap:(){
+          speedBloc.answerType = 1;
+          answer = idx;
+          speedBloc.answer = answer;
+//          setState(() {
+            postItSize = [150,150,150,150];
+            postItSize[idx-1] = 155;
+//          });
+
+        },
+        child: Stack(
+          children: <Widget>[
+            Image.asset(
+              (type == "A") ? A_POSTIT : B_POSTIT,
+              width: 150,
+              height: postItSize[idx -1],
+              fit: BoxFit.cover,
+            ),
+            Center(child: Text(text),)
+          ],
+        ),
       ),
     );
   }
@@ -131,6 +144,6 @@ class Bronze extends State<BronzeB> {
         ),
       ),
     );
-
   }
 }
+

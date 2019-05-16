@@ -36,16 +36,21 @@ class Repository {
   Future<String> fetchGetUnitList(http.Client client, String book_key) =>
       _unitProvider.fetchGetUnitList(client, book_key);
 
-  Future<String> fetchGetProblemUnit1List(http.Client client, String book_key) =>
+  Future<String> fetchGetProblemUnit1List(http.Client client,
+      String book_key) =>
       _problemunitProvider.fetchGetProblemUnit1List(client, book_key);
 
-  Future<String> fetchGetQuestion1List(http.Client client, String book_key, String type_no, String type_name) =>
-      _questionProvider.fetchGetQuestion1List(client, book_key, type_no, type_name);
+  Future<String> fetchGetQuestion1List(http.Client client, String book_key,
+      String type_no, String type_name) =>
+      _questionProvider.fetchGetQuestion1List(
+          client, book_key, type_no, type_name);
 
-  Future<String> fetchGetQuestionPublic1List(http.Client client, int public_no) =>
+  Future<String> fetchGetQuestionPublic1List(http.Client client,
+      int public_no) =>
       _questionpublicProvider.fetchGetQuestionPublic1List(client, public_no);
 
-  Future<String> fetchGetAnswerList(http.Client client, String book_key, String type_no, String type_name) =>
+  Future<String> fetchGetAnswerList(http.Client client, String book_key,
+      String type_no, String type_name) =>
       _answerProvider.fetchGetAnswerList(client, book_key, type_no, type_name);
 
   Future<String> getSpeedStageList(String level, int chapter) =>
@@ -60,13 +65,17 @@ class Repository {
   Future<String> getSpeedQuestList(String level, int chapter, int stage) =>
       _speedProvider.getQuestList(level, chapter, stage);
 
-  Future<String> getSpeedAnswerList(
-      String level, int chapter, int stage, int question_num) =>
+  Future<String> getSpeedAnswerList(String level, int chapter, int stage,
+      int question_num) =>
       _speedProvider.getAnswerList(level, chapter, stage, question_num);
 
-  Future<String> getSpeedAnswerO(
-      String level, int chapter, int stage, int question_num, int answer) =>
+  Future<String> getSpeedAnswerO(String level, int chapter, int stage,
+      int question_num, int answer) =>
       _speedProvider.getAnswerO(level, chapter, stage, question_num, answer);
+
+  Future<String> getSpeedAnswerA(String level, int chapter, int stage,
+      int question_num, String answer) =>
+      _speedProvider.getAnswerA(level, chapter, stage, question_num, answer);
 
 
 }

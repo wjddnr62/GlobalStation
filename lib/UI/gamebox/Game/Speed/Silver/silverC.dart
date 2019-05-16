@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:lms_flutter/bloc/speed_game_bloc.dart';
+import 'package:lms_flutter/model/Speed/answerList.dart';
 import 'package:lms_flutter/theme.dart';
+
+int answer = 0;
 
 class SilverC extends StatefulWidget {
 
@@ -34,129 +38,149 @@ class Silver extends State<SilverC> {
     return Container(
       width: size.width,
       height: size.height,
-      child: Stack(
-        children: <Widget>[
-          Image.asset(
-            "assets/gamebox/img/speed/speed_silver_5.png",
-            width: size.width,
-            height: size.height,
-            fit: BoxFit.cover,
-          ),
+      child: StreamBuilder(
+        stream: speedBloc.getAnswerList(widget.question_num),
+        builder: (context, snapshot){
+          if(snapshot.hasData){
 
-          Positioned(
-            top: size.height / 3.3,
-            width: size.width - 20,
-            child: Container(
-              child: Stack(
-                children: <Widget>[
-                  Image.asset(
-                    "assets/gamebox/img/speed/silver_que2.png",
-                    fit: BoxFit.contain,
-                  ),
-                ],
-              ),
-            ),
-          ),
+            String jsonValue = snapshot.data;
+            List<AnswerList> answerList = speedBloc.answerListToList(jsonValue);
 
-          Positioned(
-            top: size.height / 5.5,
-            width: size.width - 20,
-            child: Container(
-              child: Stack(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child:Image.asset(
-                      "assets/gamebox/img/speed/silver_que1.png",
-                      fit: BoxFit.contain,
+            return Stack(
+              children: <Widget>[
+                Image.asset(
+                  "assets/gamebox/img/speed/speed_silver_5.png",
+                  width: size.width,
+                  height: size.height,
+                  fit: BoxFit.cover,
+                ),
+
+                Positioned(
+                  top: size.height / 3.1,
+                  width: size.width - 20,
+                  child: Container(
+                    child: Stack(
+                      children: <Widget>[
+                        Image.asset(
+                          "assets/gamebox/img/speed/silver_que2.png",
+                          fit: BoxFit.contain,
+                        ),
+                      ],
                     ),
                   ),
+                ),
 
-                  Positioned(
-                    top: 20,
-                    left: 55,
-                    child: Container(
-                      width: size.width - 100,
-                      child:Center(
-                        child: Text(
-                          widget.question,
-                          style: titleTextStyle,
+                Positioned(
+                  top: size.height / 5.5,
+                  width: size.width - 20,
+                  child: Container(
+                    child: Stack(
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child:Image.asset(
+                            "assets/gamebox/img/speed/silver_que1.png",
+                            fit: BoxFit.contain,
+                          ),
                         ),
+
+                        Positioned(
+                          top: 20,
+                          left: 55,
+                          child: Container(
+                            width: size.width - 100,
+                            child:Center(
+                              child: Text(
+                                widget.question,
+                                style: titleTextStyle,
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: size.height / 2.4,
+                  child: Container(
+                    width: size.width,
+                    child: Center(
+                      child: Text(
+                        widget.title,
+                        style: titleTextStyle,
                       ),
                     ),
-                  )
-                ],
-              ),
-            ),
-          ),
-          Positioned(
-            top: size.height / 2.4,
-            child: Container(
-              width: size.width,
-              child: Center(
-                child: Text(
-                  widget.title,
-                  style: titleTextStyle,
+                  ),
                 ),
-              ),
-            ),
-          ),
-          Positioned(
-            top: size.height / 2.2,
-            child: wood("A", size),
-          ),
-          Positioned(
-            top: size.height / 1.83,
-            child: wood( "B", size),
-          ),
-          Positioned(
-            top: size.height / 1.56,
-            child: wood("C", size),
-          ),
-          Positioned(
-            top: size.height / 1.36,
-            child: wood("D", size),
-          ),
-          Positioned(
-            bottom: 10,
-            child: nextBtn(size),
-          ),
-        ],
+                Positioned(
+                  top: size.height / 2.2,
+                  child: wood("A", size,1),
+                ),
+                Positioned(
+                  top: size.height / 1.83,
+                  child: wood( "B", size,2),
+                ),
+                Positioned(
+                  top: size.height / 1.56,
+                  child: wood("C", size,3),
+                ),
+                Positioned(
+                  top: size.height / 1.36,
+                  child: wood("D", size,4),
+                ),
+//                Positioned(
+//                  bottom: 10,
+//                  child: nextBtn(size),
+//                ),
+              ],
+            );
+          }
+          return CircularProgressIndicator();
+        },
       ),
     );
   }
 
-  Widget wood(String text, Size size) {
+  Widget wood(String text, Size size, int idx) {
     return Container(
       width: size.width - 20,
       height: 50,
       padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Stack(
-        children: <Widget>[
-          Container(
-            width: double.infinity,
-            height: double.infinity,
-            decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black38,
-                    offset: Offset(4.0,4.0),
-                  )
-                ]
+      child: InkWell(
+        onTap: (){
+          speedBloc.answerType = 1;
+          answer = idx;
+          speedBloc.answer = answer;
+        },
+        child: Stack(
+          children: <Widget>[
+            Container(
+              width: double.infinity,
+              height: double.infinity,
+              decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black38,
+                      offset: Offset(4.0,4.0),
+                    )
+                  ]
+              ),
             ),
-          ),
-          Image.asset(
-            silverWood,
-            width: size.width - 20,
-            height: 50,
-            fit: BoxFit.fill,
-          ),
-          Align(
-            alignment: AlignmentDirectional.center,
-            child: Text(text),
-          ),
-        ],
+            Image.asset(
+              silverWood,
+              width: size.width - 20,
+              height: 50,
+              fit: BoxFit.fill,
+            ),
+            Align(
+              alignment: AlignmentDirectional.center,
+              child: Text(text),
+            ),
+          ],
+        ),
       ),
+
     );
   }
 

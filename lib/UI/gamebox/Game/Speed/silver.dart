@@ -45,6 +45,7 @@ class SpeedSilver{
         views.add(SilverD1(
           level: question.level.substring(0, 1),
           stage: 1,
+          question: question.contents,
           chapter: question.chapter,
           question_num: question.question_num,
           title: question.title,

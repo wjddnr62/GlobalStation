@@ -14,6 +14,37 @@ class SpeedGameBloc {
   final _chapter = BehaviorSubject<int>();
   final _stage = BehaviorSubject<int>();
 
+  int _answer = 0;
+  int _question_num = 0;
+  String _answerA = "";
+
+  int _answerType = 0;
+
+
+  int get question_num => _question_num;
+
+  set question_num(int value) {
+    _question_num = value;
+  }
+
+  int get answer => _answer;
+
+  set answer(int value) {
+    _answer = value;
+  }
+
+  String get answerA => _answerA;
+
+  set answerA(String value) {
+    _answerA = value;
+  }
+
+  int get answerType => _answerType;
+
+  set answerType(int value) {
+    _answerType = value;
+  }
+
   Observable<String> get level => _level.stream;
 
   Observable<int> get chapter => _chapter.stream;
@@ -26,15 +57,23 @@ class SpeedGameBloc {
 
   Function(int) get getStage => _stage.sink.add;
 
-//  Future<String> getQuestionList() =>
-//      _repository.getSpeedQuestList(_level.value, _chapter.value, _stage.value);
-
   Stream<String> getAnswerList(int question_num) =>
       Stream.fromFuture(_repository.getSpeedAnswerList(
           _level.value, _chapter.value, _stage.value, question_num));
 
-  Stream<String> getQuestionList(){
-    return Stream.fromFuture(_repository.getSpeedQuestList(_level.value, _chapter.value, _stage.value));
+  Stream<String> getQuestionList() {
+    return Stream.fromFuture(_repository.getSpeedQuestList(
+        _level.value, _chapter.value, _stage.value));
+  }
+
+  Future<String> getAnswer(int question_num){
+    if(answerType == 1){
+      return _repository.getSpeedAnswerO(
+          _level.value, _chapter.value, _stage.value, question_num, answer);
+    }else if(answer == 2){
+      return _repository.getSpeedAnswerA(
+          _level.value, _chapter.value, _stage.value, question_num, answerA);
+    }
   }
 
 
@@ -55,6 +94,8 @@ class SpeedGameBloc {
 
     return answerList;
   }
+
+
 }
 
 final speedBloc = SpeedGameBloc();
