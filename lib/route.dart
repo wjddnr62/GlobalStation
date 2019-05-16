@@ -5,7 +5,7 @@ import 'UI/login.dart';
 
 
 import 'UI/gamebox/gamebox_main.dart';
-//import 'UI/gamebox/lobby.dart';
+import 'UI/gamebox/lobby.dart';
 import 'UI/gamebox/gamebox_main.dart';
 import 'UI/bookbox/bookbox_main.dart';
 
@@ -15,7 +15,7 @@ final routes = {
 
   //-------------GameBox----------------
   '/GameBox' : (BuildContext context) => GameBox(),
-//  '/Lobby' : (BuildContext context) => LobbyPage(),
+  '/Lobby' : (BuildContext context) => LobbyPage(),
 
 
   //-------------BookBox----------------

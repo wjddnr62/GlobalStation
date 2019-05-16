@@ -11,7 +11,7 @@ class BronzeC extends StatefulWidget {
   final String question;
 
   BronzeC({Key key, this.level, this.chapter, this.stage, this.question_num,this.title,
-  this.question})
+    this.question})
       : super(key: key);
 
   @override
@@ -95,7 +95,7 @@ class Bronze extends State<BronzeC> {
             top: size.height / 1.33,
             child: postIt("C", "D", size),
           ),
-          
+
 //          Positioned(
 //            bottom: 10,
 //            child: nextBtn(size),
