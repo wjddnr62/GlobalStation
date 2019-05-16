@@ -2,13 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:lms_flutter/theme.dart';
 
 class SilverD1 extends StatefulWidget {
+
+  final String level;
+  final int chapter;
+  final int stage;
+  final int question_num;
+  final String title;
+  final String question;
+
+  SilverD1({Key key, this.level, this.chapter, this.stage, this.question_num,this.title,
+    this.question})
+      : super(key: key);
+
   @override
   Silver createState() => Silver();
 }
 
 class Silver extends State<SilverD1> {
-  String title = "Listen and choose the correct answer.";
-  String question = "Is Tom _____?";
+//  String title = "Listen and choose the correct answer.";
+//  String question = "Is Tom _____?";
 
   final String silverWood = "assets/gamebox/img/speed/wood.png";
 
@@ -47,7 +59,7 @@ class Silver extends State<SilverD1> {
                       width: size.width - 100,
                       child:Center(
                         child: Text(
-                          question,
+                          widget.question,
                           style: titleTextStyle,
                         ),
                       ),
@@ -63,7 +75,7 @@ class Silver extends State<SilverD1> {
               width: size.width,
               child: Center(
                 child: Text(
-                  title,
+                  widget.title,
                   style: titleTextStyle,
                 ),
               ),

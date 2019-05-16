@@ -1,12 +1,16 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:lms_flutter/UI/login.dart';
 import 'package:lms_flutter/UI/main.dart';
 import 'route.dart';
+
+
 void main() {
 //  SystemChrome.setEnabledSystemUIOverlays([]);
-
+//  debugPaintLayerBordersEnabled = true;
+//  debugPaintSizeEnabled = true;
   runApp(new MaterialApp(
     debugShowCheckedModeBanner: false,
     title: "LMS Splash Page",

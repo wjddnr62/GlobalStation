@@ -2,13 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:lms_flutter/theme.dart';
 
 class BronzeC extends StatefulWidget {
+
+  final String level;
+  final int chapter;
+  final int stage;
+  final int question_num;
+  final String title;
+  final String question;
+
+  BronzeC({Key key, this.level, this.chapter, this.stage, this.question_num,this.title,
+  this.question})
+      : super(key: key);
+
   @override
   Bronze createState() => Bronze();
 }
 
 class Bronze extends State<BronzeC> {
-  String title = "Listen and choose the correct answer.";
-  String question = "Good morning. How are You?asdkgafasd";
+//  String title = "Listen and choose the correct answer.";
+//  String question = "Good morning. How are You?asdkgafasd";
 
   final String C_POSTIT = "assets/gamebox/img/speed/postitC.png";
   final String D_POSTIT = "assets/gamebox/img/speed/postitD.png";
@@ -32,7 +44,7 @@ class Bronze extends State<BronzeC> {
             fit: BoxFit.cover,
           ),
           Positioned(
-            top: size.height / 6,
+            top: size.height / 5.5,
             width: size.width - 20,
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -48,7 +60,7 @@ class Bronze extends State<BronzeC> {
                     child: Container(
                       width: size.width - 100,
                       height: 30,
-                      child: Text(question,style: titleTextStyle,),
+                      child: Text(widget.question,style: titleTextStyle,),
                     ),
                   )
                 ],
@@ -61,33 +73,33 @@ class Bronze extends State<BronzeC> {
               width: size.width,
               child: Center(
                 child: Text(
-                  title,
+                  widget.title,
                   style: titleTextStyle,
                 ),
               ),
             ),
           ),
           Positioned(
-            top: size.height / 2.2,
+            top: size.height / 2.15,
             child: postIt("D", "A", size),
           ),
           Positioned(
-            top: size.height / 1.83,
+            top: size.height / 1.78,
             child: postIt("C", "B", size),
           ),
           Positioned(
-            top: size.height / 1.56,
+            top: size.height / 1.52,
             child: postIt("D", "C", size),
           ),
           Positioned(
-            top: size.height / 1.36,
+            top: size.height / 1.33,
             child: postIt("C", "D", size),
           ),
           
-          Positioned(
-            bottom: 10,
-            child: nextBtn(size),
-          ),
+//          Positioned(
+//            bottom: 10,
+//            child: nextBtn(size),
+//          ),
         ],
       ),
     );

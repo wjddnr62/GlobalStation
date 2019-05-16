@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:lms_flutter/UI/gamebox/Game/Speed/speedDialog.dart';
 import 'package:lms_flutter/model/stage.dart';
 import 'package:lms_flutter/theme.dart';
 import 'package:lms_flutter/model/UserInfo.dart';
@@ -12,6 +13,8 @@ import 'Game/Speed/bronze.dart';
 import 'Game/Speed/silver.dart';
 import 'Game/Speed/gold.dart';
 import 'Game/Speed/diamond.dart';
+
+import 'Game/Speed/speed.dart';
 
 import 'Game/Quiz/Phonics/phonics.dart';
 import 'Game/Quiz/Bronze//bronze.dart';
@@ -49,14 +52,23 @@ class GameDialogState extends State<GameDialog> {
   Widget build(BuildContext context) {
     if (startGame) {
       if (selectGame == "S") {
-        return Scaffold(
-            backgroundColor: Colors.black.withOpacity(0.5),
-            body: SafeArea(
-              child: Padding(
-                child: SpeedDiamond(),
-                padding: const EdgeInsets.all(10),
-              ),
-            ));
+//        return Scaffold(
+//            backgroundColor: Colors.black.withOpacity(0.5),
+//            body: SafeArea(
+//              child: Padding(
+//                child: SpeedGame(level: list[widget.idx],chapter: widget.cap),
+//                padding: const EdgeInsets.all(10),
+//              ),
+//            ));
+      Navigator.of(context).pop();
+      Navigator.of(context).push(PageRouteBuilder(
+                opaque: false,
+                pageBuilder: (BuildContext context, _, __) => SpeedGameDialog(
+//                      level: widget.lev,
+                level: "B",
+                      chapter: widget.cap,
+                    )));
+      print("333");
       } else if (selectGame == "Q") {
         return Scaffold(
             backgroundColor: Colors.black.withOpacity(0.5),
@@ -269,9 +281,21 @@ class GameDialogState extends State<GameDialog> {
                             height: 150,
                             child: InkWell(
                               onTap: () {
-                                setState(() {
-                                  startGame = true;
-                                });
+//                                setState(() {
+//                                  startGame = true;
+//                                });
+                              print(selectGame);
+                              if(selectGame == "S"){
+                                Navigator.of(context).pop();
+                                Navigator.of(context).push(PageRouteBuilder(
+                                    opaque: false,
+                                    pageBuilder: (BuildContext context, _, __) => SpeedGameDialog(
+//                      level: widget.lev,
+                                      level: widget.lev,
+                                      chapter: widget.cap,
+                                      stage: stages[idx].stage,
+                                    )));
+                              }
                               },
                               child: dialogView(
                                   "STAGE " + stages[idx].stage.toString()),
