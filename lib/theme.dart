@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 //---size-----------------------------
 final defaultFontSize = 16.0;
+final unitFontSize = 12.0;
 //------------------------------------
 
 //---color----------------------------
@@ -58,6 +59,10 @@ final bookboxmainColor = Color(0xFFFB6969);
 final backgroudDefaultColor = Color(0xFFF6F6F6);
 final lineColor = Color(0xFFDDDDDD);
 final greenColor = Color(0xFF2AA787);
+final yellowColor = Color(0xFFFCCA20);
+final unitColor = Color(0xFFFFFBF6);
+final backbtnbackgroundColor = Color(0xFFE8E8E8);
+final backbtnColor = Color(0xFF8A8A8A);
 //------------------------------------
 
 //---boxDecoration--------------------

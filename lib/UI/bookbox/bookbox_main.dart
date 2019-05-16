@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:lms_flutter/bloc/book_bloc.dart';
 import 'package:lms_flutter/model/UserInfo.dart';
 import 'package:lms_flutter/model/book.dart';
+import 'package:lms_flutter/model/unitData.dart';
 import 'package:lms_flutter/theme.dart';
 
 class BookBox extends StatefulWidget {
@@ -37,6 +38,7 @@ class DecoratedTabBar extends StatelessWidget implements PreferredSizeWidget {
 
 class _BookBoxState extends State<BookBox> {
   final UserInfo userInfo = new UserInfo();
+  final unitData unitdata = new unitData();
 
   var user_id;
   var user_name;
@@ -72,54 +74,75 @@ class _BookBoxState extends State<BookBox> {
 
   @override
   void initState() {
+    super.initState();
     user_id = userInfo.user_id;
     user_name = userInfo.child_name;
     user_level = userInfo.member_level;
     level_list = userInfo.levelList;
 
-    levelIcon = levelIcons[userInfo.member_level];
-
-    bloc.changeclass_str(level_list[user_level].toLowerCase());
-    bloc.getBookList().then((value) {
-      List<dynamic> bookList = json.decode(value)['data'];
-      print("getBookList : " + bookList.toString());
-      setState(() {
-        for (int i = 0; i < bookList.length; i++) {
-          if (json
-              .decode(value)['data'][i]['book_key']
-              .toString()
-              .contains("SB")) {
-            sb_book.add(Book(
-                json.decode(value)['data'][i]['book_key'],
-                json.decode(value)['data'][i]['class_str'],
-                json.decode(value)['data'][i]['unit_name'],
-                json.decode(value)['data'][i]['sub_name'],
-                json.decode(value)['data'][i]['unit_order'],
-                json.decode(value)['data'][i]['amount']));
-          } else if (json
-              .decode(value)['data'][i]['book_key']
-              .toString()
-              .contains("WB")) {
-            wb_book.add(Book(
-                json.decode(value)['data'][i]['book_key'],
-                json.decode(value)['data'][i]['class_str'],
-                json.decode(value)['data'][i]['unit_name'],
-                json.decode(value)['data'][i]['sub_name'],
-                json.decode(value)['data'][i]['unit_order'],
-                json.decode(value)['data'][i]['amount']));
+    levelIcon = levelIcons[user_level];
+    (() async {
+      bloc.changeclass_str(level_list[user_level].toLowerCase());
+      bloc.getBookList().then((value) {
+        List<dynamic> bookList = json.decode(value)['data'];
+        print("getBookList : " + bookList.toString());
+        setState(() {
+          for (int i = 0; i < bookList.length; i++) {
+            if (json
+                .decode(value)['data'][i]['book_key']
+                .toString()
+                .contains("SB")) {
+              sb_book.add(Book(
+                  json.decode(value)['data'][i]['book_key'],
+                  json.decode(value)['data'][i]['class_str'],
+                  json.decode(value)['data'][i]['unit_name'],
+                  json.decode(value)['data'][i]['sub_name'],
+                  json.decode(value)['data'][i]['unit_order'],
+                  json.decode(value)['data'][i]['amount']));
+            } else if (json
+                .decode(value)['data'][i]['book_key']
+                .toString()
+                .contains("WB")) {
+              wb_book.add(Book(
+                  json.decode(value)['data'][i]['book_key'],
+                  json.decode(value)['data'][i]['class_str'],
+                  json.decode(value)['data'][i]['unit_name'],
+                  json.decode(value)['data'][i]['sub_name'],
+                  json.decode(value)['data'][i]['unit_order'],
+                  json.decode(value)['data'][i]['amount']));
+            }
           }
-        }
-        sb_book.sort((a, b) {
-          return a.unit_order.compareTo(b.unit_order);
-        });
+          sb_book.sort((a, b) {
+            return a.unit_order.compareTo(b.unit_order);
+          });
 
-        wb_book.sort((a, b) {
-          return a.unit_order.compareTo(b.unit_order);
+          wb_book.sort((a, b) {
+            return a.unit_order.compareTo(b.unit_order);
+          });
         });
-
+      });
+      setState(() {
         getBook = true;
       });
-    });
+
+    })();
+  }
+
+  void setData(int position) {
+    if (setBook) {
+      unitdata.unit_level = wb_book[position].unit_order;
+      unitdata.unit_name = wb_book[position].unit_name;
+      unitdata.unit_sub_name = wb_book[position].sub_name;
+      unitdata.book_key = wb_book[position].book_key;
+      unitdata.amount = wb_book[position].amount;
+    } else {
+      unitdata.unit_level = sb_book[position].unit_order;
+      unitdata.unit_name = sb_book[position].unit_name;
+      unitdata.unit_sub_name = sb_book[position].sub_name;
+      unitdata.book_key = sb_book[position].book_key;
+      unitdata.amount = sb_book[position].amount;
+    }
+
   }
 
   Widget header() {
@@ -323,49 +346,152 @@ class _BookBoxState extends State<BookBox> {
                     child: TabBarView(
                       children: <Widget>[
                         ListView.builder(
-                            itemCount: 8,
+                            itemCount: sb_book.length,
                             itemBuilder: (context, position) {
                               return Padding(
                                 padding: EdgeInsets.all(8.0),
                                 child: Card(
+                                  child: InkWell(
+                                    onTap: () {
+                                      setData(position);
+                                      setBook ? Navigator.of(context).pushNamed("/" + wb_book[position].book_key) : Navigator.of(context).pushNamed("/" + sb_book[position].book_key);
+//                                      setBook ? Navigator.of(context).pushReplacementNamed("/" + wb_book[position].book_key) : Navigator.of(context).pushReplacementNamed("/" + sb_book[position].book_key);
+                                    },
                                     child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: <Widget>[
-                                    Padding(
-                                      padding: EdgeInsets.all(8.0),
-                                      child: Image.asset(
-                                        levelIcon,
-                                        width: 140,
-                                        height: 140,
-                                        fit: BoxFit.fill,
-                                      ),
-                                    ),
-                                    Container(
-                                      width: 1.0,
-                                      height: 150.0,
-                                      color: lineColor,
-                                    ),
-                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
                                       children: <Widget>[
-                                        Container(
-                                          width: 100,
-                                          height: 30,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(20.0),
+                                        Padding(
+                                          padding: EdgeInsets.all(8.0),
+                                          child: Image.asset(
+                                            levelIcon,
+                                            width: 140,
+                                            height: 140,
+                                            fit: BoxFit.fill,
                                           ),
-                                          child: Center(
-                                              child: getBook ? Text(
-                                            sb_book[position].unit_order,
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 12),
-                                          ) : Text("")),
-                                        )
+                                        ),
+                                        Container(
+                                          width: 1.0,
+                                          height: 150.0,
+                                          color: lineColor,
+                                        ),
+                                        Expanded(
+                                          child: Column(
+                                            children: <Widget>[
+                                              Padding(
+                                                padding:
+                                                    EdgeInsets.only(left: 15.0),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: <Widget>[
+                                                    Container(
+                                                      width: 50,
+                                                      height: 30,
+                                                      decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      20.0),
+                                                          color: yellowColor),
+                                                      child: Center(
+                                                          child: getBook
+                                                              ? Text(
+                                                                  sb_book[position]
+                                                                          .unit_order
+                                                                          .substring(
+                                                                              0,
+                                                                              1)
+                                                                          .toUpperCase() +
+                                                                      sb_book[position]
+                                                                          .unit_order
+                                                                          .substring(
+                                                                              1),
+                                                                  style: TextStyle(
+                                                                      color: Colors
+                                                                          .black,
+                                                                      fontSize:
+                                                                          12,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold),
+                                                                )
+                                                              : Text("")),
+                                                    ),
+                                                    Padding(
+                                                      padding: EdgeInsets.only(
+                                                          top: 5.0),
+                                                      child: Text(
+                                                        sb_book[position]
+                                                            .unit_name,
+                                                        style: TextStyle(
+                                                          color: Colors.black,
+                                                          fontSize: 12,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                        overflow:
+                                                            TextOverflow.clip,
+                                                      ),
+                                                    ),
+                                                    setBook ?
+                                                    Padding(
+                                                      padding: EdgeInsets.only(
+                                                          top: 10.0),
+                                                      child: Text(
+                                                        "진행률 0%",
+                                                        style: TextStyle(
+                                                            fontSize: 12,
+                                                            color: Color(
+                                                                0xFF8A8A8A)),
+                                                      ),
+                                                    ) : Padding(padding: EdgeInsets.only(top: 10.0),),
+                                                    setBook ?
+                                                    Padding(
+                                                      padding: EdgeInsets.only(
+                                                          top: 5.0,
+                                                          right: 15.0),
+                                                      child:
+                                                          LinearProgressIndicator(
+                                                        backgroundColor:
+                                                            Colors.grey,
+                                                        valueColor:
+                                                            AlwaysStoppedAnimation<
+                                                                Color>(
+                                                          Colors.amber,
+                                                        ),
+                                                        value: 0.0,
+                                                      ),
+                                                    ) : Padding(padding: EdgeInsets.only(top: 5.0),),
+                                                    Padding(
+                                                      padding: EdgeInsets.only(
+                                                          top: 5.0,
+                                                          right: 15.0),
+                                                      child: Container(
+                                                        width: double.infinity,
+                                                        height: 20,
+                                                        color: yellowColor,
+                                                        child: Center(
+                                                          child: Text(
+                                                            "START",
+                                                            style: TextStyle(
+                                                                color:
+                                                                    WhiteColor,
+                                                                fontSize: 12),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
                                       ],
-                                    )
-                                  ],
-                                )),
+                                    ),
+                                  ),
+                                ),
                               );
                             }),
                         Text("test"),
@@ -433,10 +559,10 @@ class _BookBoxState extends State<BookBox> {
       child: Scaffold(
         backgroundColor: backgroudDefaultColor,
         appBar: appBar(),
-        drawer: SizedBox(
-          width: double.infinity,
+//        drawer: SizedBox(
+//          width: double.infinity,
 //          child: drawer(),
-        ),
+//        ),
         body: Container(
           child: Column(
             children: <Widget>[
