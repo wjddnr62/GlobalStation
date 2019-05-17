@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:lms_flutter/bloc/book_bloc.dart';
 import 'package:lms_flutter/model/UserInfo.dart';
-import 'package:lms_flutter/model/book.dart';
-import 'package:lms_flutter/model/unitData.dart';
+import 'package:lms_flutter/model/BookBox/book.dart';
+import 'package:lms_flutter/model/BookBox/unitData.dart';
 import 'package:lms_flutter/theme.dart';
 
 class BookBox extends StatefulWidget {
