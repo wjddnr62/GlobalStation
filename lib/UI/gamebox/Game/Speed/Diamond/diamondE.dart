@@ -1,13 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:lms_flutter/theme.dart';
 
+String answer="";
+
 class DiamondE extends StatefulWidget {
+
+  final String level;
+  final int chapter;
+  final int stage;
+  final int question_num;
+  final String title;
+  final String question;
+
+  DiamondE({Key key, this.level, this.chapter, this.stage, this.question_num,this.title,
+    this.question})
+      : super(key: key);
+
+
   @override
   Diamond createState() => Diamond();
 }
 
 class Diamond extends State<DiamondE> {
-  String title = "Listen and choose the correct answer.";
+//  String title = "Listen and choose the correct answer.";
 
   final String diaMessage = "assets/gamebox/img/speed/dia_ans.png";
 
@@ -35,7 +50,7 @@ class Diamond extends State<DiamondE> {
               width: size.width,
               child: Center(
                 child: Text(
-                  title,
+                  widget.title,
                   style: titleTextStyle,
                 ),
               ),
@@ -44,10 +59,6 @@ class Diamond extends State<DiamondE> {
           Positioned(
             top: size.height / 2.2,
             child: message("A", "___", size),
-          ),
-          Positioned(
-            bottom: 10,
-            child: nextBtn(size),
           ),
         ],
       ),

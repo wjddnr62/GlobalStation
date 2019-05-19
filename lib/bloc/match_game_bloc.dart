@@ -1,13 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:rxdart/rxdart.dart';
-import 'package:lms_flutter/repository/Repository.dart';
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:lms_flutter/model/Speed/questionList.dart';
-import 'package:lms_flutter/model/Speed/answerList.dart';
+import 'package:lms_flutter/model/Match/answerList.dart';
+import 'package:lms_flutter/model/Match/questionList.dart';
+import 'package:lms_flutter/repository/Repository.dart';
+import 'package:rxdart/rxdart.dart';
 
-class SpeedGameBloc {
+class MatchGameBloc {
   final _repository = Repository();
 
   final _level = BehaviorSubject<String>();
@@ -20,17 +19,16 @@ class SpeedGameBloc {
 
   int _answerType = 0;
 
+  int get answer => _answer;
+
+  set answer(int value) {
+    _answer = value;
+  }
 
   int get question_num => _question_num;
 
   set question_num(int value) {
     _question_num = value;
-  }
-
-  int get answer => _answer;
-
-  set answer(int value) {
-    _answer = value;
   }
 
   String get answerA => _answerA;
@@ -58,24 +56,17 @@ class SpeedGameBloc {
   Function(int) get getStage => _stage.sink.add;
 
   Stream<String> getAnswerList(int question_num) =>
-      Stream.fromFuture(_repository.getSpeedAnswerList(
+      Stream.fromFuture(_repository.getMatchAnswerList(
           _level.value, _chapter.value, _stage.value, question_num));
 
   Stream<String> getQuestionList() {
-    return Stream.fromFuture(_repository.getSpeedQuestList(
+    return Stream.fromFuture(_repository.getMatchQuestList(
         _level.value, _chapter.value, _stage.value));
   }
 
-  Future<String> getAnswer(int question_num){
-    if(answerType == 1){
-      return _repository.getSpeedAnswerO(
-          _level.value, _chapter.value, _stage.value, question_num, answer);
-    }else if(answer == 2){
-      return _repository.getSpeedAnswerA(
-          _level.value, _chapter.value, _stage.value, question_num, answerA);
-    }
+  Future<String> getAnswer(int question_num) {
+      return _repository.getMatchAnswerList(_level.value, _chapter.value, _stage.value, _question_num);
   }
-
 
   List<QuestionList> questListToList(String value) {
     List<QuestionList> questionList = json
@@ -94,8 +85,6 @@ class SpeedGameBloc {
 
     return answerList;
   }
-
-
 }
 
-final speedBloc = SpeedGameBloc();
+final matchBloc = MatchGameBloc();

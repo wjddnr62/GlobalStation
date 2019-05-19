@@ -1,13 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:lms_flutter/theme.dart';
 
+String answer="";
+
 class GoldE extends StatefulWidget {
+
+  final String level;
+  final int chapter;
+  final int stage;
+  final int question_num;
+  final String title;
+  final String question;
+
+  GoldE({Key key, this.level, this.chapter, this.stage, this.question_num,this.title,
+    this.question})
+      : super(key: key);
+
+
   @override
   Gold createState() => Gold();
 }
 
 class Gold extends State<GoldE> {
-  String title = "Listen and choose the correct answer.";
+//  String title = "Listen and choose the correct answer.";
 
   final String silverWood = "assets/gamebox/img/speed/sliver_ans.png";
 
@@ -35,19 +50,15 @@ class Gold extends State<GoldE> {
               width: size.width,
               child: Center(
                 child: Text(
-                  title,
+                  widget.title,
                   style: titleTextStyle,
                 ),
               ),
             ),
           ),
           Positioned(
-            top: size.height / 2.2,
+            top: size.height / 2.1,
             child: answer(size),
-          ),
-          Positioned(
-            bottom: 10,
-            child: nextBtn(size),
           ),
         ],
       ),

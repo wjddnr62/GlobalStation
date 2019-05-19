@@ -1,10 +1,13 @@
-import 'package:http/http.dart' as http;
 import 'dart:async';
 
+import 'package:http/http.dart' as http;
+
 class MatchProvider {
-  static final String defaultUrl = "https://ga.oig.kr/laon_api/api/match/";
+  static final String defaultUrl = "http://ga.oig.kr/laon_api/api/match/";
 
   String getStage = defaultUrl + "stageList?";
+  String getQuest = defaultUrl + "questList?";
+  String getAnswer = defaultUrl + "answerList?";
 
   http.Client client = http.Client();
 
@@ -14,4 +17,33 @@ class MatchProvider {
 
     return response.body;
   }
+
+  Future<String> getQuestList(String level, int chapter, int stage) async {
+    final response = await http.get(getQuest +
+        'level=' +
+        level +
+        '&chapter=' +
+        chapter.toString() +
+        '&stage=' +
+        stage.toString());
+
+    return response.body;
+  }
+
+  Future<String> getAnswerList(
+      String level, int chapter, int stage, int question_num) async {
+    final response = await client.get(getAnswer +
+        'level=' +
+        level +
+        '&chapter=' +
+        chapter.toString() +
+        "&stage=" +
+        stage.toString() +
+        "&question_num=" +
+        question_num.toString());
+
+    return response.body;
+  }
+
+
 }

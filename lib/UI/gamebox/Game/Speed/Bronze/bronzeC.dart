@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:lms_flutter/bloc/speed_game_bloc.dart';
 import 'package:lms_flutter/theme.dart';
+
+int answer = 0;
 
 class BronzeC extends StatefulWidget {
 
@@ -27,7 +30,6 @@ class Bronze extends State<BronzeC> {
 
   @override
   Widget build(BuildContext context) {
-    print(11);
     return body(MediaQuery.of(context).size);
   }
 
@@ -81,19 +83,19 @@ class Bronze extends State<BronzeC> {
           ),
           Positioned(
             top: size.height / 2.15,
-            child: postIt("D", "A", size),
+            child: postIt("D", "A", size,1),
           ),
           Positioned(
             top: size.height / 1.78,
-            child: postIt("C", "B", size),
+            child: postIt("C", "B", size,2),
           ),
           Positioned(
             top: size.height / 1.52,
-            child: postIt("D", "C", size),
+            child: postIt("D", "C", size,3),
           ),
           Positioned(
             top: size.height / 1.33,
-            child: postIt("C", "D", size),
+            child: postIt("C", "D", size,4),
           ),
 
 //          Positioned(
@@ -105,24 +107,31 @@ class Bronze extends State<BronzeC> {
     );
   }
 
-  Widget postIt(String type, String text, Size size) {
+  Widget postIt(String type, String text, Size size,int idx) {
     return Container(
       width: size.width - 20,
       height: 50,
       padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Stack(
-        children: <Widget>[
-          Image.asset(
-            (type == "C") ? C_POSTIT : D_POSTIT,
-            width: size.width - 20,
-            height: 50,
-            fit: BoxFit.cover,
-          ),
-          Align(
-            alignment: AlignmentDirectional.center,
-            child: Text(text),
-          ),
-        ],
+      child: InkWell(
+        onTap: (){
+          speedBloc.answerType = 1;
+          answer = idx;
+          speedBloc.answer = answer;
+        },
+        child: Stack(
+          children: <Widget>[
+            Image.asset(
+              (type == "C") ? C_POSTIT : D_POSTIT,
+              width: size.width - 20,
+              height: 50,
+              fit: BoxFit.cover,
+            ),
+            Align(
+              alignment: AlignmentDirectional.center,
+              child: Text(text),
+            ),
+          ],
+        ),
       ),
     );
   }

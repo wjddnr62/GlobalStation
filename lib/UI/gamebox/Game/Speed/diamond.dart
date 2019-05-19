@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lms_flutter/model/Speed/questionList.dart';
 import 'package:lms_flutter/theme.dart';
 
 import 'Diamond/diamondC.dart';
@@ -6,25 +7,78 @@ import 'Diamond/diamondD1.dart';
 import 'Diamond/diamondD2.dart';
 import 'Diamond/diamondE.dart';
 
+//
+//class SpeedDiamond extends StatefulWidget{
+//
+//  String type = "E";
+//
+//  @override
+//  Diamond createState() => Diamond();
+//}
+//
+//class Diamond extends State<SpeedDiamond>{
+//  @override
+//  Widget build(BuildContext context) {
+//    if(widget.type == "D-1")
+//      return DiamondD1();
+//    else if(widget.type == "C")
+//      return DiamondC();
+//    else if(widget.type == "D-2")
+//      return DiamondD2();
+//    else
+//      return DiamondE();
+//  }
+//}
 
-class SpeedDiamond extends StatefulWidget{
+class SpeedDiamond{
 
-  String type = "E";
+  final List<QuestionList> qList;
 
-  @override
-  Diamond createState() => Diamond();
-}
 
-class Diamond extends State<SpeedDiamond>{
-  @override
-  Widget build(BuildContext context) {
-    if(widget.type == "D-1")
-      return DiamondD1();
-    else if(widget.type == "C")
-      return DiamondC();
-    else if(widget.type == "D-2")
-      return DiamondD2();
-    else
-      return DiamondE();
+  SpeedDiamond({this.qList});
+
+  List<Widget> views = [];
+
+  List<Widget> getViews(){
+    for (QuestionList question in qList) {
+      if (question.type == "D-1") {
+        views.add(DiamondD1(
+          level: question.level.substring(0, 1),
+          stage: 1,
+          question: question.contents,
+          chapter: question.chapter,
+          question_num: question.question_num,
+          title: question.title,
+        ));
+      } else if (question.type == "D-2") {
+        views.add(DiamondD2(
+          level: question.level.substring(0, 1),
+          stage: 1,
+          question: question.contents,
+          chapter: question.chapter,
+          question_num: question.question_num,
+          title: question.title,
+        ));
+      }else if (question.type == "C"){
+        views.add(DiamondC(
+          level: question.level.substring(0, 1),
+          stage: 1,
+          question: question.contents,
+          chapter: question.chapter,
+          question_num: question.question_num,
+          title: question.title,
+        ));
+      }else if(question.type == "E"){
+        views.add(DiamondE(
+          level: question.level.substring(0, 1),
+          stage: 1,
+          question: question.contents,
+          chapter: question.chapter,
+          question_num: question.question_num,
+          title: question.title,
+        ));
+      }
+    }
+    return views;
   }
 }

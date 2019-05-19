@@ -1,14 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:lms_flutter/theme.dart';
 
+String answer = "";
+
 class DiamondD2 extends StatefulWidget {
+
+  final String level;
+  final int chapter;
+  final int stage;
+  final int question_num;
+  final String title;
+  final String question;
+
+  DiamondD2({Key key, this.level, this.chapter, this.stage, this.question_num,this.title,
+    this.question})
+      : super(key: key);
+
+
   @override
   Diamond createState() => Diamond();
 }
 
 class Diamond extends State<DiamondD2> {
-  String title = "Listen and choose the correct answer.";
-  String question = "Did you use to _____ a gift when you visited someone's house?";
+//  String title = "Listen and choose the correct answer.";
+//  String question = "Did you use to _____ a gift when you visited someone's house?";
 
   final String diaQue = "assets/gamebox/img/speed/dia_ans.png";
 
@@ -47,7 +62,7 @@ class Diamond extends State<DiamondD2> {
                       width: size.width - 100,
                       child:Center(
                         child: Text(
-                          question,
+                          widget.question,
                           style: titleTextStyle,
                         ),
                       ),
@@ -63,7 +78,7 @@ class Diamond extends State<DiamondD2> {
               width: size.width,
               child: Center(
                 child: Text(
-                  title,
+                  widget.title,
                   style: titleTextStyle,
                 ),
               ),
@@ -72,10 +87,6 @@ class Diamond extends State<DiamondD2> {
           Positioned(
             top: size.height / 2.15,
             child: message(size),
-          ),
-          Positioned(
-            bottom: 10,
-            child: nextBtn(size),
           ),
         ],
       ),

@@ -1,14 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:lms_flutter/theme.dart';
 
+String answer = "";
+
 class GoldD2 extends StatefulWidget {
+  final String level;
+  final int chapter;
+  final int stage;
+  final int question_num;
+  final String title;
+  final String question;
+
+  GoldD2({Key key, this.level, this.chapter, this.stage, this.question_num,this.title,
+    this.question})
+      : super(key: key);
+
   @override
   Gold createState() => Gold();
 }
 
 class Gold extends State<GoldD2> {
-  String title = "Listen and choose the correct answer.";
-  String question = "We'll bring some ___ to the party.";
+//  String title = "Listen and choose the correct answer.";
+//  String question = "We'll bring some ___ to the party.";
 
   final String goldQue = "assets/gamebox/img/speed/gold_ans.png";
 
@@ -47,7 +60,7 @@ class Gold extends State<GoldD2> {
                       width: size.width - 100,
                       child:Center(
                         child: Text(
-                          question,
+                          widget.question,
                           style: titleTextStyle,
                         ),
                       ),
@@ -63,19 +76,15 @@ class Gold extends State<GoldD2> {
               width: size.width,
               child: Center(
                 child: Text(
-                  title,
+                  widget.title,
                   style: titleTextStyle,
                 ),
               ),
             ),
           ),
           Positioned(
-            top: size.height / 2.25,
+            top: size.height / 2.1,
             child: wood(size),
-          ),
-          Positioned(
-            bottom: 10,
-            child: nextBtn(size),
           ),
         ],
       ),

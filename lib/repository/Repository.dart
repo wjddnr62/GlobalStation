@@ -1,16 +1,15 @@
+import 'package:http/http.dart' as http;
 import 'package:lms_flutter/provider/tbl_book_api.dart';
-import '../provider/login_api.dart';
 import 'package:lms_flutter/provider/tbl_problem_answer_api.dart';
 import 'package:lms_flutter/provider/tbl_problem_question_public_unit_api.dart';
 import 'package:lms_flutter/provider/tbl_problem_question_unit_api.dart';
 import 'package:lms_flutter/provider/tbl_problem_unit_api.dart';
 import 'package:lms_flutter/provider/tbl_unit_api.dart';
 
-import '../provider/speed_provider.dart';
-import '../provider/quiz_provider.dart';
+import '../provider/login_api.dart';
 import '../provider/match_provider.dart';
-
-import 'package:http/http.dart' as http;
+import '../provider/quiz_provider.dart';
+import '../provider/speed_provider.dart';
 
 class Repository {
   final _loginProvider = LoginProvider();
@@ -36,16 +35,21 @@ class Repository {
   Future<String> fetchGetUnitList(http.Client client, String book_key) =>
       _unitProvider.fetchGetUnitList(client, book_key);
 
-  Future<String> fetchGetProblemUnit1List(http.Client client, String book_key) =>
+  Future<String> fetchGetProblemUnit1List(
+          http.Client client, String book_key) =>
       _problemunitProvider.fetchGetProblemUnit1List(client, book_key);
 
-  Future<String> fetchGetQuestion1List(http.Client client, String book_key, String type_no, String type_name) =>
-      _questionProvider.fetchGetQuestion1List(client, book_key, type_no, type_name);
+  Future<String> fetchGetQuestion1List(http.Client client, String book_key,
+          String type_no, String type_name) =>
+      _questionProvider.fetchGetQuestion1List(
+          client, book_key, type_no, type_name);
 
-  Future<String> fetchGetQuestionPublic1List(http.Client client, int public_no) =>
+  Future<String> fetchGetQuestionPublic1List(
+          http.Client client, int public_no) =>
       _questionpublicProvider.fetchGetQuestionPublic1List(client, public_no);
 
-  Future<String> fetchGetAnswerList(http.Client client, String book_key, String type_no, String type_name) =>
+  Future<String> fetchGetAnswerList(http.Client client, String book_key,
+          String type_no, String type_name) =>
       _answerProvider.fetchGetAnswerList(client, book_key, type_no, type_name);
 
   Future<String> getSpeedStageList(String level, int chapter) =>
@@ -57,16 +61,25 @@ class Repository {
   Future<String> getMatchStageList(String level, int chapter) =>
       _matchProvider.getStageList(level, chapter);
 
+  Future<String> getMatchQuestList(String level, int chapter, int stage) =>
+      _matchProvider.getQuestList(level, chapter, stage);
+
+  Future<String> getMatchAnswerList(
+          String level, int chapter, int stage, int question_num) =>
+      _matchProvider.getAnswerList(level, chapter, stage, question_num);
+
   Future<String> getSpeedQuestList(String level, int chapter, int stage) =>
       _speedProvider.getQuestList(level, chapter, stage);
 
   Future<String> getSpeedAnswerList(
-      String level, int chapter, int stage, int question_num) =>
+          String level, int chapter, int stage, int question_num) =>
       _speedProvider.getAnswerList(level, chapter, stage, question_num);
 
   Future<String> getSpeedAnswerO(
-      String level, int chapter, int stage, int question_num, int answer) =>
+          String level, int chapter, int stage, int question_num, int answer) =>
       _speedProvider.getAnswerO(level, chapter, stage, question_num, answer);
 
-
+  Future<String> getSpeedAnswerA(String level, int chapter, int stage,
+          int question_num, String answer) =>
+      _speedProvider.getAnswerA(level, chapter, stage, question_num, answer);
 }

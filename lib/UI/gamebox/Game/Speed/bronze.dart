@@ -177,4 +177,5 @@ class SpeedBronze{
     }
     return views;
   }
+
 }

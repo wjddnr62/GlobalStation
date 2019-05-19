@@ -1,80 +1,62 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:lms_flutter/model/Speed/questionList.dart';
-
-import 'phonics.dart';
-import 'bronze.dart';
-import 'silver.dart';
-import 'gold.dart';
-import 'diamond.dart';
-
-import 'speed.dart';
-
-import 'package:lms_flutter/bloc/speed_game_bloc.dart';
-import 'dart:convert';
+import 'package:lms_flutter/UI/gamebox/Game/Matching/phonics.dart';
+import 'package:lms_flutter/bloc/match_game_bloc.dart';
+import 'package:lms_flutter/model/Match/questionList.dart';
 
 int viewidx;
 int question_num = 0;
 int maxLen;
 
-class SpeedGameDialog extends StatefulWidget {
+class MatchGameDialog extends StatefulWidget {
   String level;
   int chapter;
   int stage;
 
-  SpeedGameDialog({Key key, this.level, this.chapter, this.stage})
+  MatchGameDialog({Key key, this.level, this.chapter, this.stage})
       : super(key: key);
 
   @override
-  SpeedGameDialogState createState() => SpeedGameDialogState();
+  MatchGameDialogState createState() => MatchGameDialogState();
 }
 
-class SpeedGameDialogState extends State<SpeedGameDialog> {
+class MatchGameDialogState extends State<MatchGameDialog> {
   @override
   Widget build(BuildContext context) {
-    speedBloc.getLevel(widget.level);
-    speedBloc.getChapter(widget.chapter);
-    speedBloc.getStage(widget.stage);
+    matchBloc.getLevel(widget.level);
+    matchBloc.getChapter(widget.chapter);
+    matchBloc.getStage(widget.stage);
+    // TODO: implement build
     return Scaffold(
-        backgroundColor: Colors.black.withOpacity(0.5),
-        body: SafeArea(
-          child: Padding(
-            child: StreamBuilder(
-              stream: speedBloc.getQuestionList(),
+      backgroundColor: Colors.black.withOpacity(0.5),
+      body: SafeArea(
+        child: Padding(
+          child: StreamBuilder(
+              stream: matchBloc.getQuestionList(),
               builder: (context, snapshot) {
-                print("questionList = " + snapshot.hasData.toString());
+                print("phonics_questionList = " + snapshot.hasData.toString());
                 if (snapshot.hasData) {
                   String jsonValue = snapshot.data;
                   List<QuestionList> qList =
-                      speedBloc.questListToList(jsonValue);
-                  if (widget.level == "B") {
+                      matchBloc.questListToList(jsonValue);
+                  if (widget.level == "P") {
                     return GameList(
-                        item: SpeedBronze(qList: qList).getViews(),
-                        size: MediaQuery.of(context).size);
-                  }else if(widget.level == "S"){
-                    return GameList(
-                        item: SpeedSilver(qList: qList).getViews(),
-                        size: MediaQuery.of(context).size);
-                  }else if(widget.level == "G"){
-                    return GameList(
-                        item: SpeedGold(qList: qList).getViews(),
-                        size: MediaQuery.of(context).size);
-                  }else if(widget.level == "D"){
-                    return GameList(
-                        item: SpeedDiamond(qList: qList).getViews(),
-                        size: MediaQuery.of(context).size);
+                      item: MatchPhonics(qList: qList).getViews(),
+                      size: MediaQuery.of(context).size,
+                    );
                   }
-
                 }
                 return SizedBox(
                   width: 100.0,
                   height: 100.0,
                 );
-              },
-            ),
+              }),
             padding: const EdgeInsets.all(10),
-          ),
-        ));
+        ),
+      ),
+    );
   }
 }
 
@@ -107,7 +89,7 @@ class GameListState extends State<GameList> {
             Positioned(
               bottom: 50,
               child: nextBtn(widget.size),
-            ),
+            )
           ],
         );
       },
@@ -118,9 +100,7 @@ class GameListState extends State<GameList> {
   Widget nextBtn(Size size) {
     return InkWell(
       onTap: () {
-        speedBloc
-            .getAnswer(speedBloc.question_num)
-            .then((value) {
+        matchBloc.getAnswer(matchBloc.question_num).then((value) {
           Map<String, dynamic> json = jsonDecode(value);
 
           if (json['data'] == 'Y') {
@@ -128,10 +108,9 @@ class GameListState extends State<GameList> {
           } else if (json['data'] == 'N') {
             print("오답");
           }
-          speedBloc.answer = 0;
-          speedBloc.question_num = 0;
-          speedBloc.answerA = "";
-          speedBloc.answerType = 0;
+
+          matchBloc.answer = 0;
+          matchBloc.question_num = 0;
 
           if (viewidx == maxLen - 1) {
             print("끝");
