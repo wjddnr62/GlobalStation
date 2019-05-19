@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:lms_flutter/UI/gamebox/Game/Quiz/quizDialog.dart';
 import 'package:lms_flutter/UI/gamebox/Game/Speed/speedDialog.dart';
 import 'package:lms_flutter/model/stage.dart';
 import 'package:lms_flutter/theme.dart';
@@ -50,60 +51,21 @@ class GameDialogState extends State<GameDialog> {
 
   @override
   Widget build(BuildContext context) {
-    if (startGame) {
-      if (selectGame == "S") {
-//        return Scaffold(
-//            backgroundColor: Colors.black.withOpacity(0.5),
-//            body: SafeArea(
-//              child: Padding(
-//                child: SpeedGame(level: list[widget.idx],chapter: widget.cap),
-//                padding: const EdgeInsets.all(10),
-//              ),
-//            ));
-        Navigator.of(context).pop();
-        Navigator.of(context).push(PageRouteBuilder(
-            opaque: false,
-            pageBuilder: (BuildContext context, _, __) => SpeedGameDialog(
-//                      level: widget.lev,
-              level: "B",
-              chapter: widget.cap,
-            )));
-        print("333");
-      } else if (selectGame == "Q") {
-        return Scaffold(
-            backgroundColor: Colors.black.withOpacity(0.5),
-            body: SafeArea(
-              child: Padding(
-                child: QuizDiamond(),
-                padding: const EdgeInsets.all(10),
-              ),
-            ));
-      } else if (selectGame == "M") {
-        return Scaffold(
-            backgroundColor: Colors.black.withOpacity(0.5),
-            body: SafeArea(
-              child: Padding(
-                child: MatchPhonics(),
-                padding: const EdgeInsets.all(10),
-              ),
-            ));
-      }
-    }
     return Scaffold(
         backgroundColor: Colors.black.withOpacity(0.5),
         body: dialogType == "K"
             ? SafeArea(
-          child: Padding(
-            child: selectGameKind(),
-            padding: const EdgeInsets.all(10),
-          ),
-        )
+                child: Padding(
+                  child: selectGameKind(),
+                  padding: const EdgeInsets.all(10),
+                ),
+              )
             : SafeArea(
-          child: Padding(
-            child: selectGameStage(),
-            padding: const EdgeInsets.all(10),
-          ),
-        ));
+                child: Padding(
+                  child: selectGameStage(),
+                  padding: const EdgeInsets.all(10),
+                ),
+              ));
   }
 
   Widget selectGameKind() {
@@ -273,7 +235,6 @@ class GameDialogState extends State<GameDialog> {
                     return ListView.builder(
                       itemCount: stages.length,
                       itemBuilder: (context, idx) {
-                        print("1");
                         return Padding(
                           padding: const EdgeInsets.only(bottom: 20),
                           child: Container(
@@ -284,17 +245,29 @@ class GameDialogState extends State<GameDialog> {
 //                                setState(() {
 //                                  startGame = true;
 //                                });
-                                print(selectGame);
-                                if(selectGame == "S"){
+
+                                if (selectGame == "S") {
                                   Navigator.of(context).pop();
                                   Navigator.of(context).push(PageRouteBuilder(
                                       opaque: false,
-                                      pageBuilder: (BuildContext context, _, __) => SpeedGameDialog(
-//                      level: widget.lev,
-                                        level: widget.lev,
-                                        chapter: widget.cap,
-                                        stage: stages[idx].stage,
-                                      )));
+                                      pageBuilder:
+                                          (BuildContext context, _, __) =>
+                                              SpeedGameDialog(
+                                                level: widget.lev,
+                                                chapter: widget.cap,
+                                                stage: stages[idx].stage,
+                                              )));
+                                }else if (selectGame == "Q") {
+                                  Navigator.of(context).pop();
+                                  Navigator.of(context).push(PageRouteBuilder(
+                                      opaque: false,
+                                      pageBuilder:
+                                          (BuildContext context, _, __) =>
+                                          QuizGameDialog(
+                                            level: widget.lev,
+                                            chapter: widget.cap,
+                                            stage: stages[idx].stage,
+                                          )));
                                 }
                               },
                               child: dialogView(
@@ -310,7 +283,6 @@ class GameDialogState extends State<GameDialog> {
                   );
                 },
               ),
-
             ),
           ),
         ],

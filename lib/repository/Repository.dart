@@ -77,5 +77,14 @@ class Repository {
       int question_num, String answer) =>
       _speedProvider.getAnswerA(level, chapter, stage, question_num, answer);
 
+  Future<String> getQuizQuestList(String level, int chapter, int stage) =>
+      _quizProvider.getQuestList(level, chapter, stage);
 
+  Future<String> getQuizAnswerList(String level, int chapter, int stage,
+      int question_num) =>
+      _quizProvider.getAnswerList(level, chapter, stage, question_num);
+
+  Future<String> getQuizAnwer(String level, int chapter, int stage,
+      int question_num, int answer_num) =>
+      _quizProvider.getCheckAnswer(level, chapter, stage, question_num, answer_num);
 }
