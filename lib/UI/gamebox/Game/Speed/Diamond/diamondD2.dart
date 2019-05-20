@@ -36,17 +36,20 @@ class Diamond extends State<DiamondD2> {
   Widget body(Size size) {
     return Container(
       width: size.width,
-      height: size.height,
+      height: size.height - 40,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+      ),
       child: Stack(
         children: <Widget>[
           Image.asset(
             "assets/gamebox/img/speed/speed_dia_2.png",
             width: size.width,
             height: size.height,
-            fit: BoxFit.cover,
+            fit: BoxFit.fill,
           ),
           Positioned(
-            top: size.height / 3.3,
+            top: size.height / 2.85,
             width: size.width - 20,
             child: Container(
               child: Stack(
@@ -73,7 +76,7 @@ class Diamond extends State<DiamondD2> {
             ),
           ),
           Positioned(
-            top: size.height / 4.3,
+            top: size.height / 3.8,
             child: Container(
               width: size.width,
               child: Center(
@@ -85,7 +88,7 @@ class Diamond extends State<DiamondD2> {
             ),
           ),
           Positioned(
-            top: size.height / 2.15,
+            top: size.height / 1.9,
             child: message(size),
           ),
         ],

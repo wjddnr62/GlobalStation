@@ -37,7 +37,10 @@ class Gold extends State<GoldC> {
   Widget body(Size size) {
     return Container(
       width: size.width,
-      height: size.height,
+      height: size.height - 40,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+      ),
       child: StreamBuilder(
         stream: speedBloc.getAnswerList(widget.question_num),
         builder: (context, snapshot){
@@ -51,7 +54,7 @@ class Gold extends State<GoldC> {
                   "assets/gamebox/img/speed/speed_gold_1.png",
                   width: size.width,
                   height: size.height,
-                  fit: BoxFit.cover,
+                  fit: BoxFit.fill,
                 ),
                 Positioned(
                   top: size.height / 7.5,

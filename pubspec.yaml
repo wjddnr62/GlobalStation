@@ -29,7 +29,8 @@ dependencies:
   shared_preferences: ^0.4.3
   rxdart: ^0.22.0
   flutter_swiper: ^1.1.6
-  cached_network_image: ^0.8.0
+  audioplayers: ^0.12.0
+
 
 dev_dependencies:
   flutter_test:
@@ -70,7 +71,9 @@ flutter:
     - assets/gamebox/img/speed/
     - assets/gamebox/img/quiz/
     - assets/gamebox/img/match/
+    - assets/gamebox/img/effect/
     - assets/level/
+    - assets/gamebox/audio/
 
 fonts:
   - family: Jua

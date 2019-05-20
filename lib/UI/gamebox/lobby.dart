@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'gameDialog.dart';
 import 'package:lms_flutter/model/UserInfo.dart';
-import 'package:lms_flutter/model/user.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class LobbyPage extends StatefulWidget {
   @override
@@ -10,6 +10,17 @@ class LobbyPage extends StatefulWidget {
 }
 
 class LobbyHomePage extends State<LobbyPage> {
+
+//  AudioPlayer audioPlayer = new AudioPlayer();
+//
+//  play() async {
+//    int result = await audioPlayer.play("assets/gamebox/audio/backgroundmusic.mp3",isLocal: true);
+//    if (result == 1){
+//      print("suc");
+//    }
+//  }
+
+
   int level = UserInfo().member_level;
 
   List<String> lobbyImg = [
@@ -145,6 +156,7 @@ class LobbyHomePage extends State<LobbyPage> {
 
   @override
   Widget build(BuildContext context) {
+//    play();
     return Scaffold(
       body: body(MediaQuery.of(context).size),
     );

@@ -86,10 +86,10 @@ class GameListState extends State<GameList> {
         return Stack(
           children: <Widget>[
             widget.item[viewidx],
-            Positioned(
-              bottom: 50,
-              child: nextBtn(widget.size),
-            )
+//            Positioned(
+//              bottom: 50,
+//              child: nextBtn(widget.size),
+//            )
           ],
         );
       },

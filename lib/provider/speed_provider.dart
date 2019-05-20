@@ -21,7 +21,7 @@ class SpeedProvider {
   }
 
   Future<String> getQuestList(String level, int chapter, int stage) async {
-    final response = await http.get(getQuest +
+    final response = await client.get(getQuest +
         'level=' +
         level +
         '&chapter=' +

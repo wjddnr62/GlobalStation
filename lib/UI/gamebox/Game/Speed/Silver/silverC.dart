@@ -37,7 +37,10 @@ class Silver extends State<SilverC> {
   Widget body(Size size) {
     return Container(
       width: size.width,
-      height: size.height,
+      height: size.height - 40,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+      ),
       child: StreamBuilder(
         stream: speedBloc.getAnswerList(widget.question_num),
         builder: (context, snapshot){
@@ -52,7 +55,7 @@ class Silver extends State<SilverC> {
                   "assets/gamebox/img/speed/speed_silver_5.png",
                   width: size.width,
                   height: size.height,
-                  fit: BoxFit.cover,
+                  fit: BoxFit.fill,
                 ),
 
                 Positioned(

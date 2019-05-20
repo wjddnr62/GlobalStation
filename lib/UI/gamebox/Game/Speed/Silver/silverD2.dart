@@ -185,14 +185,17 @@ class SilverD2 extends StatelessWidget{
   Widget body(Size size) {
     return Container(
       width: size.width,
-      height: size.height,
+      height: size.height - 40,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+      ),
       child: Stack(
         children: <Widget>[
           Image.asset(
             "assets/gamebox/img/speed/speed_silver_1.png",
             width: size.width,
             height: size.height,
-            fit: BoxFit.cover,
+            fit: BoxFit.fill,
           ),
           Positioned(
             top: size.height / 3.1,
