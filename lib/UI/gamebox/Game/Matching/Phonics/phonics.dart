@@ -30,12 +30,15 @@ class PhonicsM extends State<Phonics> {
 
   bool answer_check = false;
   bool next_question = false;
+  bool answer_finish = false;
 
   String answer_one = "";
   String answer_two = "";
   int answer_count = 0;
-
   int answer_finish_count = 0;
+  int answer_all_length = 0;
+
+  String finish_img;
 
   int answer_one_list;
   int answer_one_no;
@@ -60,6 +63,7 @@ class PhonicsM extends State<Phonics> {
   bool isOpen = true;
 
   void isOpenChange() {
+    print("Open_Change : " + this.isOpen.toString());
     if (this.isOpen = true) {
       setState(() {
         dataSetCheck = 0;
@@ -71,6 +75,20 @@ class PhonicsM extends State<Phonics> {
   inVisible() async {
     var _duration = Duration(seconds: 2);
     return Timer(_duration, isOpenChange);
+  }
+
+  nextQuestion() async {
+    print("next_async");
+    return Timer(Duration(seconds: 1), nextQ);
+  }
+
+  void nextQ() {
+    setState(() {
+      next_question = false;
+      this.isOpen = true;
+      answer_count = 0;
+      dataSetCheck = 0;
+    });
   }
 
   void answerReset() {
@@ -126,11 +144,21 @@ class PhonicsM extends State<Phonics> {
       answer_one = "";
       answer_two = "";
       answer_count += 1;
-      if (answer_count == 3) {
+      answer_finish_count += 1;
+      answer_all_length += 1;
+      if (answer_finish_count != 5 && answer_count == 3) {
         print("next_question");
-        answer_count = 0;
-        dataSetCheck = 0;
+        next_question = true;
+        print("open? : " + this.isOpen.toString());
+        this.isOpen = true;
+        nextQuestion();
+        print("new_row");
+        rowData(1);
+        rowData(2);
+        print("in");
         inVisible();
+      } else if (answer_all_length == 5) {
+
       }
       answer_check = false;
     });
@@ -164,7 +192,7 @@ class PhonicsM extends State<Phonics> {
   }
 
   Widget body(Size size) {
-    return next_question ? Image.asset("assets/gamebox/img/effect/result_background.png") : Container(
+    return Container(
       width: size.width,
       height: size.height,
       decoration: BoxDecoration(
@@ -175,7 +203,7 @@ class PhonicsM extends State<Phonics> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             String jsonValue = snapshot.data;
-//            firstShell.clear();
+
             if (dataSetCheck != 1) {
               answerList = matchBloc.answerListToList(jsonValue);
               firstShell.clear();
@@ -207,15 +235,42 @@ class PhonicsM extends State<Phonics> {
             return Stack(
               children: <Widget>[
                 Container(
-                  width: size.width,
-                  height: size.height,
-                  child: Image.asset(
-                    "assets/gamebox/img/match/18.png",
-                    fit: BoxFit.fill,
                     width: size.width,
                     height: size.height,
-                  ),
-                ),
+                    child: answer_finish ? Image.asset("assets/gamebox/img/effect/result_background.png") : next_question
+                        ? Column(
+                            children: <Widget>[
+//                              Positioned(
+//                                left: 0,
+//                                child: Opacity(
+//                                    opacity: 0.5,
+//                                    child: Container(
+//                                      width: size.width,
+//                                      height: size.height,
+//                                      decoration: BoxDecoration(
+//                                          borderRadius:
+//                                              BorderRadius.circular(10),
+//                                          color: Colors.black),
+//                                    )),
+//                              ),
+                              Image.asset(
+                                "assets/gamebox/img/match/18.png",
+                                fit: BoxFit.fill,
+                                width: size.width,
+                                height: size.height,
+                              ),
+                            ],
+                          )
+                        : Column(
+                            children: <Widget>[
+                              Image.asset(
+                                "assets/gamebox/img/match/18.png",
+                                fit: BoxFit.fill,
+                                width: size.width,
+                                height: size.height,
+                              ),
+                            ],
+                          )),
                 Positioned(
                   top: size.width / 3.5,
                   child: Container(
@@ -225,21 +280,29 @@ class PhonicsM extends State<Phonics> {
                         horizontal: 10, vertical: 10),
                     child: Stack(
                       children: <Widget>[
-                        Image.asset(
-                          "assets/gamebox/img/match/17.png",
-                          width: size.width - 20,
-                          height: 360,
-                          fit: BoxFit.fill,
-                        ),
+                        next_question
+                            ? Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: <Widget>[
+                                  Image.asset(
+                                      "assets/gamebox/img/effect/yay.png")
+                                ],
+                              )
+                            : Image.asset(
+                                "assets/gamebox/img/match/17.png",
+                                width: size.width - 20,
+                                height: 360,
+                                fit: BoxFit.fill,
+                              ),
                         Align(
                           alignment: AlignmentDirectional.topCenter,
                           child: next_question
                               ? Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
                                   crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: <Widget>[
-                                    Image.asset("assets/gamebox/img/effect/yay.png")
-                                  ],
+                                  children: <Widget>[],
                                 )
                               : Column(
                                   mainAxisAlignment:
