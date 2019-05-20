@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:lms_flutter/UI/gamebox/Settings/character.dart';
+import 'package:lms_flutter/UI/gamebox/Settings/setting.dart';
 import 'gameDialog.dart';
 import 'package:lms_flutter/model/UserInfo.dart';
 import 'package:audioplayers/audioplayers.dart';
@@ -10,7 +12,6 @@ class LobbyPage extends StatefulWidget {
 }
 
 class LobbyHomePage extends State<LobbyPage> {
-
 //  AudioPlayer audioPlayer = new AudioPlayer();
 //
 //  play() async {
@@ -19,7 +20,6 @@ class LobbyHomePage extends State<LobbyPage> {
 //      print("suc");
 //    }
 //  }
-
 
   int level = UserInfo().member_level;
 
@@ -62,6 +62,44 @@ class LobbyHomePage extends State<LobbyPage> {
             height: 100,
           ),
         ),
+        SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 10),
+            child: Align(
+              alignment: AlignmentDirectional.topStart,
+              child: InkWell(
+                onTap: () {
+                  setCharacter();
+                },
+                child: Image.asset(
+                  "assets/gamebox/img/btn_myinfo.png",
+                  fit: BoxFit.contain,
+                  width: 50,
+                  height: 50,
+                ),
+              ),
+            ),
+          ),
+        ),
+        SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: Align(
+              alignment: AlignmentDirectional.topEnd,
+              child: InkWell(
+                onTap: () {
+                  settings();
+                },
+                child: Image.asset(
+                  "assets/gamebox/img/btn_setting.png",
+                  fit: BoxFit.contain,
+                  width: 50,
+                  height: 50,
+                ),
+              ),
+            ),
+          ),
+        ),
         Align(
           alignment: AlignmentDirectional.bottomCenter,
           child: Image.asset(
@@ -83,7 +121,7 @@ class LobbyHomePage extends State<LobbyPage> {
               var cap = 0;
               if (idx <= 2) {
                 lev = "P";
-                cap = idx + 1; // 0,1,2
+                cap = idx + 1;
               } else if (idx <= 5) {
                 lev = "B";
                 cap = idx - 2;
@@ -114,13 +152,13 @@ class LobbyHomePage extends State<LobbyPage> {
                 ),
                 (idx + 1 > level)
                     ? Positioned.fill(
-                  child: Container(
-                    color: Color.fromARGB(100, 0, 0, 0),
-                  ),
-                )
+                        child: Container(
+                          color: Color.fromARGB(100, 0, 0, 0),
+                        ),
+                      )
                     : SizedBox(
-                  width: 0,
-                ),
+                        width: 0,
+                      ),
               ],
             ),
           ),
@@ -137,10 +175,24 @@ class LobbyHomePage extends State<LobbyPage> {
     Navigator.of(context).push(PageRouteBuilder(
         opaque: false,
         pageBuilder: (BuildContext context, _, __) => GameDialog(
-          idx: idx,
-          lev: lev,
-          cap: cap,
-        )));
+              idx: idx,
+              lev: lev,
+              cap: cap,
+            )));
+  }
+
+  void settings() {
+    Navigator.of(context).push(PageRouteBuilder(
+      opaque: false,
+      pageBuilder: (context, _, __) => SettingsPage(),
+    ));
+  }
+
+  void setCharacter() {
+    Navigator.of(context).push(PageRouteBuilder(
+      opaque: false,
+      pageBuilder: (context, _, __) => CharacterPage(),
+    ));
   }
 
   @override

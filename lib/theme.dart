@@ -16,6 +16,8 @@ final quizBronzeColor = Color.fromARGB(255, 247, 81, 86);
 final quizSilverColor = Color.fromARGB(255, 44, 173, 151);
 final quizGoldColor = Color.fromARGB(255, 51, 143, 208);
 final quizDiamondColor = Color.fromARGB(255, 117, 65, 180);
+final beige = Color.fromARGB(255 ,255, 255, 231);
+final skyBlue = Color.fromARGB(255, 215, 234, 235);
 
 //------------------------------------
 
