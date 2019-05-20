@@ -5,10 +5,11 @@ import 'package:lms_flutter/UI/bookbox/unit_start.dart';
 import 'package:lms_flutter/bloc/answer_bloc.dart';
 import 'package:lms_flutter/bloc/question_bloc.dart';
 import 'package:lms_flutter/bloc/unit_bloc.dart';
-import 'package:lms_flutter/model/answer.dart';
-import 'package:lms_flutter/model/question.dart';
-import 'package:lms_flutter/model/unit.dart';
-import 'package:lms_flutter/model/unitData.dart';
+import 'package:lms_flutter/model/BookBox/ProblemList.dart';
+import 'package:lms_flutter/model/BookBox/answer.dart';
+import 'package:lms_flutter/model/BookBox/question.dart';
+import 'package:lms_flutter/model/BookBox/unit.dart';
+import 'package:lms_flutter/model/BookBox/unitData.dart';
 import 'package:lms_flutter/theme.dart';
 
 import '../unit_end.dart';
@@ -19,6 +20,7 @@ class phonics_1_SB_1 extends StatefulWidget {
 
 class _phonics_1_SB_1 extends State<phonics_1_SB_1> {
   final unitData unitdata = new unitData();
+  final ProblemList problemList = new ProblemList();
 
   String img_url = 'http://isgec.oig.kr/img/bookbox/SB/Phonics1/Unit%201/';
 
@@ -33,14 +35,22 @@ class _phonics_1_SB_1 extends State<phonics_1_SB_1> {
   int detail_no = 1;
   int page_num = 0;
   int page_end = 0;
+  int back_status = 0;
 
   AppBar appBar_height;
 
   List<Unit> unitList = new List();
   List<ProblemUnit> problemunitList = new List();
+
   List<Question> questionList = new List();
+  List<Question> questionList_sub = new List();
+  List<Question> questionList_back = new List();
   List<QuestionPublic> questionpublicList = new List();
+  List<QuestionPublic> questionpublicList_sub = new List();
+  List<QuestionPublic> questionpublicList_back = new List();
   List<Answer> answerList = new List();
+  List<Answer> answerList_sub = new List();
+  List<Answer> answerList_back = new List();
 
   bool unitSelect = false;
   bool questionSelect = false;
@@ -52,76 +62,88 @@ class _phonics_1_SB_1 extends State<phonics_1_SB_1> {
   void initState() {
     super.initState();
 
-      unit_level = unitdata.unit_level;
-      unit_name = unitdata.unit_name;
-      unit_sub_name = unitdata.unit_sub_name;
-      book_key = unitdata.book_key;
-      amount = unitdata.amount;
+    unit_level = unitdata.unit_level;
+    unit_name = unitdata.unit_name;
+    unit_sub_name = unitdata.unit_sub_name;
+    book_key = unitdata.book_key;
+    amount = unitdata.amount;
 
-      unit_bloc.changebook_key(book_key);
-      unit_bloc.getUnitList().then((value) {
-        List<dynamic> unitValue = json.decode(value)['data'];
-        print("getUnitLIst : " + unitValue.toString());
+    unit_bloc.changebook_key(book_key);
+    unit_bloc.getUnitList().then((value) {
+      List<dynamic> unitValue = json.decode(value)['data'];
+      print("getUnitLIst : " + unitValue.toString());
 
-        for (int i = 0; i < unitValue.length; i++) {
-          unitList.add(Unit(
-              json.decode(value)['data'][i]['book_key'],
-              json.decode(value)['data'][i]['book_page'],
-              json.decode(value)['data'][i]['name'],
-              json.decode(value)['data'][i]['num'],
-              json.decode(value)['data'][i]['division_no'],
-              json.decode(value)['data'][i]['division_name'],
-              json.decode(value)['data'][i]['type_no'],
-              json.decode(value)['data'][i]['type_name'],
-              json.decode(value)['data'][i]['music'],
-              json.decode(value)['data'][i]['answer_check']));
+      for (int i = 0; i < unitValue.length; i++) {
+        unitList.add(Unit(
+            json.decode(value)['data'][i]['book_key'],
+            json.decode(value)['data'][i]['book_page'],
+            json.decode(value)['data'][i]['name'],
+            json.decode(value)['data'][i]['num'],
+            json.decode(value)['data'][i]['division_no'],
+            json.decode(value)['data'][i]['division_name'],
+            json.decode(value)['data'][i]['type_no'],
+            json.decode(value)['data'][i]['type_name'],
+            json.decode(value)['data'][i]['music'],
+            json.decode(value)['data'][i]['answer_check']));
+      }
+
+      unit_bloc.getProblemUnit1List().then((value) {
+        List<dynamic> problemunitValue = json.decode(value)['data'];
+        print("getproblemUnitList : " + problemunitValue.toString());
+
+        for (int i = 0; i < problemunitValue.length; i++) {
+          problemunitList.add(ProblemUnit(
+            json.decode(value)['data'][i]['book_key'],
+            json.decode(value)['data'][i]['division_name'],
+            json.decode(value)['data'][i]['division_no'],
+            json.decode(value)['data'][i]['type_name'],
+            json.decode(value)['data'][i]['type_no'],
+            json.decode(value)['data'][i]['question_no'],
+            json.decode(value)['data'][i]['public_no'],
+          ));
         }
 
-        unit_bloc.getProblemUnit1List().then((value) {
-          List<dynamic> problemunitValue = json.decode(value)['data'];
-          print("getproblemUnitList : " + problemunitValue.toString());
+        getProblemData(unitList[0].type_no, unitList[0].type_name,
+            problemunitList[0].public_no);
+        detail_no = 1;
 
-          for (int i = 0; i < problemunitValue.length; i++) {
-            problemunitList.add(ProblemUnit(
-              json.decode(value)['data'][i]['book_key'],
-              json.decode(value)['data'][i]['division_name'],
-              json.decode(value)['data'][i]['division_no'],
-              json.decode(value)['data'][i]['type_name'],
-              json.decode(value)['data'][i]['type_no'],
-              json.decode(value)['data'][i]['question_no'],
-              json.decode(value)['data'][i]['public_no'],
-            ));
-          }
-
-          getProblemData(unitList[0].type_no, unitList[0].type_name,
-              problemunitList[0].public_no);
-        });
-
+        ListSet();
       });
+    });
   }
 
-  Future<void> DataSet() async {
+  DataSet(int check) {
     setState(() {
       questionSelect = false;
       music_use = false;
       answer_use = false;
       public_use = false;
 
-      print("dataset_pageNum : " + page_num.toString());
-      getProblemData(unitList[page_num].type_no, unitList[page_num].type_name,
-          problemunitList[page_num].public_no);
-
-      for (int i = 0; i< questionList.length; i++){
-        print("detail_no : " + questionList[i].detail_no.toString());
+      print("dataset_pageNum : " + (page_num + 1).toString());
+      if (check == 0) {
+        getProblemData(
+            unitList[(page_num - 1)].type_no,
+            unitList[(page_num - 1)].type_name,
+            problemunitList[(page_num)].public_no);
+        detail_no = 1;
+      } else if (check == 1) {
+        getProblemData(
+            unitList[(page_num + 1)].type_no,
+            unitList[(page_num + 1)].type_name,
+            problemunitList[(page_num + 1)].public_no);
+        detail_no = 0;
       }
 
-      detail_no = 1;
-      unitContainer = unitContainer;
-    });
+      for (int i = 0; i < questionList_sub.length; i++) {
+        print("detail_no : " + questionList_sub[i].detail_no.toString());
+      }
 
+
+//      unitContainer = unitContainer;
+    });
   }
 
-  Future<void> getProblemData(String type_no, String type_name, int public_no) async {
+  void getProblemData(String type_no, String type_name, int public_no) {
     question_bloc.changebook_key(book_key);
     question_bloc.changetype_name(type_name);
     question_bloc.changetype_no(type_no);
@@ -132,63 +154,51 @@ class _phonics_1_SB_1 extends State<phonics_1_SB_1> {
 
     setState(() {
       if (unitList[page_num].music != null) {
-        setState(() {
-          music_use = true;
-        });
+        music_use = true;
       }
 
-      try{
-        question_bloc.getQuestion1List().then((value) {
-          List<dynamic> questionValue = json.decode(value)['data'];
+      question_bloc.getQuestion1List().then((value) {
+        List<dynamic> questionValue = json.decode(value)['data'];
 
-          questionList.clear();
+        questionList_sub.clear();
 
-          for (int i = 0; i < questionValue.length; i++) {
-            setState(() {
-              questionList.add(Question(
-                json.decode(value)['data'][i]['book_key'],
-                json.decode(value)['data'][i]['division_name'],
-                json.decode(value)['data'][i]['division_no'],
-                json.decode(value)['data'][i]['type_name'],
-                json.decode(value)['data'][i]['type_no'],
-                json.decode(value)['data'][i]['question_no'],
-                json.decode(value)['data'][i]['question_sub'],
-                json.decode(value)['data'][i]['detail_no'],
-                json.decode(value)['data'][i]['question'],
-                json.decode(value)['data'][i]['img'],
-                json.decode(value)['data'][i]['ani_img'],
-                json.decode(value)['data'][i]['quiz_status'],
-              ));
-            });
-          }
+        for (int i = 0; i < questionValue.length; i++) {
+          questionList_sub.add(Question(
+            json.decode(value)['data'][i]['book_key'],
+            json.decode(value)['data'][i]['division_name'],
+            json.decode(value)['data'][i]['division_no'],
+            json.decode(value)['data'][i]['type_name'],
+            json.decode(value)['data'][i]['type_no'],
+            json.decode(value)['data'][i]['question_no'],
+            json.decode(value)['data'][i]['question_sub'],
+            json.decode(value)['data'][i]['detail_no'],
+            json.decode(value)['data'][i]['question'],
+            json.decode(value)['data'][i]['img'],
+            json.decode(value)['data'][i]['ani_img'],
+            json.decode(value)['data'][i]['quiz_status'],
+          ));
+        }
 
-          if (questionSelect == false) {
-            questionSelect = true;
-            print("question");
-          }
+//          problemList.questionList = questionList;
 
-//          detail_no = 1;
-//          unitContainer = unitContainer;
-          setState(() {
-          });
-        });
-      }finally{
-        setState(() {
+        if (questionSelect == false) {
           questionSelect = true;
-        });
-      }
-
+          print("question");
+        }
+      }).catchError((error) {
+        print("error = ${error}");
+      });
 
       if (public_no != 0) {
         question_bloc.changepublic_no(public_no);
         question_bloc.getQuestionPublic1List().then((value) {
           List<dynamic> questionpublicValue = json.decode(value)['data'];
 
-          questionpublicList.clear();
+          questionpublicList_sub.clear();
 
           for (int i = 0; i < questionpublicValue.length; i++) {
             setState(() {
-              questionpublicList.add(QuestionPublic(
+              questionpublicList_sub.add(QuestionPublic(
                 json.decode(value)['data'][i]['public_no'],
                 json.decode(value)['data'][i]['detail_no'],
                 json.decode(value)['data'][i]['question'],
@@ -197,10 +207,9 @@ class _phonics_1_SB_1 extends State<phonics_1_SB_1> {
               ));
             });
           }
-          setState(() {
-            public_use = true;
+
+          public_use = true;
 //            unitContainer = unitContainer;
-          });
         });
       }
 
@@ -208,11 +217,11 @@ class _phonics_1_SB_1 extends State<phonics_1_SB_1> {
         List<dynamic> answerValue = json.decode(value)['data'];
         print("answerValue : " + answerValue.toString());
 
-        answerList.clear();
+        answerList_sub.clear();
 
         for (int i = 0; i < answerValue.length; i++) {
           setState(() {
-            answerList.add(Answer(
+            answerList_sub.add(Answer(
               json.decode(value)['data'][i]['book_key'],
               json.decode(value)['data'][i]['division_name'],
               json.decode(value)['data'][i]['division_no'],
@@ -225,20 +234,24 @@ class _phonics_1_SB_1 extends State<phonics_1_SB_1> {
             ));
           });
         }
-        setState(() {
-          for (int i = 0; i < answerList.length; i++) {
-            if (answerList[i].answer != null &&
-                answerList[i].sub_answer != null) {
-              answer_use = true;
+        for (int i = 0; i < answerList_sub.length; i++) {
+          if (answerList_sub[i].answer != null &&
+              answerList_sub[i].sub_answer != null) {
+            answer_use = true;
 //              unitContainer = unitContainer;
-              break;
-            }
+            break;
           }
-        });
+        }
       });
     });
+  }
 
-
+  ListSet() {
+    setState(() {
+      questionList = questionList_sub;
+      questionpublicList = questionpublicList_sub;
+      answerList = answerList_sub;
+    });
   }
 
   Widget A() {
@@ -382,8 +395,14 @@ class _phonics_1_SB_1 extends State<phonics_1_SB_1> {
                         setState(() {
                           if (detail_no == 1) {
                             page_num -= 1;
-                            DataSet();
+                            questionList = questionList_back;
+                            back_status = 0;
                             unitContainer = A();
+                            print(detail_no.toString() +
+                                ", " +
+                                questionList.length.toString() +
+                                ", " +
+                                page_num.toString());
                           } else if (detail_no == questionList.length) {
                             detail_no -= 1;
                             unitContainer = B();
@@ -476,10 +495,12 @@ class _phonics_1_SB_1 extends State<phonics_1_SB_1> {
               Padding(
                 padding: EdgeInsets.only(top: 20.0),
                 child: questionSelect
-                    ? questionList[detail_no -1 ].question != null ? Text(
-                        questionList[detail_no - 1].question,
-                        style: TextStyle(color: Colors.black, fontSize: 20),
-                      ) : Text("e")
+                    ? questionList[detail_no - 1].question != null
+                        ? Text(
+                            questionList[detail_no - 1].question,
+                            style: TextStyle(color: Colors.black, fontSize: 20),
+                          )
+                        : Text("e")
                     : Text("t"),
               ),
             ],
@@ -608,22 +629,43 @@ class _phonics_1_SB_1 extends State<phonics_1_SB_1> {
 
                       if (page_end == 0) {
                         if (page_num == 0) {
-                          if (detail_no < questionList.length) {
-                            print("check");
-                            detail_no += 1;
-                            unitContainer = A();
-                          } else if (detail_no == questionList.length) {
-                            page_num += 1;
-                            detail_no = 1;
-                            DataSet();
-                            unitContainer = B();
-                          }
                           print("a : " +
                               detail_no.toString() +
                               ", " +
                               page_num.toString() +
                               ", " +
+                              questionList.length.toString() +
+                              ", " +
                               questionSelect.toString());
+                          if (detail_no < questionList.length) {
+                            print("check");
+                            detail_no += 1;
+                            unitContainer = A();
+                            if (back_status == 0) {
+                              questionList_back = questionList;
+                              back_status = 1;
+                            }
+                            if (detail_no == questionList.length) {
+                              print("questionList1 : " +
+                                  questionList.length.toString() +
+                                  ", " +
+                                  detail_no.toString());
+                              DataSet(1);
+                              page_num++;
+                              print("dataset");
+                              print("questionList2 : " +
+                                  questionList.length.toString() +
+                                  ", " +
+                                  detail_no.toString());
+                            }
+                          } else if (detail_no == questionList.length) {
+                            print("next_page");
+                            page_num += 1;
+                            detail_no = 1;
+//                            DataSet();
+                            unitContainer = B();
+                            ListSet();
+                          }
                         } else if (page_num == 1) {
                           if (detail_no < questionList.length) {
                             detail_no += 1;

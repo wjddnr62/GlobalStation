@@ -76,6 +76,7 @@ flutter:
     - assets/gamebox/img/charactor/skin/
     - assets/gamebox/img/charactor/hairStyle/
     - assets/gamebox/img/charactor/hat/
+    - assets/gamebox/img/effect/
     - assets/level/
     - assets/gamebox/audio/
 

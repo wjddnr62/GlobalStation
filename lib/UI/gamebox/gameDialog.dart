@@ -9,6 +9,7 @@ import 'package:lms_flutter/model/UserInfo.dart';
 
 import 'package:lms_flutter/bloc/game_public_bloc.dart';
 
+import 'Game/Matching/matchDialog.dart';
 import 'Game/Speed/phonics.dart';
 import 'Game/Speed/bronze.dart';
 import 'Game/Speed/silver.dart';
@@ -235,6 +236,7 @@ class GameDialogState extends State<GameDialog> {
                     return ListView.builder(
                       itemCount: stages.length,
                       itemBuilder: (context, idx) {
+                        print("1");
                         return Padding(
                           padding: const EdgeInsets.only(bottom: 20),
                           child: Container(
@@ -268,6 +270,16 @@ class GameDialogState extends State<GameDialog> {
                                             chapter: widget.cap,
                                             stage: stages[idx].stage,
                                           )));
+                                }else if (selectGame == "M") {
+                                  Navigator.of(context).pop();
+                                  Navigator.of(context).push(PageRouteBuilder(
+                                      opaque: false,
+                                      pageBuilder: (BuildContext context, _, __) => MatchGameDialog(
+//                      level: widget.lev,
+                                        level: widget.lev,
+                                        chapter: widget.cap,
+                                        stage: stages[idx].stage,
+                                      )));
                                 }
                               },
                               child: dialogView(
@@ -283,6 +295,7 @@ class GameDialogState extends State<GameDialog> {
                   );
                 },
               ),
+
             ),
           ),
         ],

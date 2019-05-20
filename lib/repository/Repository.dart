@@ -1,3 +1,4 @@
+import 'package:http/http.dart' as http;
 import 'package:lms_flutter/provider/tbl_book_api.dart';
 import '../provider/login_api.dart';
 import 'package:lms_flutter/provider/tbl_problem_answer_api.dart';
@@ -6,6 +7,7 @@ import 'package:lms_flutter/provider/tbl_problem_question_unit_api.dart';
 import 'package:lms_flutter/provider/tbl_problem_unit_api.dart';
 import 'package:lms_flutter/provider/tbl_unit_api.dart';
 
+import '../provider/login_api.dart';
 import '../provider/speed_provider.dart';
 import '../provider/quiz_provider.dart';
 import '../provider/match_provider.dart';
@@ -61,6 +63,13 @@ class Repository {
 
   Future<String> getMatchStageList(String level, int chapter) =>
       _matchProvider.getStageList(level, chapter);
+
+  Future<String> getMatchQuestList(String level, int chapter, int stage) =>
+      _matchProvider.getQuestList(level, chapter, stage);
+
+  Future<String> getMatchAnswerList(
+          String level, int chapter, int stage, int question_num) =>
+      _matchProvider.getAnswerList(level, chapter, stage, question_num);
 
   Future<String> getSpeedQuestList(String level, int chapter, int stage) =>
       _speedProvider.getQuestList(level, chapter, stage);

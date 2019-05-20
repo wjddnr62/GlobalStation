@@ -55,7 +55,7 @@ Widget unitStart(String unit_level, String unit_name, String unit_sub_name,
             child: Container(
 //              color: white,
               width: double.infinity,
-              height: 270,
+              height: 250,
               decoration: BoxDecoration(
                 color: Colors.white,
                 border: Border.all(color: Colors.grey)

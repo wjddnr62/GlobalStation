@@ -2,7 +2,7 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 
 class SpeedProvider {
-  static final String defaultUrl = "https://ga.oig.kr/laon_api/api/speed/";
+  static final String defaultUrl = "http://ga.oig.kr/laon_api/api/speed/";
   String getStage = defaultUrl + "stageList?";
   String getQuest = defaultUrl + "questList?";
   String getAnswer = defaultUrl + "answerList?";
@@ -69,6 +69,7 @@ class SpeedProvider {
       'question_num': question_num.toString(),
       'answer': answer
     });
+
     return response.body;
   }
 }
