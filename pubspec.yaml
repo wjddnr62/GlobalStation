@@ -71,6 +71,11 @@ flutter:
     - assets/gamebox/img/speed/
     - assets/gamebox/img/quiz/
     - assets/gamebox/img/match/
+    - assets/gamebox/img/charactor/eye/
+    - assets/gamebox/img/charactor/hair/
+    - assets/gamebox/img/charactor/skin/
+    - assets/gamebox/img/charactor/hairStyle/
+    - assets/gamebox/img/charactor/hat/
     - assets/gamebox/img/effect/
     - assets/level/
     - assets/gamebox/audio/
@@ -78,7 +83,7 @@ flutter:
 fonts:
   - family: Jua
     fonts:
-      - asset: fonts/BMJUA_ttf.ttf
+      - asset: fonts/BM-JUA.otf
   #  - images/a_dot_burr.jpeg
   #  - images/a_dot_ham.jpeg
 
