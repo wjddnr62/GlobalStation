@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:lms_flutter/bloc/match_game_bloc.dart';
 import 'package:lms_flutter/model/Match/answerList.dart';
 
+import '../../../../../theme.dart';
+
 int answer = 0;
 
 class Phonics extends StatefulWidget {
@@ -52,8 +54,12 @@ class PhonicsM extends State<Phonics> {
 
   List<AnswerList> answerList = new List();
 
+  int next_problem = 0;
+
   List<shellData> firstShell = new List();
   List<shellData> secondShell = new List();
+  List<shellData> firstShell_sub = new List();
+  List<shellData> secondShell_sub = new List();
 
   List<shellParam> shell_param = new List();
 
@@ -65,6 +71,7 @@ class PhonicsM extends State<Phonics> {
   void isOpenChange() {
     print("Open_Change : " + this.isOpen.toString());
     if (this.isOpen = true) {
+//      dataSetCheck = 0;
       setState(() {
         dataSetCheck = 0;
         this.isOpen = false;
@@ -85,9 +92,11 @@ class PhonicsM extends State<Phonics> {
   void nextQ() {
     setState(() {
       next_question = false;
-      this.isOpen = true;
+//      this.isOpen = true;
       answer_count = 0;
+      next_problem = 1;
       dataSetCheck = 0;
+//      inVisible();
     });
   }
 
@@ -144,21 +153,21 @@ class PhonicsM extends State<Phonics> {
       answer_one = "";
       answer_two = "";
       answer_count += 1;
-      answer_finish_count += 1;
-      answer_all_length += 1;
-      if (answer_finish_count != 5 && answer_count == 3) {
-        print("next_question");
-        next_question = true;
-        print("open? : " + this.isOpen.toString());
-        this.isOpen = true;
-        nextQuestion();
-        print("new_row");
-        rowData(1);
-        rowData(2);
-        print("in");
-        inVisible();
-      } else if (answer_all_length == 5) {
-
+      print("count_up");
+      print("all_length : " + answer_all_length.toString() + ", " + answer_finish_count.toString());
+      if (answer_all_length != 5 && answer_count == 3) {
+        answer_finish_count += 1;
+        answer_all_length += 1;
+        if (answer_all_length == 5) {
+          answer_finish = true;
+        } else {
+          print("next_question");
+          next_question = true;
+          nextQuestion();
+          rowData(1);
+          rowData(2);
+          inVisible();
+        }
       }
       answer_check = false;
     });
@@ -203,43 +212,104 @@ class PhonicsM extends State<Phonics> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             String jsonValue = snapshot.data;
-
-            if (dataSetCheck != 1) {
-              answerList = matchBloc.answerListToList(jsonValue);
-              firstShell.clear();
-              for (int i = 0; i < 3; i++) {
-                print("first open check : " + this.isOpen.toString());
-                if (answerList[i].en == null || answerList[i].en == "") {
-                  firstShell
-                      .add(shellData(1, this.isOpen, answerList[i].img, 1));
-                } else {
-                  firstShell
-                      .add(shellData(2, this.isOpen, answerList[i].en, 1));
+            answerList = matchBloc.answerListToList(jsonValue);
+            if (next_problem != 2) {
+              if (dataSetCheck != 1) {
+                firstShell.clear();
+                for (int i = 0; i < 3; i++) {
+//                  print("first open check : " + this.isOpen.toString());
+                  if (answerList[i].en == null || answerList[i].en == "") {
+                    firstShell
+                        .add(shellData(1, this.isOpen, answerList[i].img, 1));
+                  } else {
+                    firstShell
+                        .add(shellData(2, this.isOpen, answerList[i].en, 1));
+                  }
                 }
+                secondShell.clear();
+                for (int i = 3; i < 6; i++) {
+                  if (answerList[i].en == null || answerList[i].en == "") {
+                    secondShell
+                        .add(shellData(1, this.isOpen, answerList[i].img, 1));
+                  } else {
+                    secondShell
+                        .add(shellData(2, this.isOpen, answerList[i].en, 1));
+                  }
+                }
+                if (next_problem == 1) {
+                  firstShell_sub.clear();
+                  for (int i = 0; i < firstShell.length; i++) {
+//                print("first open check : " + this.isOpen.toString());
+//                    print("first_sub : " +
+//                        firstShell[i].type.toString() +
+//                        ", " +
+//                        firstShell[i].param);
+                    firstShell_sub.add(shellData(firstShell[i].type,
+                        this.isOpen, firstShell[i].param, 1));
+                  }
+                  secondShell_sub.clear();
+                  for (int i = 0; i < secondShell.length; i++) {
+//                    print("second_sub : " +
+//                        secondShell[i].type.toString() +
+//                        ", " +
+//                        secondShell[i].param);
+                    secondShell_sub.add(shellData(secondShell[i].type,
+                        this.isOpen, secondShell[i].param, 1));
+                  }
+//                  print("sub length : " +
+//                      firstShell_sub.length.toString() +
+//                      ", " +
+//                      secondShell_sub.length.toString());
+                  next_problem = 2;
+//                  inVisible();
+                }
+              }
+            } else if (next_problem == 2 && dataSetCheck != 1) {
+//              print("sub length : " +
+//                  firstShell_sub.length.toString() +
+//                  ", " +
+//                  secondShell_sub.length.toString());
+//              print("next_problem 2");
+              firstShell.clear();
+              for (int i = 0; i < firstShell_sub.length; i++) {
+//                print("first open check : " + this.isOpen.toString());
+//                print("first_sub : " +
+//                    firstShell_sub[i].type.toString() +
+//                    ", " +
+//                    firstShell_sub[i].param);
+                firstShell.add(shellData(firstShell_sub[i].type, this.isOpen,
+                    firstShell_sub[i].param, 1));
               }
               secondShell.clear();
-              for (int i = 3; i < 6; i++) {
-                if (answerList[i].en == null || answerList[i].en == "") {
-                  secondShell
-                      .add(shellData(1, this.isOpen, answerList[i].img, 1));
-                } else {
-                  secondShell
-                      .add(shellData(2, this.isOpen, answerList[i].en, 1));
-                }
+              for (int i = 0; i < secondShell_sub.length; i++) {
+//                print("second_sub : " +
+//                    secondShell_sub[i].type.toString() +
+//                    ", " +
+//                    secondShell_sub[i].param);
+                secondShell.add(shellData(secondShell_sub[i].type, this.isOpen,
+                    secondShell_sub[i].param, 1));
               }
+//              print("length : " +
+//                  firstShell.length.toString() +
+//                  ", " +
+//                  secondShell.length.toString());
             }
+
             dataSetCheck = 1;
 
-            print("check");
+//            print("check");
 //            print("match_list_length : " + firstShell.length.toString() + ", " + secondShell.length.toString());
             return Stack(
               children: <Widget>[
                 Container(
                     width: size.width,
                     height: size.height,
-                    child: answer_finish ? Image.asset("assets/gamebox/img/effect/result_background.png") : next_question
-                        ? Column(
-                            children: <Widget>[
+                    child: answer_finish
+                        ? Image.asset(
+                            "assets/gamebox/img/effect/result_background.png")
+                        : next_question
+                            ? Column(
+                                children: <Widget>[
 //                              Positioned(
 //                                left: 0,
 //                                child: Opacity(
@@ -253,24 +323,24 @@ class PhonicsM extends State<Phonics> {
 //                                          color: Colors.black),
 //                                    )),
 //                              ),
-                              Image.asset(
-                                "assets/gamebox/img/match/18.png",
-                                fit: BoxFit.fill,
-                                width: size.width,
-                                height: size.height,
-                              ),
-                            ],
-                          )
-                        : Column(
-                            children: <Widget>[
-                              Image.asset(
-                                "assets/gamebox/img/match/18.png",
-                                fit: BoxFit.fill,
-                                width: size.width,
-                                height: size.height,
-                              ),
-                            ],
-                          )),
+                                  Image.asset(
+                                    "assets/gamebox/img/match/18.png",
+                                    fit: BoxFit.fill,
+                                    width: size.width,
+                                    height: size.height,
+                                  ),
+                                ],
+                              )
+                            : Column(
+                                children: <Widget>[
+                                  Image.asset(
+                                    "assets/gamebox/img/match/18.png",
+                                    fit: BoxFit.fill,
+                                    width: size.width,
+                                    height: size.height,
+                                  ),
+                                ],
+                              )),
                 Positioned(
                   top: size.width / 3.5,
                   child: Container(
@@ -280,21 +350,36 @@ class PhonicsM extends State<Phonics> {
                         horizontal: 10, vertical: 10),
                     child: Stack(
                       children: <Widget>[
-                        next_question
-                            ? Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  Image.asset(
-                                      "assets/gamebox/img/effect/yay.png")
-                                ],
+                        answer_finish
+                            ? Align(
+                                alignment: AlignmentDirectional.topCenter,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(
+                                      widget.level.toString() + ", " + widget.stage.toString() + ", " + widget.chapter.toString(),
+                                      style: titleTextStyle,
+                                    )
+                                  ],
+                                ),
                               )
-                            : Image.asset(
-                                "assets/gamebox/img/match/17.png",
-                                width: size.width - 20,
-                                height: 360,
-                                fit: BoxFit.fill,
-                              ),
+                            : next_question
+                                ? Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: <Widget>[
+                                      Image.asset(
+                                          "assets/gamebox/img/effect/yay.png")
+                                    ],
+                                  )
+                                : Image.asset(
+                                    "assets/gamebox/img/match/17.png",
+                                    width: size.width - 20,
+                                    height: 360,
+                                    fit: BoxFit.fill,
+                                  ),
                         Align(
                           alignment: AlignmentDirectional.topCenter,
                           child: next_question
