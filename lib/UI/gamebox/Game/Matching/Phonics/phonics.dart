@@ -1,12 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:lms_flutter/UI/gamebox/public/Result.dart';
 import 'package:lms_flutter/bloc/match_game_bloc.dart';
 import 'package:lms_flutter/model/Match/answerList.dart';
-
-import '../../../../../theme.dart';
-
-int answer = 0;
 
 class Phonics extends StatefulWidget {
   final String level;
@@ -71,7 +68,6 @@ class PhonicsM extends State<Phonics> {
   void isOpenChange() {
     print("Open_Change : " + this.isOpen.toString());
     if (this.isOpen = true) {
-//      dataSetCheck = 0;
       setState(() {
         dataSetCheck = 0;
         this.isOpen = false;
@@ -87,6 +83,17 @@ class PhonicsM extends State<Phonics> {
   nextQuestion() async {
     print("next_async");
     return Timer(Duration(seconds: 1), nextQ);
+  }
+
+  finishResult() async {
+    return Timer(Duration(seconds: 1), resultView);
+  }
+
+  void resultView() {
+    setState(() {
+      next_question = false;
+      answer_finish = true;
+    });
   }
 
   void nextQ() {
@@ -154,12 +161,16 @@ class PhonicsM extends State<Phonics> {
       answer_two = "";
       answer_count += 1;
       print("count_up");
-      print("all_length : " + answer_all_length.toString() + ", " + answer_finish_count.toString());
+      print("all_length : " +
+          answer_all_length.toString() +
+          ", " +
+          answer_finish_count.toString());
       if (answer_all_length != 5 && answer_count == 3) {
         answer_finish_count += 1;
         answer_all_length += 1;
         if (answer_all_length == 5) {
-          answer_finish = true;
+          next_question = true;
+          resultView();
         } else {
           print("next_question");
           next_question = true;
@@ -180,6 +191,14 @@ class PhonicsM extends State<Phonics> {
     } else if (answerNo == 1) {
       return Timer(Duration(seconds: 1), answerOk);
     }
+  }
+
+  resetGame() {
+    print("P_M_reset");
+  }
+
+  resultNextGame() {
+    print("P_M_resultNextGame");
   }
 
   @override
@@ -217,7 +236,6 @@ class PhonicsM extends State<Phonics> {
               if (dataSetCheck != 1) {
                 firstShell.clear();
                 for (int i = 0; i < 3; i++) {
-//                  print("first open check : " + this.isOpen.toString());
                   if (answerList[i].en == null || answerList[i].en == "") {
                     firstShell
                         .add(shellData(1, this.isOpen, answerList[i].img, 1));
@@ -239,60 +257,28 @@ class PhonicsM extends State<Phonics> {
                 if (next_problem == 1) {
                   firstShell_sub.clear();
                   for (int i = 0; i < firstShell.length; i++) {
-//                print("first open check : " + this.isOpen.toString());
-//                    print("first_sub : " +
-//                        firstShell[i].type.toString() +
-//                        ", " +
-//                        firstShell[i].param);
                     firstShell_sub.add(shellData(firstShell[i].type,
                         this.isOpen, firstShell[i].param, 1));
                   }
                   secondShell_sub.clear();
                   for (int i = 0; i < secondShell.length; i++) {
-//                    print("second_sub : " +
-//                        secondShell[i].type.toString() +
-//                        ", " +
-//                        secondShell[i].param);
                     secondShell_sub.add(shellData(secondShell[i].type,
                         this.isOpen, secondShell[i].param, 1));
                   }
-//                  print("sub length : " +
-//                      firstShell_sub.length.toString() +
-//                      ", " +
-//                      secondShell_sub.length.toString());
                   next_problem = 2;
-//                  inVisible();
                 }
               }
             } else if (next_problem == 2 && dataSetCheck != 1) {
-//              print("sub length : " +
-//                  firstShell_sub.length.toString() +
-//                  ", " +
-//                  secondShell_sub.length.toString());
-//              print("next_problem 2");
               firstShell.clear();
               for (int i = 0; i < firstShell_sub.length; i++) {
-//                print("first open check : " + this.isOpen.toString());
-//                print("first_sub : " +
-//                    firstShell_sub[i].type.toString() +
-//                    ", " +
-//                    firstShell_sub[i].param);
                 firstShell.add(shellData(firstShell_sub[i].type, this.isOpen,
                     firstShell_sub[i].param, 1));
               }
               secondShell.clear();
               for (int i = 0; i < secondShell_sub.length; i++) {
-//                print("second_sub : " +
-//                    secondShell_sub[i].type.toString() +
-//                    ", " +
-//                    secondShell_sub[i].param);
                 secondShell.add(shellData(secondShell_sub[i].type, this.isOpen,
                     secondShell_sub[i].param, 1));
               }
-//              print("length : " +
-//                  firstShell.length.toString() +
-//                  ", " +
-//                  secondShell.length.toString());
             }
 
             dataSetCheck = 1;
@@ -305,8 +291,24 @@ class PhonicsM extends State<Phonics> {
                     width: size.width,
                     height: size.height,
                     child: answer_finish
-                        ? Image.asset(
-                            "assets/gamebox/img/effect/result_background.png")
+                        ? Stack(
+                            children: <Widget>[
+                              Image.asset(
+                                  "assets/gamebox/img/effect/result_background.png"),
+                              Center(
+                                child: Result(
+                                    level: widget.level,
+                                    chapter: widget.chapter,
+                                    stage: widget.stage,
+                                    score: answer_finish_count,
+                                    scoreLength: answer_all_length,
+                                    sizeWidth:
+                                        MediaQuery.of(context).size.width,
+                                resetGame: resetGame(),
+                                resultNextGame: resultNextGame()),
+                              )
+                            ],
+                          )
                         : next_question
                             ? Column(
                                 children: <Widget>[
@@ -351,19 +353,7 @@ class PhonicsM extends State<Phonics> {
                     child: Stack(
                       children: <Widget>[
                         answer_finish
-                            ? Align(
-                                alignment: AlignmentDirectional.topCenter,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Text(
-                                      widget.level.toString() + ", " + widget.stage.toString() + ", " + widget.chapter.toString(),
-                                      style: titleTextStyle,
-                                    )
-                                  ],
-                                ),
-                              )
+                            ? Text("")
                             : next_question
                                 ? Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -418,22 +408,22 @@ class PhonicsM extends State<Phonics> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               shell(firstShell[0].type, firstShell[0].isOpen,
-                  firstShell[0].param, firstShell[0].opactiy),
+                  firstShell[0].param, firstShell[0].opacity),
               shell(firstShell[1].type, firstShell[1].isOpen,
-                  firstShell[1].param, firstShell[1].opactiy),
+                  firstShell[1].param, firstShell[1].opacity),
               shell(firstShell[2].type, firstShell[2].isOpen,
-                  firstShell[2].param, firstShell[2].opactiy),
+                  firstShell[2].param, firstShell[2].opacity),
             ],
           )
         : Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               shell(secondShell[0].type, secondShell[0].isOpen,
-                  secondShell[0].param, secondShell[0].opactiy),
+                  secondShell[0].param, secondShell[0].opacity),
               shell(secondShell[1].type, secondShell[1].isOpen,
-                  secondShell[1].param, secondShell[1].opactiy),
+                  secondShell[1].param, secondShell[1].opacity),
               shell(secondShell[2].type, secondShell[2].isOpen,
-                  secondShell[2].param, secondShell[2].opactiy),
+                  secondShell[2].param, secondShell[2].opacity),
             ],
           );
   }
@@ -452,7 +442,6 @@ class PhonicsM extends State<Phonics> {
               if (type == 1) {
                 for (int i = 0; i < firstShell.length; i++) {
                   if (firstShell[i].type == 1 && firstShell[i].param == param) {
-//                  print("type 1 fisrt : " + type.toString() + ", " + param);
                     firstShell.removeAt(i);
                     firstShell.insert(i, shellData(type, true, param, 1));
                     rowData(1);
@@ -615,9 +604,9 @@ class shellData {
   final int type;
   final bool isOpen;
   final String param;
-  final double opactiy;
+  final double opacity;
 
-  shellData(this.type, this.isOpen, this.param, this.opactiy);
+  shellData(this.type, this.isOpen, this.param, this.opacity);
 }
 
 class shellParam {

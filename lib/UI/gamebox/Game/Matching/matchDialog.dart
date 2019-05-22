@@ -6,6 +6,8 @@ import 'package:lms_flutter/UI/gamebox/Game/Matching/phonics.dart';
 import 'package:lms_flutter/bloc/match_game_bloc.dart';
 import 'package:lms_flutter/model/Match/questionList.dart';
 
+import 'bronze.dart';
+
 int viewidx;
 int question_num = 0;
 int maxLen;
@@ -44,6 +46,11 @@ class MatchGameDialogState extends State<MatchGameDialog> {
                   if (widget.level == "P") {
                     return GameList(
                       item: MatchPhonics(qList: qList).getViews(),
+                      size: MediaQuery.of(context).size,
+                    );
+                  } else if (widget.level == "B") {
+                    return GameList(
+                      item: MatchBronze(qList: qList).getViews(),
                       size: MediaQuery.of(context).size,
                     );
                   }

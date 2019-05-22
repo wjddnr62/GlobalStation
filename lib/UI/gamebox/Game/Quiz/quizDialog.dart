@@ -108,11 +108,11 @@ class GameListState extends State<GameList> {
         return Stack(
           children: <Widget>[
             widget.item[viewidx],
-            Positioned(
-              top: 10,
-              child: ProgressBar(sizeWidth: MediaQuery.of(context).size.width - 100,
-              maxTime: 30,),
-            ),
+//            Positioned(
+//              top: 10,
+//              child: ProgressBar(sizeWidth: MediaQuery.of(context).size.width - 100,
+//              maxTime: 30,),
+//            ),
             Positioned(
               bottom: 20,
               child: nextBtn(widget.size),
