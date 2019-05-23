@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lms_flutter/bloc/speed_game_bloc.dart';
 import 'package:lms_flutter/theme.dart';
 
 String answer="";
@@ -22,13 +23,12 @@ class DiamondE extends StatefulWidget {
 }
 
 class Diamond extends State<DiamondE> {
-//  String title = "Listen and choose the correct answer.";
 
   final String diaMessage = "assets/gamebox/img/speed/dia_ans.png";
 
   @override
   Widget build(BuildContext context) {
-    print(11);
+    speedBloc.answerType = 2;
     return body(MediaQuery.of(context).size);
   }
 
@@ -48,7 +48,7 @@ class Diamond extends State<DiamondE> {
             fit: BoxFit.fill,
           ),
           Positioned(
-            top: size.height / 4.3,
+            top: size.height / 3.8,
             child: Container(
               width: size.width,
               child: Center(
@@ -85,38 +85,24 @@ class Diamond extends State<DiamondE> {
             alignment: AlignmentDirectional.center,
             child: Padding(
               padding: const EdgeInsets.only(left: 40),
-              child: TextField(
-                decoration: InputDecoration(
-                  hintText: "_______________________",
-                  focusedBorder: InputBorder.none,
-                  enabledBorder: InputBorder.none,
-                ),
-              ),
+              child: input(),
             ),
           ),
-//          Align(
-//              alignment: AlignmentDirectional.centerStart,
-//              child: Padding(
-//                padding: const EdgeInsets.only(left: 20),
-//                child: Text(type+")"),
-//              )
-//          )
         ],
       ),
     );
   }
 
-  Widget nextBtn(Size size) {
-    return Container(
-      width: size.width,
-      height: 50,
-      child: Center(
-        child: Image.asset(
-          "assets/gamebox/img/next_btn.png",
-          width: 100,
-          height: 50,
-        ),
+  Widget input(){
+    return TextField(
+      decoration: InputDecoration(
+        hintText: "_______________________",
+        focusedBorder: InputBorder.none,
+        enabledBorder: InputBorder.none,
       ),
+      onChanged: (value){
+        speedBloc.answerA = value;
+      },
     );
   }
 }

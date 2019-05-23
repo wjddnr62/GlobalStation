@@ -30,6 +30,11 @@ class Silver extends State<SilverD1> {
 
   @override
   Widget build(BuildContext context) {
+    speedBloc.answerType = 1;
+    speedBloc.getLevel(widget.level);
+    speedBloc.getChapter(widget.chapter);
+    speedBloc.getStage(widget.stage);
+    speedBloc.question_num = widget.question_num;
     return body(MediaQuery.of(context).size);
   }
 
@@ -124,6 +129,8 @@ class Silver extends State<SilverD1> {
     );
   }
 
+  int clickAnswer = 0;
+
   Widget wood(String type, String text, Size size,int idx) {
     return Container(
       width: size.width - 20,
@@ -131,9 +138,11 @@ class Silver extends State<SilverD1> {
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: InkWell(
         onTap: (){
-          speedBloc.answerType = 1;
           answer = idx;
           speedBloc.answer = answer;
+          setState(() {
+            clickAnswer = idx;
+          });
         },
         child: Stack(
           children: <Widget>[
@@ -151,7 +160,7 @@ class Silver extends State<SilverD1> {
             ),
             Image.asset(
               silverWood,
-              width: size.width - 20,
+              width: (idx == clickAnswer)? size.width - 30: size.width - 50,
               height: 50,
               fit: BoxFit.fill,
             ),
@@ -172,17 +181,4 @@ class Silver extends State<SilverD1> {
     );
   }
 
-  Widget nextBtn(Size size) {
-    return Container(
-      width: size.width,
-      height: 50,
-      child: Center(
-        child: Image.asset(
-          "assets/gamebox/img/next_btn.png",
-          width: 100,
-          height: 50,
-        ),
-      ),
-    );
-  }
 }

@@ -36,7 +36,6 @@ class Phonics extends State<QuizP> {
       height: size.height - 40,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        color: Colors.red,
       ),
       child: StreamBuilder(
         stream: quizBloc.getAnswerList(widget.question_num),
@@ -106,6 +105,8 @@ class Phonics extends State<QuizP> {
     );
   }
 
+  int clickAnswer = 0;
+
   Widget answerRow(String ans1, String ans2,int type){
     int ans1Num = 0;
     int ans2Num = 0;
@@ -130,9 +131,12 @@ class Phonics extends State<QuizP> {
     return Container(
       width: 80,
       height: 50,
-      decoration: quizPhonicsBoxContainer,
+      decoration: (clickAnswer == num) ? quizPhonicsSelectBoxContainer : quizPhonicsBoxContainer,
       child: InkWell(
         onTap: (){
+          setState(() {
+            clickAnswer = num;
+          });
           quizBloc.answer = num;
         },
         child: Center(
@@ -146,7 +150,7 @@ class Phonics extends State<QuizP> {
     return Container(
       width: 200,
       height: 80,
-      color: Colors.red,
+//      color: Colors.red,
     );
   }
 

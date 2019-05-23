@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lms_flutter/bloc/speed_game_bloc.dart';
 import 'package:lms_flutter/theme.dart';
 
 String answer = "";
@@ -11,8 +12,14 @@ class GoldD2 extends StatefulWidget {
   final String title;
   final String question;
 
-  GoldD2({Key key, this.level, this.chapter, this.stage, this.question_num,this.title,
-    this.question})
+  GoldD2(
+      {Key key,
+      this.level,
+      this.chapter,
+      this.stage,
+      this.question_num,
+      this.title,
+      this.question})
       : super(key: key);
 
   @override
@@ -27,6 +34,7 @@ class Gold extends State<GoldD2> {
 
   @override
   Widget build(BuildContext context) {
+    speedBloc.answerType = 2;
     return body(MediaQuery.of(context).size);
   }
 
@@ -60,7 +68,7 @@ class Gold extends State<GoldD2> {
                     left: 55,
                     child: Container(
                       width: size.width - 100,
-                      child:Center(
+                      child: Center(
                         child: Text(
                           widget.question,
                           style: titleTextStyle,
@@ -116,24 +124,13 @@ class Gold extends State<GoldD2> {
                   focusedBorder: InputBorder.none,
                   enabledBorder: InputBorder.none,
                 ),
+                onChanged: (value) {
+                  speedBloc.answerA = value;
+                },
               ),
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget nextBtn(Size size) {
-    return Container(
-      width: size.width,
-      height: 50,
-      child: Center(
-        child: Image.asset(
-          "assets/gamebox/img/next_btn.png",
-          width: 100,
-          height: 50,
-        ),
       ),
     );
   }

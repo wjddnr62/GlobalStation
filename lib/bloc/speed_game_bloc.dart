@@ -61,16 +61,22 @@ class SpeedGameBloc {
       Stream.fromFuture(_repository.getSpeedAnswerList(
           _level.value, _chapter.value, _stage.value, question_num));
 
-  Stream<String> getQuestionList() {
-    return Stream.fromFuture(_repository.getSpeedQuestList(
+  Stream<String> getQuestionList() =>
+    Stream.fromFuture(_repository.getSpeedQuestList(
         _level.value, _chapter.value, _stage.value));
-  }
+
+  Future<String> getQuestionList2() =>
+      _repository.getSpeedQuestList(
+          _level.value, _chapter.value, _stage.value);
+
+
 
   Future<String> getAnswer(int question_num){
+    print(answerType.toString());
     if(answerType == 1){
       return _repository.getSpeedAnswerO(
           _level.value, _chapter.value, _stage.value, question_num, answer);
-    }else if(answer == 2){
+    }else if(answerType == 2){
       return _repository.getSpeedAnswerA(
           _level.value, _chapter.value, _stage.value, question_num, answerA);
     }

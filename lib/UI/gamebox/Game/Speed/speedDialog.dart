@@ -1,3 +1,5 @@
+import 'dart:core';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lms_flutter/model/Speed/questionList.dart';
@@ -12,6 +14,7 @@ import 'speed.dart';
 
 import 'package:lms_flutter/bloc/speed_game_bloc.dart';
 import 'dart:convert';
+import 'dart:async';
 
 int viewidx;
 int question_num = 0;
@@ -30,51 +33,102 @@ class SpeedGameDialog extends StatefulWidget {
 }
 
 class SpeedGameDialogState extends State<SpeedGameDialog> {
+
   @override
-  Widget build(BuildContext context) {
+  void initState() {
     speedBloc.getLevel(widget.level);
     speedBloc.getChapter(widget.chapter);
     speedBloc.getStage(widget.stage);
-    return Scaffold(
-        backgroundColor: Colors.black.withOpacity(0.5),
-        body: SafeArea(
-          child: Padding(
-            child: StreamBuilder(
-              stream: speedBloc.getQuestionList(),
-              builder: (context, snapshot) {
-                print("questionList = " + snapshot.hasData.toString());
-                if (snapshot.hasData) {
-                  String jsonValue = snapshot.data;
-                  List<QuestionList> qList =
-                      speedBloc.questListToList(jsonValue);
-                  if (widget.level == "B") {
-                    return GameList(
-                        item: SpeedBronze(qList: qList).getViews(),
-                        size: MediaQuery.of(context).size);
-                  }else if(widget.level == "S"){
-                    return GameList(
-                        item: SpeedSilver(qList: qList).getViews(),
-                        size: MediaQuery.of(context).size);
-                  }else if(widget.level == "G"){
-                    return GameList(
-                        item: SpeedGold(qList: qList).getViews(),
-                        size: MediaQuery.of(context).size);
-                  }else if(widget.level == "D"){
-                    return GameList(
-                        item: SpeedDiamond(qList: qList).getViews(),
-                        size: MediaQuery.of(context).size);
-                  }
+    super.initState();
+  }
 
-                }
-                return SizedBox(
-                  width: 100.0,
-                  height: 100.0,
-                );
-              },
+  @override
+  Widget build(BuildContext context) {
+    speedBloc.getQuestionList2().then((value) {
+      String jsonValue = value;
+      List<QuestionList> qList = speedBloc.questListToList(jsonValue);
+      setState(() {
+        Navigator.of(context).pop();
+        Navigator.of(context).push(PageRouteBuilder(
+            opaque: false,
+            pageBuilder: (BuildContext context, _, __) => SpeedGame(
+              level: widget.level,
+              chapter: widget.chapter,
+              stage: widget.stage,
+              qList: qList,
+            )));
+      });
+    });
+
+    return Scaffold(
+      backgroundColor: Colors.black.withOpacity(0.5),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Container(
+            child: Center(
+              child: CircularProgressIndicator(),
             ),
-            padding: const EdgeInsets.all(10),
           ),
-        ));
+        ),
+      ),
+    );
+
+//    return Scaffold(
+//        backgroundColor: Colors.black.withOpacity(0.5),
+//        body: SafeArea(
+//          child: Padding(
+//            child: StreamBuilder(
+//              stream: speedBloc.stage,
+//              builder: (context, snapshot) {
+//                print("questionList = " + snapshot.hasData.toString());
+//                if (snapshot.hasData) {
+////                  String jsonValue = snapshot.data;
+////                  List<QuestionList> qList =
+////                      speedBloc.questListToList(jsonValue);
+////                  setState(() {
+////                    Navigator.of(context).pop();
+////                  });s
+//
+////                  Navigator.of(context).push(PageRouteBuilder(
+////                      opaque: false,
+////                      pageBuilder:
+////                          (BuildContext context, _, __) =>
+////                          SpeedGame(
+////                            level: widget.level,
+////                            chapter: widget.chapter,
+////                            stage: widget.stage,
+////                            qList: qList,
+////                          )));
+//
+////                  if (widget.level == "B") {
+////                    return GameList(
+////                        item: SpeedBronze(qList: qList).getViews(),
+////                        size: MediaQuery.of(context).size);
+////                  }else if(widget.level == "S"){
+////                    return GameList(
+////                        item: SpeedSilver(qList: qList).getViews(),
+////                        size: MediaQuery.of(context).size);
+////                  }else if(widget.level == "G"){
+////                    return GameList(
+////                        item: SpeedGold(qList: qList).getViews(),
+////                        size: MediaQuery.of(context).size);
+////                  }else if(widget.level == "D"){
+////                    return GameList(
+////                        item: SpeedDiamond(qList: qList).getViews(),
+////                        size: MediaQuery.of(context).size);
+////                  }
+//
+//                }
+//                return SizedBox(
+//                  width: 100.0,
+//                  height: 100.0,
+//                );
+//              },
+//            ),
+//            padding: const EdgeInsets.all(10),
+//          ),
+//        ));
   }
 }
 
@@ -97,7 +151,6 @@ class GameListState extends State<GameList> {
   @override
   Widget build(BuildContext context) {
     maxLen = widget.item.length;
-    print(maxLen);
     return ListView.builder(
       physics: NeverScrollableScrollPhysics(),
       itemBuilder: (context, idx) {
@@ -118,9 +171,7 @@ class GameListState extends State<GameList> {
   Widget nextBtn(Size size) {
     return InkWell(
       onTap: () {
-        speedBloc
-            .getAnswer(speedBloc.question_num)
-            .then((value) {
+        speedBloc.getAnswer(speedBloc.question_num).then((value) {
           Map<String, dynamic> json = jsonDecode(value);
 
           if (json['data'] == 'Y') {

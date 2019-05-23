@@ -4,7 +4,7 @@ import 'dart:async';
 import 'package:lms_flutter/UI/gamebox/Game/Quiz/quizDialog.dart';
 
 class QuizProvider {
-  static final String defaultUrl = "https://ga.oig.kr/laon_api/api/quiz/";
+  static final String defaultUrl = "http://ga.oig.kr/laon_api_v2/api/quiz/";
   String getStage = defaultUrl + "stageList?";
   String getQuest = defaultUrl + "questList?";
   String getAnswer = defaultUrl + "answerList?";

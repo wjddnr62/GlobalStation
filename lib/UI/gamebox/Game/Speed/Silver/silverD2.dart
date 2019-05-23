@@ -179,6 +179,7 @@ class SilverD2 extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    speedBloc.answerType = 2;
     return body(MediaQuery.of(context).size);
   }
 
@@ -255,12 +256,7 @@ class SilverD2 extends StatelessWidget{
       width: size.width - 20,
       height: 50,
       padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: InkWell(
-        onTap: (){
-//          speedBloc.answerA = answer;
-          speedBloc.answerType = 2;
-        },
-        child: Stack(
+      child:  Stack(
           children: <Widget>[
             Container(
               width: double.infinity,
@@ -291,13 +287,12 @@ class SilverD2 extends StatelessWidget{
                     focusedBorder: InputBorder.none,
                     enabledBorder: InputBorder.none,
                   ),
-//                  onChanged: (value){speedBloc.answerA = value;},
+                  onChanged: (value){speedBloc.answerA = value;},
                 ),
               ),
             ),
           ],
         ),
-      ),
     );
   }
 

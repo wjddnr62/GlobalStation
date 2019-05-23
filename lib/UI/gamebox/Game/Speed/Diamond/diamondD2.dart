@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lms_flutter/bloc/speed_game_bloc.dart';
 import 'package:lms_flutter/theme.dart';
 
 String answer = "";
@@ -29,7 +30,7 @@ class Diamond extends State<DiamondD2> {
 
   @override
   Widget build(BuildContext context) {
-    print(11);
+    speedBloc.answerType = 2;
     return body(MediaQuery.of(context).size);
   }
 
@@ -119,6 +120,9 @@ class Diamond extends State<DiamondD2> {
                   focusedBorder: InputBorder.none,
                   enabledBorder: InputBorder.none,
                 ),
+                onChanged: (value){
+                  speedBloc.answerA = value;
+                },
               ),
             ),
           ),

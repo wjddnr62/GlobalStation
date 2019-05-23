@@ -30,6 +30,7 @@ dependencies:
   rxdart: ^0.22.0
   flutter_swiper: ^1.1.6
   audioplayers: ^0.12.0
+  flutter_svg: ^0.12.4+1
 
 
 dev_dependencies:
@@ -71,6 +72,7 @@ flutter:
     - assets/gamebox/img/speed/
     - assets/gamebox/img/quiz/
     - assets/gamebox/img/match/
+    - assets/gamebox/img/charactor/
     - assets/gamebox/img/charactor/eye/
     - assets/gamebox/img/charactor/hair/
     - assets/gamebox/img/charactor/skin/

@@ -62,6 +62,12 @@ class SpeedProvider {
 
   Future<String> getAnswerA(String level,int chapter, int stage, int question_num,
       String answer) async {
+    print(answerA);
+    print(level);
+    print(chapter.toString());
+    print(stage.toString());
+    print(question_num.toString());
+    print(answer);
     final response = await client.post(answerA,body: {
       'level': level,
       'chapter': chapter.toString(),
@@ -69,6 +75,7 @@ class SpeedProvider {
       'question_num': question_num.toString(),
       'answer': answer
     });
+    print(response);
 
     return response.body;
   }

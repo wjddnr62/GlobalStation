@@ -113,6 +113,8 @@ class Diamond extends State<QuizD> {
     );
   }
 
+  int clickAnswer = 0;
+
   Widget answerRow(String ans1, String ans2,int type) {
     int ans1Num = 0;
     int ans2Num = 0;
@@ -139,9 +141,12 @@ class Diamond extends State<QuizD> {
     return Container(
       width: 100,
       height: 40,
-      decoration: quizDiamondBoxContainer,
+      decoration: (clickAnswer == num) ? quizDiamondSelectBoxContainer :quizDiamondBoxContainer,
       child: InkWell(
         onTap: (){
+          setState(() {
+            clickAnswer = num;
+          });
           quizBloc.answer = num;
         },
         child: Center(
