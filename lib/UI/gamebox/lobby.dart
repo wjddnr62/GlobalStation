@@ -116,7 +116,7 @@ class LobbyHomePage extends State<LobbyPage> {
       itemBuilder: (context, idx) {
         return InkWell(
           onTap: () {
-            if (idx < level) {
+            if (idx <= level) {
               var lev = "";
               var cap = 0;
               if (idx <= 2) {
@@ -150,7 +150,7 @@ class LobbyHomePage extends State<LobbyPage> {
                     fit: BoxFit.cover,
                   ),
                 ),
-                (idx + 1 > level)
+                (idx > level)
                     ? Positioned.fill(
                         child: Container(
                           color: Color.fromARGB(100, 0, 0, 0),

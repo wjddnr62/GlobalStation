@@ -626,8 +626,8 @@ class SilverM extends State<Silver> {
             }
           },
           child: Container(
-            width: 100,
-            height: 100,
+            width: 150,
+            height: 80,
             child: Center(
               child: (type == 1)
                   ? this.isOpen
@@ -635,7 +635,7 @@ class SilverM extends State<Silver> {
                 param,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 12,
+                  fontSize: 16,
                   color: Colors.black,
                   fontFamily: 'Jua',
                 ),
@@ -647,7 +647,7 @@ class SilverM extends State<Silver> {
                 param,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 12,
+                  fontSize: 16,
                   color: Colors.black,
                   fontFamily: 'Jua',
                 ),

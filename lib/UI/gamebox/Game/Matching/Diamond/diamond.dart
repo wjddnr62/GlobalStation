@@ -146,6 +146,7 @@ class DiamondM extends State<Diamond> {
       }
       rowData(1);
       rowData(2);
+      rowData(3);
       answer_one = "";
       answer_two = "";
       answer_one_question_num = 0;
@@ -196,6 +197,7 @@ class DiamondM extends State<Diamond> {
       }
       rowData(1);
       rowData(2);
+      rowData(3);
       answer_one = "";
       answer_two = "";
       answer_one_question_num = 0;
@@ -526,6 +528,7 @@ class DiamondM extends State<Diamond> {
                         i, cardData(type, true, param, 1, question_num));
                     rowData(1);
                     rowData(2);
+                    rowData(3);
                     if (answer_one == "") {
                       answer_one = param;
                       answer_one_list = 1;
@@ -550,6 +553,7 @@ class DiamondM extends State<Diamond> {
                             i, cardData(type, true, param, 1, question_num));
                         rowData(1);
                         rowData(2);
+                        rowData(3);
                         if (answer_one == "") {
                           answer_one = param;
                           answer_one_list = 2;
@@ -574,6 +578,7 @@ class DiamondM extends State<Diamond> {
                                 cardData(type, true, param, 1, question_num));
                             rowData(1);
                             rowData(2);
+                            rowData(3);
                             if (answer_one == "") {
                               answer_one = param;
                               answer_one_list = 2;
@@ -603,6 +608,7 @@ class DiamondM extends State<Diamond> {
                         i, cardData(type, true, param, 1, question_num));
                     rowData(1);
                     rowData(2);
+                    rowData(3);
                     if (answer_one == "") {
                       answer_one = param;
                       answer_one_list = 1;
@@ -628,6 +634,7 @@ class DiamondM extends State<Diamond> {
                             i, cardData(type, true, param, 1, question_num));
                         rowData(1);
                         rowData(2);
+                        rowData(3);
                         if (answer_one == "") {
                           answer_one = param;
                           answer_one_list = 2;
@@ -652,6 +659,7 @@ class DiamondM extends State<Diamond> {
                                 cardData(type, true, param, 1, question_num));
                             rowData(1);
                             rowData(2);
+                            rowData(3);
                             if (answer_one == "") {
                               answer_one = param;
                               answer_one_list = 2;
@@ -691,7 +699,7 @@ class DiamondM extends State<Diamond> {
           },
           child: Container(
             width: 100,
-            height: 100,
+            height: 90,
             child: Center(
               child: (type == 1)
                   ? this.isOpen

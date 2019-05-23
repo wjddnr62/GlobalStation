@@ -146,6 +146,7 @@ class GoldM extends State<Gold> {
       }
       rowData(1);
       rowData(2);
+      rowData(3);
       answer_one = "";
       answer_two = "";
       answer_one_question_num = 0;
@@ -196,6 +197,7 @@ class GoldM extends State<Gold> {
       }
       rowData(1);
       rowData(2);
+      rowData(3);
       answer_one = "";
       answer_two = "";
       answer_one_question_num = 0;
@@ -218,6 +220,7 @@ class GoldM extends State<Gold> {
           nextQuestion();
           rowData(1);
           rowData(2);
+          rowData(3);
           inVisible();
         }
       }
@@ -257,9 +260,7 @@ class GoldM extends State<Gold> {
     matchBloc.getChapter(widget.chapter);
     matchBloc.getStage(widget.stage);
     matchBloc.question_num = widget.question_num;
-    return body(MediaQuery
-        .of(context)
-        .size);
+    return body(MediaQuery.of(context).size);
   }
 
   Widget body(Size size) {
@@ -278,8 +279,6 @@ class GoldM extends State<Gold> {
             if (next_problem != 2) {
               if (dataSetCheck != 1) {
                 glove.clear();
-                gloveTwo.clear();
-                gloveThree.clear();
                 for (int i = 0; i < 4; i++) {
                   if (answerList[i].en == null || answerList[i].en == "") {
                     glove.add(gloveData(1, this.isOpen, answerList[i].ko, 1,
@@ -289,6 +288,7 @@ class GoldM extends State<Gold> {
                         answerList[i].question_num));
                   }
                 }
+                gloveTwo.clear();
                 for (int i = 4; i < 8; i++) {
                   if (answerList[i].en == null || answerList[i].en == "") {
                     gloveTwo.add(gloveData(1, this.isOpen, answerList[i].ko, 1,
@@ -298,6 +298,7 @@ class GoldM extends State<Gold> {
                         answerList[i].question_num));
                   }
                 }
+                gloveThree.clear();
                 for (int i = 8; i < 12; i++) {
                   if (answerList[i].en == null || answerList[i].en == "") {
                     gloveThree.add(gloveData(1, this.isOpen, answerList[i].ko,
@@ -361,95 +362,92 @@ class GoldM extends State<Gold> {
                     height: size.height,
                     child: answer_finish
                         ? Stack(
-                      children: <Widget>[
-                        Image.asset(
-                            "assets/gamebox/img/effect/result_background.png"),
-                        Center(
-                          child: Result(
-                              level: widget.level,
-                              chapter: widget.chapter,
-                              stage: widget.stage,
-                              score: answer_finish_count,
-                              scoreLength: answer_all_length,
-                              sizeWidth:
-                              MediaQuery
-                                  .of(context)
-                                  .size
-                                  .width,
-                              resetGame: resetGame(),
-                              resultNextGame: resultNextGame()),
-                        )
-                      ],
-                    )
+                            children: <Widget>[
+                              Image.asset(
+                                  "assets/gamebox/img/effect/result_background.png"),
+                              Center(
+                                child: Result(
+                                    level: widget.level,
+                                    chapter: widget.chapter,
+                                    stage: widget.stage,
+                                    score: answer_finish_count,
+                                    scoreLength: answer_all_length,
+                                    sizeWidth:
+                                        MediaQuery.of(context).size.width,
+                                    resetGame: resetGame(),
+                                    resultNextGame: resultNextGame()),
+                              )
+                            ],
+                          )
                         : next_question
-                        ? Column(
-                      children: <Widget>[
-                        Image.asset(
-                          "assets/gamebox/img/match/18.png",
-                          fit: BoxFit.fill,
-                          width: size.width,
-                          height: size.height,
-                        ),
-                      ],
-                    )
-                        : Column(
-                      children: <Widget>[
-                        Image.asset(
-                          "assets/gamebox/img/match/18.png",
-                          fit: BoxFit.fill,
-                          width: size.width,
-                          height: size.height,
-                        ),
-                      ],
-                    )),
+                            ? Column(
+                                children: <Widget>[
+                                  Image.asset(
+                                    "assets/gamebox/img/match/18.png",
+                                    fit: BoxFit.fill,
+                                    width: size.width,
+                                    height: size.height,
+                                  ),
+                                ],
+                              )
+                            : Column(
+                                children: <Widget>[
+                                  Image.asset(
+                                    "assets/gamebox/img/match/18.png",
+                                    fit: BoxFit.fill,
+                                    width: size.width,
+                                    height: size.height,
+                                  ),
+                                ],
+                              )),
                 Positioned(
                   top: size.width / 3.5,
                   child: Container(
                     width: size.width - 20,
                     height: 420,
                     padding:
-                    const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+                        const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
                     child: Stack(
                       children: <Widget>[
                         answer_finish
                             ? Text("")
                             : next_question
-                            ? Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment:
-                          CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Image.asset(
-                                "assets/gamebox/img/effect/yay.png")
-                          ],
-                        )
-                            : Padding(
-                          padding: EdgeInsets.only(
-                              left: 10.0, right: 10.0),
-                          child: Image.asset(
-                            "assets/gamebox/img/match/match_gold.png",
-                            width: size.width - 20,
-                            height: 420,
-                            fit: BoxFit.fill,
-                          ),
-                        ),
+                                ? Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: <Widget>[
+                                      Image.asset(
+                                          "assets/gamebox/img/effect/yay.png")
+                                    ],
+                                  )
+                                : Padding(
+                                    padding: EdgeInsets.only(
+                                        left: 10.0, right: 10.0),
+                                    child: Image.asset(
+                                      "assets/gamebox/img/match/match_gold.png",
+                                      width: size.width - 20,
+                                      height: 420,
+                                      fit: BoxFit.fill,
+                                    ),
+                                  ),
                         Align(
                           alignment: AlignmentDirectional.topCenter,
                           child: next_question
                               ? Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[],
-                          )
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[],
+                                )
                               : Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              rowData(1),
-                              rowData(2),
-                              rowData(3),
-                            ],
-                          ),
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    rowData(1),
+                                    rowData(2),
+                                    rowData(3),
+                                  ],
+                                ),
                         ),
                       ],
                     ),
@@ -465,49 +463,69 @@ class GoldM extends State<Gold> {
   }
 
   Widget rowData(int upDown) {
-    return (upDown == 1)
-        ? Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: <Widget>[
-        Glove(glove[0].type, glove[0].isOpen, glove[0].param,
-            glove[0].opacity, glove[0].question_num),
-        Glove(glove[1].type, glove[1].isOpen, glove[1].param,
-            glove[1].opacity, glove[1].question_num),
-        Glove(glove[2].type, glove[2].isOpen, glove[2].param,
-            glove[2].opacity, glove[2].question_num),
-        Glove(glove[3].type, glove[3].isOpen, glove[3].param,
-            glove[3].opacity, glove[3].question_num),
-      ],
-    )
-        : (upDown != 1 && upDown == 2) ? Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: <Widget>[
-        Glove(gloveTwo[0].type, gloveTwo[0].isOpen, gloveTwo[0].param,
-            gloveTwo[0].opacity, gloveTwo[0].question_num),
-        Glove(gloveTwo[1].type, gloveTwo[1].isOpen, gloveTwo[1].param,
-            gloveTwo[1].opacity, gloveTwo[1].question_num),
-        Glove(gloveTwo[2].type, gloveTwo[2].isOpen, gloveTwo[2].param,
-            gloveTwo[2].opacity, gloveTwo[2].question_num),
-        Glove(gloveTwo[3].type, gloveTwo[3].isOpen, gloveTwo[3].param,
-            gloveTwo[3].opacity, gloveTwo[3].question_num),
-      ],
-    ) : Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: <Widget>[
-        Glove(gloveThree[0].type, gloveThree[0].isOpen, gloveThree[0].param,
-            gloveThree[0].opacity, gloveThree[0].question_num),
-        Glove(gloveThree[1].type, gloveThree[1].isOpen, gloveThree[1].param,
-            gloveThree[1].opacity, gloveThree[1].question_num),
-        Glove(gloveThree[2].type, gloveThree[2].isOpen, gloveThree[2].param,
-            gloveThree[2].opacity, gloveThree[2].question_num),
-        Glove(gloveThree[3].type, gloveThree[3].isOpen, gloveThree[3].param,
-            gloveThree[3].opacity, gloveThree[3].question_num),
-      ],
-    );
+    if (upDown == 1) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Glove(glove[0].type, glove[0].isOpen, glove[0].param,
+              glove[0].opacity, glove[0].question_num),
+          Glove(glove[1].type, glove[1].isOpen, glove[1].param,
+              glove[1].opacity, glove[1].question_num),
+          Glove(glove[2].type, glove[2].isOpen, glove[2].param,
+              glove[2].opacity, glove[2].question_num),
+          Glove(glove[3].type, glove[3].isOpen, glove[3].param,
+              glove[3].opacity, glove[3].question_num),
+        ],
+      );
+    } else if (upDown == 2) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Glove(gloveTwo[0].type, gloveTwo[0].isOpen, gloveTwo[0].param,
+              gloveTwo[0].opacity, gloveTwo[0].question_num),
+          Glove(gloveTwo[1].type, gloveTwo[1].isOpen, gloveTwo[1].param,
+              gloveTwo[1].opacity, gloveTwo[1].question_num),
+          Glove(gloveTwo[2].type, gloveTwo[2].isOpen, gloveTwo[2].param,
+              gloveTwo[2].opacity, gloveTwo[2].question_num),
+          Glove(gloveTwo[3].type, gloveTwo[3].isOpen, gloveTwo[3].param,
+              gloveTwo[3].opacity, gloveTwo[3].question_num),
+        ],
+      );
+    } else if (upDown == 3) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Glove(
+              gloveThree[0].type,
+              gloveThree[0].isOpen,
+              gloveThree[0].param,
+              gloveThree[0].opacity,
+              gloveThree[0].question_num),
+          Glove(
+              gloveThree[1].type,
+              gloveThree[1].isOpen,
+              gloveThree[1].param,
+              gloveThree[1].opacity,
+              gloveThree[1].question_num),
+          Glove(
+              gloveThree[2].type,
+              gloveThree[2].isOpen,
+              gloveThree[2].param,
+              gloveThree[2].opacity,
+              gloveThree[2].question_num),
+          Glove(
+              gloveThree[3].type,
+              gloveThree[3].isOpen,
+              gloveThree[3].param,
+              gloveThree[3].opacity,
+              gloveThree[3].question_num),
+        ],
+      );
+    }
   }
 
-  Widget Glove(int type, bool isOpen, String param, double opacity,
-      int question_num) {
+  Widget Glove(
+      int type, bool isOpen, String param, double opacity, int question_num) {
     this.isOpen = isOpen;
     this.opacity = opacity;
     return IgnorePointer(
@@ -526,6 +544,7 @@ class GoldM extends State<Gold> {
                         i, gloveData(type, true, param, 1, question_num));
                     rowData(1);
                     rowData(2);
+                    rowData(3);
                     if (answer_one == "") {
                       answer_one = param;
                       answer_one_list = 1;
@@ -550,6 +569,7 @@ class GoldM extends State<Gold> {
                             i, gloveData(type, true, param, 1, question_num));
                         rowData(1);
                         rowData(2);
+                        rowData(3);
                         if (answer_one == "") {
                           answer_one = param;
                           answer_one_list = 2;
@@ -574,15 +594,16 @@ class GoldM extends State<Gold> {
                                 gloveData(type, true, param, 1, question_num));
                             rowData(1);
                             rowData(2);
+                            rowData(3);
                             if (answer_one == "") {
                               answer_one = param;
-                              answer_one_list = 2;
+                              answer_one_list = 3;
                               answer_one_no = i;
                               answer_one_type = type;
                               answer_one_question_num = question_num;
                             } else if (answer_one != "" && answer_two == "") {
                               answer_two = param;
-                              answer_two_list = 2;
+                              answer_two_list = 3;
                               answer_two_no = i;
                               answer_two_type = type;
                               answer_two_question_num = question_num;
@@ -603,6 +624,7 @@ class GoldM extends State<Gold> {
                         i, gloveData(type, true, param, 1, question_num));
                     rowData(1);
                     rowData(2);
+                    rowData(3);
                     if (answer_one == "") {
                       answer_one = param;
                       answer_one_list = 1;
@@ -628,6 +650,7 @@ class GoldM extends State<Gold> {
                             i, gloveData(type, true, param, 1, question_num));
                         rowData(1);
                         rowData(2);
+                        rowData(3);
                         if (answer_one == "") {
                           answer_one = param;
                           answer_one_list = 2;
@@ -652,15 +675,16 @@ class GoldM extends State<Gold> {
                                 gloveData(type, true, param, 1, question_num));
                             rowData(1);
                             rowData(2);
+                            rowData(3);
                             if (answer_one == "") {
                               answer_one = param;
-                              answer_one_list = 2;
+                              answer_one_list = 3;
                               answer_one_no = i;
                               answer_one_type = type;
                               answer_one_question_num = question_num;
                             } else if (answer_one != "" && answer_two == "") {
                               answer_two = param;
-                              answer_two_list = 2;
+                              answer_two_list = 3;
                               answer_two_no = i;
                               answer_two_type = type;
                               answer_two_question_num = question_num;
@@ -695,29 +719,35 @@ class GoldM extends State<Gold> {
             child: Center(
               child: (type == 1)
                   ? this.isOpen
-                  ? Text(
-                param,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 12,
-                  color: Colors.black,
-                  fontFamily: 'Jua',
-                ),
-                textAlign: TextAlign.center,
-              )
-                  : Text("")
+                      ? Padding(
+                          padding: EdgeInsets.only(bottom: 20.0),
+                          child: Text(
+                            param,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 12,
+                              color: Colors.black,
+                              fontFamily: 'Jua',
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        )
+                      : Text("")
                   : this.isOpen
-                  ? Text(
-                param,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 12,
-                  color: Colors.black,
-                  fontFamily: 'Jua',
-                ),
-                textAlign: TextAlign.center,
-              )
-                  : Text(""),
+                      ? Padding(
+                          padding: EdgeInsets.only(bottom: 20.0),
+                          child: Text(
+                            param,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 12,
+                              color: Colors.black,
+                              fontFamily: 'Jua',
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        )
+                      : Text(""),
             ),
             decoration: BoxDecoration(
               image: DecorationImage(
@@ -739,6 +769,6 @@ class gloveData {
   final double opacity;
   final int question_num;
 
-  gloveData(this.type, this.isOpen, this.param, this.opacity,
-      this.question_num);
+  gloveData(
+      this.type, this.isOpen, this.param, this.opacity, this.question_num);
 }
