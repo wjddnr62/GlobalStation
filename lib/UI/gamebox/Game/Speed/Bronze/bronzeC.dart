@@ -30,6 +30,11 @@ class Bronze extends State<BronzeC> {
 
   @override
   Widget build(BuildContext context) {
+    speedBloc.answerType = 1;
+    speedBloc.getLevel(widget.level);
+    speedBloc.getChapter(widget.chapter);
+    speedBloc.getStage(widget.stage);
+    speedBloc.question_num = widget.question_num;
     return body(MediaQuery.of(context).size);
   }
 
@@ -110,22 +115,27 @@ class Bronze extends State<BronzeC> {
     );
   }
 
+  int clickAnswer = 0;
+
   Widget postIt(String type, String text, Size size,int idx) {
     return Container(
-      width: size.width - 20,
+      width: size.width - 10,
       height: 50,
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: InkWell(
         onTap: (){
-          speedBloc.answerType = 1;
           answer = idx;
           speedBloc.answer = answer;
+          setState(() {
+            clickAnswer = idx;
+            print(clickAnswer.toString());
+          });
         },
         child: Stack(
           children: <Widget>[
             Image.asset(
               (type == "C") ? C_POSTIT : D_POSTIT,
-              width: size.width - 20,
+              width: (idx == clickAnswer)? size.width - 30 : size.width - 50,
               height: 50,
               fit: BoxFit.cover,
             ),

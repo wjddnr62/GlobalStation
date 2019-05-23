@@ -95,7 +95,11 @@ class GameDialogState extends State<GameDialog> {
                   top: 0,
                   right: 0,
                   child: InkWell(
-                    child: Text("x"),
+                    child: Image.asset(
+                      "assets/gamebox/img/close_button.png",
+                      fit: BoxFit.contain,
+                      width: 25,
+                    ),
                     onTap: () {
                       Navigator.of(context).pop();
                     },
@@ -207,7 +211,11 @@ class GameDialogState extends State<GameDialog> {
                   top: 0,
                   right: 0,
                   child: InkWell(
-                    child: Text("x"),
+                    child: Image.asset(
+                      "assets/gamebox/img/close_button.png",
+                      fit: BoxFit.contain,
+                      width: 25,
+                    ),
                     onTap: () {
                       Navigator.of(context).pop();
                     },
@@ -259,27 +267,29 @@ class GameDialogState extends State<GameDialog> {
                                                 chapter: widget.cap,
                                                 stage: stages[idx].stage,
                                               )));
-                                }else if (selectGame == "Q") {
+                                } else if (selectGame == "Q") {
                                   Navigator.of(context).pop();
                                   Navigator.of(context).push(PageRouteBuilder(
                                       opaque: false,
                                       pageBuilder:
                                           (BuildContext context, _, __) =>
-                                          QuizGameDialog(
-                                            level: widget.lev,
-                                            chapter: widget.cap,
-                                            stage: stages[idx].stage,
-                                          )));
-                                }else if (selectGame == "M") {
+                                              QuizGameDialog(
+                                                level: widget.lev,
+                                                chapter: widget.cap,
+                                                stage: stages[idx].stage,
+                                              )));
+                                } else if (selectGame == "M") {
                                   Navigator.of(context).pop();
                                   Navigator.of(context).push(PageRouteBuilder(
                                       opaque: false,
-                                      pageBuilder: (BuildContext context, _, __) => MatchGameDialog(
+                                      pageBuilder:
+                                          (BuildContext context, _, __) =>
+                                              MatchGameDialog(
 //                      level: widget.lev,
-                                        level: widget.lev,
-                                        chapter: widget.cap,
-                                        stage: stages[idx].stage,
-                                      )));
+                                                level: widget.lev,
+                                                chapter: widget.cap,
+                                                stage: stages[idx].stage,
+                                              )));
                                 }
                               },
                               child: dialogView(
@@ -295,7 +305,6 @@ class GameDialogState extends State<GameDialog> {
                   );
                 },
               ),
-
             ),
           ),
         ],

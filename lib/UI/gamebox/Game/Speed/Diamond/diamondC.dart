@@ -6,7 +6,6 @@ import 'package:lms_flutter/theme.dart';
 int answer = 0;
 
 class DiamondC extends StatefulWidget {
-
   final String level;
   final int chapter;
   final int stage;
@@ -14,25 +13,30 @@ class DiamondC extends StatefulWidget {
   final String title;
   final String question;
 
-  DiamondC({Key key, this.level, this.chapter, this.stage, this.question_num,this.title,
-    this.question})
+  DiamondC(
+      {Key key,
+      this.level,
+      this.chapter,
+      this.stage,
+      this.question_num,
+      this.title,
+      this.question})
       : super(key: key);
-
-
 
   @override
   Diamond createState() => Diamond();
 }
 
 class Diamond extends State<DiamondC> {
-//  String title = "Listen and choose the correct answer.";
-//  String question = "can you and Jason ___ Well?";
-
   final String diamondMessage = "assets/gamebox/img/speed/message.png";
 
   @override
   Widget build(BuildContext context) {
-
+    speedBloc.answerType = 1;
+    speedBloc.getLevel(widget.level);
+    speedBloc.getChapter(widget.chapter);
+    speedBloc.getStage(widget.stage);
+    speedBloc.question_num = widget.question_num;
     return body(MediaQuery.of(context).size);
   }
 
@@ -45,8 +49,8 @@ class Diamond extends State<DiamondC> {
       ),
       child: StreamBuilder(
         stream: speedBloc.getAnswerList(widget.question_num),
-        builder: (context, snapshot){
-          if(snapshot.hasData){
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
             String jsonValue = snapshot.data;
             List<AnswerList> answerList = speedBloc.answerListToList(jsonValue);
             return Stack(
@@ -57,8 +61,6 @@ class Diamond extends State<DiamondC> {
                   height: size.height,
                   fit: BoxFit.fill,
                 ),
-
-
                 Positioned(
                   top: size.height / 5.5,
                   width: size.width - 20,
@@ -67,18 +69,17 @@ class Diamond extends State<DiamondC> {
                       children: <Widget>[
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child:Image.asset(
+                          child: Image.asset(
                             "assets/gamebox/img/speed/dia_que.png",
                             fit: BoxFit.contain,
                           ),
                         ),
-
                         Positioned(
                           top: 23,
                           left: 55,
                           child: Container(
                             width: size.width - 100,
-                            child:Center(
+                            child: Center(
                               child: Text(
                                 widget.question,
                                 style: titleTextStyle,
@@ -104,19 +105,19 @@ class Diamond extends State<DiamondC> {
                 ),
                 Positioned(
                   top: size.height / 2,
-                  child: message("A", size,1),
+                  child: message("A", size, 1),
                 ),
                 Positioned(
                   top: size.height / 1.7,
-                  child: message( "B", size,2),
+                  child: message("B", size, 2),
                 ),
                 Positioned(
                   top: size.height / 1.48,
-                  child: message("C", size,3),
+                  child: message("C", size, 3),
                 ),
                 Positioned(
                   top: size.height / 1.31,
-                  child: message("D", size,4),
+                  child: message("D", size, 4),
                 ),
               ],
             );
@@ -124,41 +125,36 @@ class Diamond extends State<DiamondC> {
           return CircularProgressIndicator();
         },
       ),
-
     );
   }
 
-  Widget message(String text, Size size,int idx) {
+  int clickAnswer = 0;
+
+  Widget message(String text, Size size, int idx) {
     return Container(
-      width: size.width - 20,
+      width: (idx == clickAnswer) ? size.width - 10 : size.width - 20,
       height: 50,
       padding: const EdgeInsets.symmetric(horizontal: 15),
-      child: Stack(
-        children: <Widget>[
-          Image.asset(
-            diamondMessage,
-            width: size.width - 20,
-            height: 50,
-            fit: BoxFit.fill,
-          ),
-          Align(
-            alignment: AlignmentDirectional.center,
-            child: Text(text),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget nextBtn(Size size) {
-    return Container(
-      width: size.width,
-      height: 50,
-      child: Center(
-        child: Image.asset(
-          "assets/gamebox/img/next_btn.png",
-          width: 100,
-          height: 50,
+      child: InkWell(
+        onTap: () {
+          clickAnswer = idx;
+          setState(() {
+            speedBloc.answer = idx;
+          });
+        },
+        child: Stack(
+          children: <Widget>[
+            Image.asset(
+              diamondMessage,
+              width: size.width - 20,
+              height: 50,
+              fit: BoxFit.fill,
+            ),
+            Align(
+              alignment: AlignmentDirectional.center,
+              child: Text(text),
+            ),
+          ],
         ),
       ),
     );

@@ -23,14 +23,15 @@ class GoldC extends StatefulWidget {
 }
 
 class Gold extends State<GoldC> {
-//  String title = "Listen and choose the correct answer.";
-//  String question = "Good morning. How are You?";
-
   final String goldBrick = "assets/gamebox/img/speed/brick.png";
 
   @override
   Widget build(BuildContext context) {
-
+    speedBloc.answerType = 1;
+    speedBloc.getLevel(widget.level);
+    speedBloc.getChapter(widget.chapter);
+    speedBloc.getStage(widget.stage);
+    speedBloc.question_num = widget.question_num;
     return body(MediaQuery.of(context).size);
   }
 
@@ -125,25 +126,37 @@ class Gold extends State<GoldC> {
     );
   }
 
+  int clickAnswer = 0;
+
   Widget brick(String text, Size size, int idx) {
     return Container(
       width: size.width - 20,
       height: 70,
       padding: const EdgeInsets.symmetric(horizontal: 15),
-      child: Stack(
-        children: <Widget>[
-          Image.asset(
-            goldBrick,
-            width: size.width - 20,
-            height: 70,
-            fit: BoxFit.fill,
-          ),
-          Align(
-            alignment: AlignmentDirectional.center,
-            child: Text(text),
-          ),
-        ],
+      child: InkWell(
+        onTap: (){
+          answer = idx;
+          speedBloc.answer = answer;
+          setState(() {
+            clickAnswer = idx;
+          });
+        },
+        child: Stack(
+          children: <Widget>[
+            Image.asset(
+              goldBrick,
+              width: (idx == clickAnswer) ? size.width - 30: size.width - 50,
+              height: 70,
+              fit: BoxFit.fill,
+            ),
+            Align(
+              alignment: AlignmentDirectional.center,
+              child: Text(text),
+            ),
+          ],
+        ),
       ),
+
     );
   }
 

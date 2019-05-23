@@ -12,10 +12,15 @@ final dialogBoxColor = Color.fromARGB(255, 253, 209, 64);
 final dialogBoxShadow = Color.fromARGB(255, 225, 148, 53);
 final dialogBackground = Color.fromARGB(255, 214, 233, 234);
 final quizPhonicsColor = Color.fromARGB(255, 254, 227, 77);
+final quizPhonicsSelectColor = Color.fromARGB(255, 254, 227, 244);
 final quizBronzeColor = Color.fromARGB(255, 247, 81, 86);
+final quizBronzeSelectColor = Color.fromARGB(255, 247, 81, 244);
 final quizSilverColor = Color.fromARGB(255, 44, 173, 151);
+final quizSilverSelectColor = Color.fromARGB(255, 44, 173, 244);
 final quizGoldColor = Color.fromARGB(255, 51, 143, 208);
+final quizGoldSelectColor = Color.fromARGB(255, 51, 143, 255);
 final quizDiamondColor = Color.fromARGB(255, 117, 65, 180);
+final quizDiamondSelectColor = Color.fromARGB(255, 117, 65, 255);
 final beige = Color.fromARGB(255 ,255, 255, 231);
 final skyBlue = Color.fromARGB(255, 215, 234, 235);
 
@@ -91,8 +96,18 @@ final quizPhonicsBoxContainer = BoxDecoration(
   borderRadius: BorderRadius.circular(5.0),
 );
 
+final quizPhonicsSelectBoxContainer = BoxDecoration(
+  color: quizPhonicsSelectColor,
+  borderRadius: BorderRadius.circular(5.0),
+);
+
 final quizBronzeBoxContainer = BoxDecoration(
   color: quizBronzeColor,
+  borderRadius: BorderRadius.circular(5.0),
+);
+
+final quizBronzeSelectBoxContainer = BoxDecoration(
+  color: quizBronzeSelectColor,
   borderRadius: BorderRadius.circular(5.0),
 );
 
@@ -101,13 +116,28 @@ final quizSilverBoxContainer = BoxDecoration(
   borderRadius: BorderRadius.circular(5.0),
 );
 
+final quizSilverSelectBoxContainer = BoxDecoration(
+  color: quizSilverSelectColor,
+  borderRadius: BorderRadius.circular(5.0),
+);
+
 final quizGoldBoxContainer = BoxDecoration(
   color: quizGoldColor,
   borderRadius: BorderRadius.circular(5.0),
 );
 
+final quizGoldSelectBoxContainer = BoxDecoration(
+  color: quizGoldSelectColor,
+  borderRadius: BorderRadius.circular(5.0),
+);
+
 final quizDiamondBoxContainer = BoxDecoration(
   color: quizDiamondColor,
+  borderRadius: BorderRadius.circular(5.0),
+);
+
+final quizDiamondSelectBoxContainer = BoxDecoration(
+  color: quizDiamondSelectColor,
   borderRadius: BorderRadius.circular(5.0),
 );
 //------------------------------------

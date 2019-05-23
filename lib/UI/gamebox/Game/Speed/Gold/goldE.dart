@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:lms_flutter/bloc/speed_game_bloc.dart';
 import 'package:lms_flutter/theme.dart';
 
-String answer="";
+String answer = "";
 
 class GoldE extends StatefulWidget {
-
   final String level;
   final int chapter;
   final int stage;
@@ -12,10 +12,15 @@ class GoldE extends StatefulWidget {
   final String title;
   final String question;
 
-  GoldE({Key key, this.level, this.chapter, this.stage, this.question_num,this.title,
-    this.question})
+  GoldE(
+      {Key key,
+      this.level,
+      this.chapter,
+      this.stage,
+      this.question_num,
+      this.title,
+      this.question})
       : super(key: key);
-
 
   @override
   Gold createState() => Gold();
@@ -28,7 +33,7 @@ class Gold extends State<GoldE> {
 
   @override
   Widget build(BuildContext context) {
-    print(11);
+    speedBloc.answerType = 2;
     return body(MediaQuery.of(context).size);
   }
 
@@ -86,8 +91,10 @@ class Gold extends State<GoldE> {
                   enabledBorder: InputBorder.none,
                   filled: true,
                   fillColor: Colors.transparent,
-
                 ),
+                onChanged: (value) {
+                  speedBloc.answerA = value;
+                },
               ),
             ),
           ),

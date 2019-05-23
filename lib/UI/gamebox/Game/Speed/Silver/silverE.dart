@@ -149,7 +149,7 @@ String answer = "";
 //
 //}
 
-class SilverE extends StatelessWidget{
+class SilverE extends StatelessWidget {
   final String level;
   final int chapter;
   final int stage;
@@ -157,14 +157,21 @@ class SilverE extends StatelessWidget{
   final String title;
   final String question;
 
-  SilverE({Key key, this.level, this.chapter, this.stage, this.question_num,this.title,
-    this.question})
+  SilverE(
+      {Key key,
+      this.level,
+      this.chapter,
+      this.stage,
+      this.question_num,
+      this.title,
+      this.question})
       : super(key: key);
 
   final String silverWood = "assets/gamebox/img/speed/sliver_ans.png";
 
   @override
   Widget build(BuildContext context) {
+    speedBloc.answerType = 2;
     return body(MediaQuery.of(context).size);
   }
 
@@ -198,10 +205,12 @@ class SilverE extends StatelessWidget{
                     left: 45,
                     child: Container(
                       width: size.width - 100,
-                      child:Center(
-                        child: Image.asset("assets/gamebox/img/speed/speaker-filled-audio-tool-2.png",
-                        fit: BoxFit.scaleDown,
-                        width: 30,),
+                      child: Center(
+                        child: Image.asset(
+                          "assets/gamebox/img/speed/speaker-filled-audio-tool-2.png",
+                          fit: BoxFit.scaleDown,
+                          width: 30,
+                        ),
                       ),
                     ),
                   )
@@ -237,50 +246,43 @@ class SilverE extends StatelessWidget{
       width: size.width - 20,
       height: 50,
       padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: InkWell(
-        onTap: (){
-//          speedBloc.answerA = answer;
-          speedBloc.answerType = 2;
-        },
-        child: Stack(
-          children: <Widget>[
-            Container(
-              width: double.infinity,
-              height: double.infinity,
-              decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black38,
-                      offset: Offset(4.0,4.0),
-                    )
-                  ]
-              ),
-            ),
-            Image.asset(
-              silverWood,
-              width: size.width - 20,
-              height: 50,
-              fit: BoxFit.fill,
-            ),
-            Align(
-              alignment: AlignmentDirectional.center,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 40),
-                child: new TextField(
-                  focusNode: focus,
-                  controller: controller,
-                  decoration: InputDecoration(
-                    focusedBorder: InputBorder.none,
-                    enabledBorder: InputBorder.none,
-                  ),
-//                  onChanged: (value){speedBloc.answerA = value;},
+      child: Stack(
+        children: <Widget>[
+          Container(
+            width: double.infinity,
+            height: double.infinity,
+            decoration: BoxDecoration(boxShadow: [
+              BoxShadow(
+                color: Colors.black38,
+                offset: Offset(4.0, 4.0),
+              )
+            ]),
+          ),
+          Image.asset(
+            silverWood,
+            width: size.width - 20,
+            height: 50,
+            fit: BoxFit.fill,
+          ),
+          Align(
+            alignment: AlignmentDirectional.center,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 40),
+              child: new TextField(
+                focusNode: focus,
+                controller: controller,
+                decoration: InputDecoration(
+                  focusedBorder: InputBorder.none,
+                  enabledBorder: InputBorder.none,
                 ),
+                onChanged: (value) {
+                  speedBloc.answerA = value;
+                },
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 }
-

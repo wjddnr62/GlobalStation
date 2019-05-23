@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lms_flutter/UI/gamebox/public/progressBar.dart';
@@ -46,24 +48,24 @@ class QuizGameDialogState extends State<QuizGameDialog> {
                 if (snapshot.hasData) {
                   String jsonValue = snapshot.data;
                   List<QuestionList> qList =
-                    quizBloc.questListToList(jsonValue);
+                      quizBloc.questListToList(jsonValue);
                   if (widget.level == "P") {
                     return GameList(
                         item: QuizPhonics(qList: qList).getViews(),
                         size: MediaQuery.of(context).size);
-                  }else if (widget.level == "B") {
+                  } else if (widget.level == "B") {
                     return GameList(
                         item: QuizBronze(qList: qList).getViews(),
                         size: MediaQuery.of(context).size);
-                  }else if(widget.level == "S"){
+                  } else if (widget.level == "S") {
                     return GameList(
                         item: QuizSilver(qList: qList).getViews(),
                         size: MediaQuery.of(context).size);
-                  }else if(widget.level == "G"){
+                  } else if (widget.level == "G") {
                     return GameList(
                         item: QuizGold(qList: qList).getViews(),
                         size: MediaQuery.of(context).size);
-                  }else if(widget.level == "D"){
+                  } else if (widget.level == "D") {
                     return GameList(
                         item: QuizDiamond(qList: qList).getViews(),
                         size: MediaQuery.of(context).size);
@@ -93,60 +95,82 @@ class GameList extends StatefulWidget {
 }
 
 class GameListState extends State<GameList> {
+  String answer;
+
   @override
   void initState() {
     viewidx = 0;
+    answer = "";
   }
 
   @override
   Widget build(BuildContext context) {
     maxLen = widget.item.length;
     print(maxLen);
-    return ListView.builder(
-      physics: NeverScrollableScrollPhysics(),
-      itemBuilder: (context, idx) {
-        return Stack(
-          children: <Widget>[
-            widget.item[viewidx],
-//            Positioned(
-//              top: 10,
-//              child: ProgressBar(sizeWidth: MediaQuery.of(context).size.width - 100,
-//              maxTime: 30,),
-//            ),
-            Positioned(
-              bottom: 20,
-              child: nextBtn(widget.size),
+    return Stack(
+      children: <Widget>[
+        Positioned.fill(
+          child: ListView.builder(
+            physics: NeverScrollableScrollPhysics(),
+            itemBuilder: (context, idx) {
+              return Stack(
+                children: <Widget>[
+                  widget.item[viewidx],
+                  Positioned(
+                    bottom: 20,
+                    child: nextBtn(widget.size),
+                  ),
+                ],
+              );
+            },
+            itemCount: widget.item.length,
+          ),
+        ),
+        Positioned(
+          top: 10,
+          right: 10,
+          child: InkWell(
+            child: Image.asset(
+              "assets/gamebox/img/close_button.png",
+              fit: BoxFit.contain,
+              width: 25,
             ),
-          ],
-        );
-      },
-      itemCount: widget.item.length,
+            onTap: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ),
+        checkAnswer(),
+      ],
     );
   }
 
   Widget nextBtn(Size size) {
     return InkWell(
       onTap: () {
-        quizBloc
-            .getAnswer(quizBloc.question_num)
-            .then((value) {
+        quizBloc.getAnswer(quizBloc.question_num).then((value) {
           Map<String, dynamic> json = jsonDecode(value);
 
-          if (json['data'] == 'Y') {
-            print("정답");
-          } else if (json['data'] == 'N') {
-            print("오답");
-          }
-          quizBloc.answer = 0;
-          quizBloc.question_num = 0;
+//          if (json['data'] == 'Y') {
+//            print("정답");
+//          } else if (json['data'] == 'N') {
+//            print("오답");
+//          }
+          setState(() {
+            answer = json['data'];
+            quizBloc.answer = 0;
+            quizBloc.question_num = 0;
+          });
 
           if (viewidx == maxLen - 1) {
             print("끝");
+            Navigator.of(context).pop();
           } else {
-            setState(() {
-              print(viewidx);
-              viewidx++;
-            });
+            handleTimeout();
+//            setState(() {
+//              print(viewidx);
+//              viewidx++;
+//            });
           }
         });
       },
@@ -163,5 +187,49 @@ class GameListState extends State<GameList> {
         ),
       ),
     );
+  }
+
+  Widget checkAnswer() {
+    String img = "";
+    if (answer == 'Y')
+      img = "assets/gamebox/img/quiz/yay.png";
+    else if (answer == 'N') img = "assets/gamebox/img/quiz/nope.png";
+
+    if (answer == "") {
+      answer = "";
+      return Positioned(
+        top: 0,
+        child: SizedBox(
+          width: 0.0,
+          height: 0.0,
+        ),
+      );
+    }
+    answer = "";
+    return Positioned.fill(
+      child: Container(
+        child: Image.asset(img),
+      ),
+    );
+  }
+
+  final timeout = const Duration(seconds: 2);
+  Timer _timer;
+
+  void handleTimeout() {
+    _timer = new Timer(timeout, () {
+      setState(() {
+        answer = "";
+        viewidx++;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    if(_timer != null)
+      _timer.cancel();
+
+    super.dispose();
   }
 }

@@ -26,6 +26,7 @@ class Bronze extends State<BronzeB> {
 
   @override
   Widget build(BuildContext context) {
+    speedBloc.answerType = 1;
     speedBloc.getLevel(widget.level);
     speedBloc.getChapter(widget.chapter);
     speedBloc.getStage(widget.stage);
@@ -102,29 +103,28 @@ class Bronze extends State<BronzeB> {
     );
   }
 
-  List<double> postItSize = [150,150,150,150];
+
+  int clickAnswer = 0;
 
   Widget postIt(String type, String text,int idx) {
     return Container(
-      width: 150,
+      width: 160,
       height: 160,
       child: InkWell(
         onTap:(){
-          speedBloc.answerType = 1;
           answer = idx;
           speedBloc.answer = answer;
-//          setState(() {
-            postItSize = [150,150,150,150];
-            postItSize[idx-1] = 155;
-//          });
+        setState(() {
+          clickAnswer = idx;
+        });
 
         },
         child: Stack(
           children: <Widget>[
             Image.asset(
               (type == "A") ? A_POSTIT : B_POSTIT,
-              width: 150,
-              height: postItSize[idx -1],
+              width: (idx == clickAnswer)? 160 : 150,
+              height: 150,
               fit: BoxFit.cover,
             ),
             Center(child: Text(text),)

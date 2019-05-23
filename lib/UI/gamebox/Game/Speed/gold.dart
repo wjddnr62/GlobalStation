@@ -42,7 +42,7 @@ class SpeedGold{
   List<Widget> getViews(){
     for (QuestionList question in qList) {
       if (question.type == "D-1") {
-        views.add(GoldD1(
+        views.add(GoldC(
           level: question.level.substring(0, 1),
           stage: 1,
           question: question.contents,
@@ -51,7 +51,7 @@ class SpeedGold{
           title: question.title,
         ));
       } else if (question.type == "D-2") {
-        views.add(GoldD2(
+        views.add(GoldC(
           level: question.level.substring(0, 1),
           stage: 1,
           question: question.contents,
@@ -69,7 +69,7 @@ class SpeedGold{
           title: question.title,
         ));
       }else if(question.type == "E"){
-        views.add(GoldE(
+        views.add(GoldC(
           level: question.level.substring(0, 1),
           stage: 1,
           question: question.contents,

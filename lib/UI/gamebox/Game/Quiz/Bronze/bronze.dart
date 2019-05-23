@@ -106,6 +106,8 @@ class Bronze extends State<QuizB> {
     );
   }
 
+  int clickAnswer = 0;
+
   Widget answerRow(String ans1, String ans2,int type){
     int ans1Num = 0;
     int ans2Num = 0;
@@ -130,9 +132,12 @@ class Bronze extends State<QuizB> {
     return Container(
       width: 80,
       height: 50,
-      decoration: quizBronzeBoxContainer,
+      decoration: (clickAnswer == num)? quizBronzeSelectBoxContainer : quizBronzeBoxContainer,
       child: InkWell(
         onTap: (){
+          setState(() {
+            clickAnswer = num;
+          });
           quizBloc.answer = num;
         },
         child: Center(
@@ -147,7 +152,7 @@ class Bronze extends State<QuizB> {
     return Container(
       width: 200,
       height: 80,
-      color: Colors.red,
+//      color: Colors.red,
     );
   }
 

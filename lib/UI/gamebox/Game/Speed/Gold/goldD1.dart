@@ -30,6 +30,11 @@ class Gold extends State<GoldD1> {
 
   @override
   Widget build(BuildContext context) {
+    speedBloc.answerType = 1;
+    speedBloc.getLevel(widget.level);
+    speedBloc.getChapter(widget.chapter);
+    speedBloc.getStage(widget.stage);
+    speedBloc.question_num = widget.question_num;
     return body(MediaQuery.of(context).size);
   }
 
@@ -125,46 +130,44 @@ class Gold extends State<GoldD1> {
     );
   }
 
+  int clickAnswer = 0;
+
   Widget brick(String type, String text, Size size,int idx) {
     return Container(
       width: size.width - 20,
       height: 70,
       padding: const EdgeInsets.symmetric(horizontal: 15),
-      child: Stack(
-        children: <Widget>[
-          Image.asset(
-            glodBrick,
-            width: size.width - 20,
-            height: 70,
-            fit: BoxFit.fill,
-          ),
-          Align(
-            alignment: AlignmentDirectional.center,
-            child: Text(text),
-          ),
-          Align(
-              alignment: AlignmentDirectional.centerStart,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 20),
-                child: Text(type),
-              )
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget nextBtn(Size size) {
-    return Container(
-      width: size.width,
-      height: 50,
-      child: Center(
-        child: Image.asset(
-          "assets/gamebox/img/next_btn.png",
-          width: 100,
-          height: 50,
+      child:InkWell(
+        onTap: (){
+          answer = idx;
+          speedBloc.answer = answer;
+          setState(() {
+            clickAnswer = idx;
+          });
+        },
+        child: Stack(
+          children: <Widget>[
+            Image.asset(
+              glodBrick,
+              width: size.width - 20,
+              height: 70,
+              fit: BoxFit.fill,
+            ),
+            Align(
+              alignment: AlignmentDirectional.center,
+              child: Text(text),
+            ),
+            Align(
+                alignment: AlignmentDirectional.centerStart,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 20),
+                  child: Text(type),
+                )
+            )
+          ],
         ),
       ),
     );
   }
+
 }

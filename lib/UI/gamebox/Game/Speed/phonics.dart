@@ -1,138 +1,39 @@
+import 'package:lms_flutter/model/Speed/questionList.dart';
 import 'package:flutter/material.dart';
-import 'package:lms_flutter/theme.dart';
 
-class SpeedPhonics extends StatefulWidget{
-  @override
-  Phonics createState() => Phonics();
-}
+import 'Phonics/phonicsA.dart';
+import 'Phonics/phonicsB.dart';
 
-class Phonics extends State<SpeedPhonics>{
-  String title = "Listen and choose the correct word.";
+class SpeedPhonics{
 
-  @override
-  Widget build(BuildContext context) {
-    return body(MediaQuery.of(context).size);
-  }
-  
-  Widget body(Size size){
-    return Container(
-      width: size.width,
-      height: size.height,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Stack(
-        children: <Widget>[
-          Container(
-            width: size.width,
-            height: size.height,
+  final List<QuestionList> qList;
 
-            child: Image.asset("assets/gamebox/img/speed/speed_phonics_bg.png",
-              fit: BoxFit.cover,
-              width: size.width,
-              height: size.height,),
-          ),
 
-          Positioned(
-            top: size.height / 3.8,
-            child: Container(
-              width: size.width,
-              child: Center(child: Text(title,style: titleTextStyle,),),
-            ),
-          ),
+  SpeedPhonics({this.qList});
 
-          Positioned(
-            top: size.height / 2.5,
-            right: 30,
-            child: questionText("test1"),
-          ),
-          Positioned(
-            top: size.height / 2.5,
-            left: 30,
-            child: questionText("test2"),
-          ),
-          Positioned(
-            top: size.height / 1.8,
-            right: 30,
-            child: questionText("test3"),
-          ),
-          Positioned(
-            top: size.height / 1.8,
-            left: 30,
-            child: questionText("test4"),
-          ),
+  List<Widget> views = [];
 
-          Positioned(
-            bottom: 10,
-            child: nextBtn(size),
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget questionPicture(String data){
-    return Container(
-      width: 150,
-      height: 250,
-      child: Stack(
-        children: <Widget>[
-          Image.asset("assets/gamebox/img/speed/balloon.png",
-            width: 150,
-            height: 250,
-            fit: BoxFit.contain,
-          ),
-
-          Align(
-            alignment: AlignmentDirectional.topCenter,
-            child: Container(
-              width: 100,
-              height: 100,
-              child: Center(
-                child: Image.network(data),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-  Widget questionText(String data){
-    return Container(
-      width: 150,
-      height: 250,
-      child: Stack(
-        children: <Widget>[
-          Image.asset("assets/gamebox/img/speed/balloon.png",
-            width: 150,
-            height: 250,
-            fit: BoxFit.contain,
-          ),
-
-          Align(
-            alignment: AlignmentDirectional.topCenter,
-            child: Container(
-              width: 100,
-              height: 100,
-              child: Center(
-                child: Text(data,style: questionTextStyle,),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-
-  }
-
-  Widget nextBtn(Size size){
-    return Container(
-      width: size.width,
-      height: 55,
-      child: Image.asset("assets/gamebox/img/next_btn.png",
-      width: 100,
-      height: 55,),
-    );
+  List<Widget> getViews(){
+    for (QuestionList question in qList) {
+      if (question.type == "A") {
+        views.add(PhonicsA(
+          level: question.level.substring(0, 1),
+          stage: 1,
+          chapter: question.chapter,
+          question_num: question.question_num,
+          title: question.title,
+        ));
+      } else if (question.type == "B") {
+        views.add(PhonicsB(
+          level: question.level.substring(0, 1),
+          stage: 1,
+          chapter: question.chapter,
+          question_num: question.question_num,
+          title: question.title,
+        ));
+      }
+    }
+    return views;
   }
 
 }
