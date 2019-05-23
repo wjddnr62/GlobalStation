@@ -116,8 +116,6 @@ class LobbyHomePage extends State<LobbyPage> {
       itemBuilder: (context, idx) {
         return InkWell(
           onTap: () {
-            print(idx.toString());
-            print(level.toString());
             if (idx <= level) {
               var lev = "";
               var cap = 0;

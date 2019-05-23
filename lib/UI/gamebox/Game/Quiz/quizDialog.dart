@@ -70,6 +70,7 @@ class QuizGameDialogState extends State<QuizGameDialog> {
                         item: QuizDiamond(qList: qList).getViews(),
                         size: MediaQuery.of(context).size);
                   }
+
                 }
                 return SizedBox(
                   width: 100.0,

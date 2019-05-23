@@ -2,9 +2,14 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:lms_flutter/UI/gamebox/Game/Matching/diamond.dart';
+import 'package:lms_flutter/UI/gamebox/Game/Matching/gold.dart';
 import 'package:lms_flutter/UI/gamebox/Game/Matching/phonics.dart';
+import 'package:lms_flutter/UI/gamebox/Game/Matching/silver.dart';
 import 'package:lms_flutter/bloc/match_game_bloc.dart';
 import 'package:lms_flutter/model/Match/questionList.dart';
+
+import 'bronze.dart';
 
 int viewidx;
 int question_num = 0;
@@ -44,6 +49,26 @@ class MatchGameDialogState extends State<MatchGameDialog> {
                   if (widget.level == "P") {
                     return GameList(
                       item: MatchPhonics(qList: qList).getViews(),
+                      size: MediaQuery.of(context).size,
+                    );
+                  } else if (widget.level == "B") {
+                    return GameList(
+                      item: MatchBronze(qList: qList).getViews(),
+                      size: MediaQuery.of(context).size,
+                    );
+                  } else if (widget.level == "S") {
+                    return GameList(
+                      item: MatchSilver(qList: qList).getViews(),
+                      size: MediaQuery.of(context).size,
+                    );
+                  } else if (widget.level == "G") {
+                    return GameList(
+                      item: MatchGold(qList: qList).getViews(),
+                      size: MediaQuery.of(context).size,
+                    );
+                  } else if (widget.level == "D") {
+                    return GameList(
+                      item: MatchDiamond(qList: qList).getViews(),
                       size: MediaQuery.of(context).size,
                     );
                   }

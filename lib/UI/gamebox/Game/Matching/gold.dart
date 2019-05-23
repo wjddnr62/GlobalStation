@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:lms_flutter/model/Match/questionList.dart';
 
-import 'Phonics/phonics.dart';
+import 'Gold/gold.dart';
 
-class MatchPhonics{
+class MatchGold {
   final List<QuestionList> qList;
 
-  MatchPhonics({this.qList});
+  MatchGold({this.qList});
 
   List<Widget> views = [];
 
-  List<Widget> getViews(){
+  List<Widget> getViews() {
     for (QuestionList question in qList) {
-      views.add(Phonics(
-          level: question.level.substring(0, 1),
-        stage : question.stage,
+      views.add(Gold(
+        level: question.level.substring(0, 1),
+        stage: question.stage,
         chapter: question.chapter,
         question_num: question.question_num,
       ));
