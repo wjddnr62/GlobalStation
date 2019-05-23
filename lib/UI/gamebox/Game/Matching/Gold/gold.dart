@@ -208,7 +208,7 @@ class GoldM extends State<Gold> {
           answer_all_length.toString() +
           ", " +
           answer_finish_count.toString());
-      if (answer_all_length != 8 && answer_count == 4) {
+      if (answer_all_length != 8 && answer_count == 6) {
         answer_finish_count += 1;
         answer_all_length += 1;
         if (answer_all_length == 8) {
@@ -284,7 +284,7 @@ class GoldM extends State<Gold> {
                     glove.add(gloveData(1, this.isOpen, answerList[i].ko, 1,
                         answerList[i].question_num));
                   } else {
-                    glove.add(gloveData(1, this.isOpen, answerList[i].en, 1,
+                    glove.add(gloveData(2, this.isOpen, answerList[i].en, 1,
                         answerList[i].question_num));
                   }
                 }
@@ -294,7 +294,7 @@ class GoldM extends State<Gold> {
                     gloveTwo.add(gloveData(1, this.isOpen, answerList[i].ko, 1,
                         answerList[i].question_num));
                   } else {
-                    gloveTwo.add(gloveData(1, this.isOpen, answerList[i].en, 1,
+                    gloveTwo.add(gloveData(2, this.isOpen, answerList[i].en, 1,
                         answerList[i].question_num));
                   }
                 }
@@ -304,7 +304,7 @@ class GoldM extends State<Gold> {
                     gloveThree.add(gloveData(1, this.isOpen, answerList[i].ko,
                         1, answerList[i].question_num));
                   } else {
-                    gloveThree.add(gloveData(1, this.isOpen, answerList[i].en,
+                    gloveThree.add(gloveData(2, this.isOpen, answerList[i].en,
                         1, answerList[i].question_num));
                   }
                 }
@@ -535,6 +535,7 @@ class GoldM extends State<Gold> {
         child: GestureDetector(
           onTap: () {
             setState(() {
+              print("touch : " + type.toString() + ", " + param + ", " + question_num.toString());
               if (type == 1) {
                 for (int i = 0; i < glove.length; i++) {
                   if (glove[i].type == 1 &&
@@ -720,12 +721,12 @@ class GoldM extends State<Gold> {
               child: (type == 1)
                   ? this.isOpen
                       ? Padding(
-                          padding: EdgeInsets.only(bottom: 20.0),
+                          padding: EdgeInsets.only(bottom: 20.0, left: 10.0, right: 10.0),
                           child: Text(
                             param,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              fontSize: 12,
+                              fontSize: 14,
                               color: Colors.black,
                               fontFamily: 'Jua',
                             ),
@@ -735,12 +736,12 @@ class GoldM extends State<Gold> {
                       : Text("")
                   : this.isOpen
                       ? Padding(
-                          padding: EdgeInsets.only(bottom: 20.0),
+                          padding: EdgeInsets.only(bottom: 20.0, left: 10.0, right: 10.0),
                           child: Text(
                             param,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              fontSize: 12,
+                              fontSize: 14,
                               color: Colors.black,
                               fontFamily: 'Jua',
                             ),

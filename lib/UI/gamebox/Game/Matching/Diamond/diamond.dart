@@ -208,7 +208,7 @@ class DiamondM extends State<Diamond> {
           answer_all_length.toString() +
           ", " +
           answer_finish_count.toString());
-      if (answer_all_length != 8 && answer_count == 4) {
+      if (answer_all_length != 8 && answer_count == 6) {
         answer_finish_count += 1;
         answer_all_length += 1;
         if (answer_all_length == 8) {
@@ -259,9 +259,7 @@ class DiamondM extends State<Diamond> {
     matchBloc.getChapter(widget.chapter);
     matchBloc.getStage(widget.stage);
     matchBloc.question_num = widget.question_num;
-    return body(MediaQuery
-        .of(context)
-        .size);
+    return body(MediaQuery.of(context).size);
   }
 
   Widget body(Size size) {
@@ -287,7 +285,7 @@ class DiamondM extends State<Diamond> {
                     card.add(cardData(1, this.isOpen, answerList[i].ko, 1,
                         answerList[i].question_num));
                   } else {
-                    card.add(cardData(1, this.isOpen, answerList[i].en, 1,
+                    card.add(cardData(2, this.isOpen, answerList[i].en, 1,
                         answerList[i].question_num));
                   }
                 }
@@ -296,17 +294,17 @@ class DiamondM extends State<Diamond> {
                     cardTwo.add(cardData(1, this.isOpen, answerList[i].ko, 1,
                         answerList[i].question_num));
                   } else {
-                    cardTwo.add(cardData(1, this.isOpen, answerList[i].en, 1,
+                    cardTwo.add(cardData(2, this.isOpen, answerList[i].en, 1,
                         answerList[i].question_num));
                   }
                 }
                 for (int i = 8; i < 12; i++) {
                   if (answerList[i].en == null || answerList[i].en == "") {
-                    cardThree.add(cardData(1, this.isOpen, answerList[i].ko,
-                        1, answerList[i].question_num));
+                    cardThree.add(cardData(1, this.isOpen, answerList[i].ko, 1,
+                        answerList[i].question_num));
                   } else {
-                    cardThree.add(cardData(1, this.isOpen, answerList[i].en,
-                        1, answerList[i].question_num));
+                    cardThree.add(cardData(2, this.isOpen, answerList[i].en, 1,
+                        answerList[i].question_num));
                   }
                 }
                 print("on");
@@ -323,12 +321,8 @@ class DiamondM extends State<Diamond> {
                   }
                   cardThree_sub.clear();
                   for (int i = 0; i < cardThree.length; i++) {
-                    cardThree_sub.add(cardData(
-                        cardThree[i].type,
-                        this.isOpen,
-                        cardThree[i].param,
-                        1,
-                        cardThree[i].question_num));
+                    cardThree_sub.add(cardData(cardThree[i].type, this.isOpen,
+                        cardThree[i].param, 1, cardThree[i].question_num));
                   }
                   next_problem = 2;
                 }
@@ -346,12 +340,8 @@ class DiamondM extends State<Diamond> {
               }
               cardThree.clear();
               for (int i = 0; i < cardThree_sub.length; i++) {
-                cardThree.add(cardData(
-                    cardThree_sub[i].type,
-                    this.isOpen,
-                    cardThree_sub[i].param,
-                    1,
-                    cardThree_sub[i].question_num));
+                cardThree.add(cardData(cardThree_sub[i].type, this.isOpen,
+                    cardThree_sub[i].param, 1, cardThree_sub[i].question_num));
               }
             }
 
@@ -363,95 +353,92 @@ class DiamondM extends State<Diamond> {
                     height: size.height,
                     child: answer_finish
                         ? Stack(
-                      children: <Widget>[
-                        Image.asset(
-                            "assets/gamebox/img/effect/result_background.png"),
-                        Center(
-                          child: Result(
-                              level: widget.level,
-                              chapter: widget.chapter,
-                              stage: widget.stage,
-                              score: answer_finish_count,
-                              scoreLength: answer_all_length,
-                              sizeWidth:
-                              MediaQuery
-                                  .of(context)
-                                  .size
-                                  .width,
-                              resetGame: resetGame(),
-                              resultNextGame: resultNextGame()),
-                        )
-                      ],
-                    )
+                            children: <Widget>[
+                              Image.asset(
+                                  "assets/gamebox/img/effect/result_background.png"),
+                              Center(
+                                child: Result(
+                                    level: widget.level,
+                                    chapter: widget.chapter,
+                                    stage: widget.stage,
+                                    score: answer_finish_count,
+                                    scoreLength: answer_all_length,
+                                    sizeWidth:
+                                        MediaQuery.of(context).size.width,
+                                    resetGame: resetGame(),
+                                    resultNextGame: resultNextGame()),
+                              )
+                            ],
+                          )
                         : next_question
-                        ? Column(
-                      children: <Widget>[
-                        Image.asset(
-                          "assets/gamebox/img/match/18.png",
-                          fit: BoxFit.fill,
-                          width: size.width,
-                          height: size.height,
-                        ),
-                      ],
-                    )
-                        : Column(
-                      children: <Widget>[
-                        Image.asset(
-                          "assets/gamebox/img/match/18.png",
-                          fit: BoxFit.fill,
-                          width: size.width,
-                          height: size.height,
-                        ),
-                      ],
-                    )),
+                            ? Column(
+                                children: <Widget>[
+                                  Image.asset(
+                                    "assets/gamebox/img/match/18.png",
+                                    fit: BoxFit.fill,
+                                    width: size.width,
+                                    height: size.height,
+                                  ),
+                                ],
+                              )
+                            : Column(
+                                children: <Widget>[
+                                  Image.asset(
+                                    "assets/gamebox/img/match/18.png",
+                                    fit: BoxFit.fill,
+                                    width: size.width,
+                                    height: size.height,
+                                  ),
+                                ],
+                              )),
                 Positioned(
                   top: size.width / 3.5,
                   child: Container(
                     width: size.width - 20,
                     height: 420,
                     padding:
-                    const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+                        const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
                     child: Stack(
                       children: <Widget>[
                         answer_finish
                             ? Text("")
                             : next_question
-                            ? Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment:
-                          CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Image.asset(
-                                "assets/gamebox/img/effect/yay.png")
-                          ],
-                        )
-                            : Padding(
-                          padding: EdgeInsets.only(
-                              left: 10.0, right: 10.0),
-                          child: Image.asset(
-                            "assets/gamebox/img/match/match_dia.png",
-                            width: size.width - 20,
-                            height: 420,
-                            fit: BoxFit.fill,
-                          ),
-                        ),
+                                ? Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: <Widget>[
+                                      Image.asset(
+                                          "assets/gamebox/img/effect/yay.png")
+                                    ],
+                                  )
+                                : Padding(
+                                    padding: EdgeInsets.only(
+                                        left: 10.0, right: 10.0),
+                                    child: Image.asset(
+                                      "assets/gamebox/img/match/match_dia.png",
+                                      width: size.width - 20,
+                                      height: 420,
+                                      fit: BoxFit.fill,
+                                    ),
+                                  ),
                         Align(
                           alignment: AlignmentDirectional.topCenter,
                           child: next_question
                               ? Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[],
-                          )
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[],
+                                )
                               : Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              rowData(1),
-                              rowData(2),
-                              rowData(3),
-                            ],
-                          ),
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    rowData(1),
+                                    rowData(2),
+                                    rowData(3),
+                                  ],
+                                ),
                         ),
                       ],
                     ),
@@ -467,49 +454,53 @@ class DiamondM extends State<Diamond> {
   }
 
   Widget rowData(int upDown) {
-    return (upDown == 1)
-        ? Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: <Widget>[
-        Glove(card[0].type, card[0].isOpen, card[0].param,
-            card[0].opacity, card[0].question_num),
-        Glove(card[1].type, card[1].isOpen, card[1].param,
-            card[1].opacity, card[1].question_num),
-        Glove(card[2].type, card[2].isOpen, card[2].param,
-            card[2].opacity, card[2].question_num),
-        Glove(card[3].type, card[3].isOpen, card[3].param,
-            card[3].opacity, card[3].question_num),
-      ],
-    )
-        : (upDown != 1 && upDown == 2) ? Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: <Widget>[
-        Glove(cardTwo[0].type, cardTwo[0].isOpen, cardTwo[0].param,
-            cardTwo[0].opacity, cardTwo[0].question_num),
-        Glove(cardTwo[1].type, cardTwo[1].isOpen, cardTwo[1].param,
-            cardTwo[1].opacity, cardTwo[1].question_num),
-        Glove(cardTwo[2].type, cardTwo[2].isOpen, cardTwo[2].param,
-            cardTwo[2].opacity, cardTwo[2].question_num),
-        Glove(cardTwo[3].type, cardTwo[3].isOpen, cardTwo[3].param,
-            cardTwo[3].opacity, cardTwo[3].question_num),
-      ],
-    ) : Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: <Widget>[
-        Glove(cardThree[0].type, cardThree[0].isOpen, cardThree[0].param,
-            cardThree[0].opacity, cardThree[0].question_num),
-        Glove(cardThree[1].type, cardThree[1].isOpen, cardThree[1].param,
-            cardThree[1].opacity, cardThree[1].question_num),
-        Glove(cardThree[2].type, cardThree[2].isOpen, cardThree[2].param,
-            cardThree[2].opacity, cardThree[2].question_num),
-        Glove(cardThree[3].type, cardThree[3].isOpen, cardThree[3].param,
-            cardThree[3].opacity, cardThree[3].question_num),
-      ],
-    );
+    if (upDown == 1) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Card(card[0].type, card[0].isOpen, card[0].param, card[0].opacity,
+              card[0].question_num),
+          Card(card[1].type, card[1].isOpen, card[1].param, card[1].opacity,
+              card[1].question_num),
+          Card(card[2].type, card[2].isOpen, card[2].param, card[2].opacity,
+              card[2].question_num),
+          Card(card[3].type, card[3].isOpen, card[3].param, card[3].opacity,
+              card[3].question_num),
+        ],
+      );
+    } else if (upDown == 2) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Card(cardTwo[0].type, cardTwo[0].isOpen, cardTwo[0].param,
+              cardTwo[0].opacity, cardTwo[0].question_num),
+          Card(cardTwo[1].type, cardTwo[1].isOpen, cardTwo[1].param,
+              cardTwo[1].opacity, cardTwo[1].question_num),
+          Card(cardTwo[2].type, cardTwo[2].isOpen, cardTwo[2].param,
+              cardTwo[2].opacity, cardTwo[2].question_num),
+          Card(cardTwo[3].type, cardTwo[3].isOpen, cardTwo[3].param,
+              cardTwo[3].opacity, cardTwo[3].question_num),
+        ],
+      );
+    } else if (upDown == 3) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Card(cardThree[0].type, cardThree[0].isOpen, cardThree[0].param,
+              cardThree[0].opacity, cardThree[0].question_num),
+          Card(cardThree[1].type, cardThree[1].isOpen, cardThree[1].param,
+              cardThree[1].opacity, cardThree[1].question_num),
+          Card(cardThree[2].type, cardThree[2].isOpen, cardThree[2].param,
+              cardThree[2].opacity, cardThree[2].question_num),
+          Card(cardThree[3].type, cardThree[3].isOpen, cardThree[3].param,
+              cardThree[3].opacity, cardThree[3].question_num),
+        ],
+      );
+    }
   }
 
-  Widget Glove(int type, bool isOpen, String param, double opacity,
-      int question_num) {
+  Widget Card(
+      int type, bool isOpen, String param, double opacity, int question_num) {
     this.isOpen = isOpen;
     this.opacity = opacity;
     return IgnorePointer(
@@ -581,13 +572,13 @@ class DiamondM extends State<Diamond> {
                             rowData(3);
                             if (answer_one == "") {
                               answer_one = param;
-                              answer_one_list = 2;
+                              answer_one_list = 3;
                               answer_one_no = i;
                               answer_one_type = type;
                               answer_one_question_num = question_num;
                             } else if (answer_one != "" && answer_two == "") {
                               answer_two = param;
-                              answer_two_list = 2;
+                              answer_two_list = 3;
                               answer_two_no = i;
                               answer_two_type = type;
                               answer_two_question_num = question_num;
@@ -662,13 +653,13 @@ class DiamondM extends State<Diamond> {
                             rowData(3);
                             if (answer_one == "") {
                               answer_one = param;
-                              answer_one_list = 2;
+                              answer_one_list = 3;
                               answer_one_no = i;
                               answer_one_type = type;
                               answer_one_question_num = question_num;
                             } else if (answer_one != "" && answer_two == "") {
                               answer_two = param;
-                              answer_two_list = 2;
+                              answer_two_list = 3;
                               answer_two_no = i;
                               answer_two_type = type;
                               answer_two_question_num = question_num;
@@ -703,35 +694,42 @@ class DiamondM extends State<Diamond> {
             child: Center(
               child: (type == 1)
                   ? this.isOpen
-                  ? Text(
-                param,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 12,
-                  color: Colors.black,
-                  fontFamily: 'Jua',
-                ),
-                textAlign: TextAlign.center,
-              )
-                  : Text("")
+                      ? Container(
+                          width: 50,
+                          child: Text(
+                            param,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              color: Colors.black,
+                              fontFamily: 'Jua',
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        )
+                      : Text("")
                   : this.isOpen
-                  ? Text(
-                param,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 12,
-                  color: Colors.black,
-                  fontFamily: 'Jua',
-                ),
-                textAlign: TextAlign.center,
-              )
-                  : Text(""),
+                      ? Container(
+                          width: 50,
+                          child: Text(
+                            param,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              color: Colors.black,
+                              fontFamily: 'Jua',
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        )
+                      : Text(""),
             ),
             decoration: BoxDecoration(
               image: DecorationImage(
                   image: AssetImage((type == 1)
                       ? this.isOpen ? cardOpen : cardClose
-                      : this.isOpen ? cardOpen : cardClose)),
+                      : this.isOpen ? cardOpen : cardClose),
+                  fit: BoxFit.contain),
             ),
           ),
         ),
