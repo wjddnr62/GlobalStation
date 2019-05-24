@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:lms_flutter/UI/gamebox/public/Result.dart';
+import 'package:lms_flutter/UI/gamebox/public/questionStatus.dart';
 import 'package:lms_flutter/bloc/match_game_bloc.dart';
 import 'package:lms_flutter/model/Match/answerList.dart';
 
@@ -10,6 +11,7 @@ class Phonics extends StatefulWidget {
   final int chapter;
   final int stage;
   final int question_num;
+
 
   Phonics({Key key, this.level, this.chapter, this.stage, this.question_num})
       : super(key: key);
@@ -64,6 +66,8 @@ class PhonicsM extends State<Phonics> {
   double opacity = 1;
 
   bool isOpen = true;
+
+
 
   void isOpenChange() {
     print("Open_Change : " + this.isOpen.toString());
@@ -193,11 +197,11 @@ class PhonicsM extends State<Phonics> {
     }
   }
 
-  resetGame() {
+  void resetGame() {
     print("P_M_reset");
   }
 
-  resultNextGame() {
+  void resultNextGame() {
     print("P_M_resultNextGame");
   }
 
@@ -304,8 +308,8 @@ class PhonicsM extends State<Phonics> {
                                     scoreLength: answer_all_length,
                                     sizeWidth:
                                         MediaQuery.of(context).size.width,
-                                resetGame: resetGame(),
-                                resultNextGame: resultNextGame()),
+                                    resetGame: resetGame,
+                                    resultNextGame: resultNextGame),
                               )
                             ],
                           )
@@ -343,6 +347,14 @@ class PhonicsM extends State<Phonics> {
                                   ),
                                 ],
                               )),
+//                Positioned(
+//                  top: size.width / 4,
+//                  child: questionStatus(
+//                      question_all_length: 5,
+//                      question_count: answer_count,
+//                      width: size.width,
+//                    ),
+//                ),
                 Positioned(
                   top: size.width / 3.5,
                   child: Container(

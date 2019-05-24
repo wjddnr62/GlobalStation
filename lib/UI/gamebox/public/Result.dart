@@ -9,8 +9,8 @@ class Result extends StatefulWidget {
   int score;
   int scoreLength;
   double sizeWidth;
-  void resetGame;
-  void resultNextGame;
+  Function resetGame;
+  Function resultNextGame;
 
   Result(
       {Key key,
@@ -31,6 +31,8 @@ class Result extends StatefulWidget {
 class ResultView extends State<Result> {
   String level_full;
   String resultImgUrl;
+  Function nextGame;
+  Function resetGame;
 
   level_set() {
     if (widget.level == "P") {
@@ -44,6 +46,8 @@ class ResultView extends State<Result> {
     } else if (widget.level == "D") {
       level_full = "Diamond";
     }
+    nextGame = widget.resultNextGame;
+    resetGame = widget.resetGame;
   }
 
   resultImgSet() {
@@ -139,10 +143,8 @@ class ResultView extends State<Result> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: <Widget>[
                     GestureDetector(
-                      onTap: () {
-                        // ignore: unnecessary_statements
-                        widget.resetGame;
-                      },
+                      onTap: () => resetGame
+                      ,
                       child: Image.asset(
                         "assets/gamebox/img/effect/back_btn.png",
                         width: 100,
@@ -150,9 +152,7 @@ class ResultView extends State<Result> {
                       ),
                     ),
                     GestureDetector(
-                      onTap: () {
-                        widget.resultNextGame;
-                      },
+                      onTap: () => widget.resultNextGame,
                       child: Image.asset(
                         "assets/gamebox/img/effect/next_btn.png",
                         width: 100,

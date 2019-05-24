@@ -69,7 +69,7 @@ class LobbyHomePage extends State<LobbyPage> {
               alignment: AlignmentDirectional.topStart,
               child: InkWell(
                 onTap: () {
-                  setCharacter();
+//                  setCharacter();
                 },
                 child: Image.asset(
                   "assets/gamebox/img/btn_myinfo.png",

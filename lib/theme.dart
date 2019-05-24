@@ -78,6 +78,8 @@ final unitColor = Color(0xFFFFFBF6);
 final backbtnbackgroundColor = Color(0xFFE8E8E8);
 final backbtnColor = Color(0xFF8A8A8A);
 final resultStageColor = Color(0xFFF76666);
+final StatusBarLeftColor = Color(0xFF29a787);
+final StatusBarRightColor = Color(0xFFffd851);
 //------------------------------------
 
 //---boxDecoration--------------------

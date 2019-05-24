@@ -36,6 +36,9 @@ class _LoginState extends State<Login> {
         userInfo.user_id = userData[0].user_id;
       }
     }).catchError((error){
+      Scaffold.of(context).showSnackBar(new SnackBar(
+        content: new Text(error),
+      ));
       print("error : " + error);
     });
   }
@@ -64,29 +67,37 @@ class _LoginState extends State<Login> {
 
   Widget body(buildContext) {
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
+      resizeToAvoidBottomPadding: true,
       backgroundColor: Color(0xFFFCCA20),
       body: new Container(
         child: new Container(
-          margin: new EdgeInsets.only(left: 30.0, right: 30.0),
+          margin: new EdgeInsets.only(left: 30.0, right: 30.0, bottom: 40.0),
           child: new Center(
             child: new Column(
-//                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                new Padding(padding: EdgeInsets.only(top: 130.0)),
-                Image.asset(
-                  'assets/logo/icon_logo.png',
-                  width: 150,
-                  height: 100,
+                Align(
+                  alignment: Alignment.center,
+                  child: Image.asset(
+                    'assets/logo/icon_logo.png',
+                    width: 150,
+                    height: 100,
+                  ),
                 ),
-                new Container(
+//                Padding(padding: EdgeInsets.only(top: 130.0)),
+//                Image.asset(
+//                  'assets/logo/icon_logo.png',
+//                  width: 150,
+//                  height: 100,
+//                ),
+                Container(
                   child: new Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
                       Padding(
                         padding: EdgeInsets.only(top: 35.0),
-                        child: new TextFormField(
+                        child: TextFormField(
                           controller: _idController,
                           decoration: new InputDecoration(
                             hintText: "아이디",

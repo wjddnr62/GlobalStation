@@ -213,11 +213,11 @@ class BronzeM extends State<Bronze> {
   }
 
   resetGame() {
-    print("P_M_reset");
+    print("B_M_reset");
   }
 
   resultNextGame() {
-    print("P_M_resultNextGame");
+    print("B_M_resultNextGame");
   }
 
   @override
