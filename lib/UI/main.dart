@@ -467,7 +467,7 @@ class _MainState extends State<Main> {
                 child: GestureDetector(
                   onTap: () {
                     print("Book Box");
-                    Navigator.of(context).pushNamed('/BookBox');
+//                    Navigator.of(context).pushNamed('/BookBox');
                   },
                   child: Text(
                     "Book Box",
@@ -554,7 +554,7 @@ class _MainState extends State<Main> {
     return GestureDetector(
       onTap: () {
         print("Book Box");
-        Navigator.of(context).pushNamed('/BookBox');
+//        Navigator.of(context).pushNamed('/BookBox');
       },
       child: Padding(
         padding: EdgeInsets.only(bottom: 10.0),

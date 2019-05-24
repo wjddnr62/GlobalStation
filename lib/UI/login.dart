@@ -71,7 +71,7 @@ class _LoginState extends State<Login> {
       backgroundColor: Color(0xFFFCCA20),
       body: new Container(
         child: new Container(
-          margin: new EdgeInsets.only(left: 30.0, right: 30.0, bottom: 40.0),
+          margin: new EdgeInsets.only(left: 30.0, right: 30.0, bottom: 0.0),
           child: new Center(
             child: new Column(
                   mainAxisAlignment: MainAxisAlignment.center,
