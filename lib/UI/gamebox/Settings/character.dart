@@ -221,13 +221,22 @@ class Character extends State<CharacterPage> {
   }
 
   Widget getHat(){
+    double width;
+    double height = 0;
+    if (hats == 2) {
+      width = 50;
+    } else if (hats == 1){
+      width = 80;
+    } else if (hats == 3) {
+      width = 90;
+    }
     if(hats == 0){
       return SizedBox(width:0,height:0);
     }
     else
       return Align(
         alignment: AlignmentDirectional.topCenter,
-        child: Image.asset(hatUrl,fit: BoxFit.contain,width: 110,),
+        child: Image.asset(hatUrl,fit: BoxFit.contain,width: width),
       );
   }
 

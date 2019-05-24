@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:lms_flutter/UI/gamebox/Settings/character.dart';
 import 'package:lms_flutter/UI/gamebox/Settings/setting.dart';
+import 'Settings/mypage.dart';
 import 'gameDialog.dart';
 import 'package:lms_flutter/model/UserInfo.dart';
 import 'package:audioplayers/audioplayers.dart';
@@ -70,6 +71,7 @@ class LobbyHomePage extends State<LobbyPage> {
               child: InkWell(
                 onTap: () {
 //                  setCharacter();
+                  myPage();
                 },
                 child: Image.asset(
                   "assets/gamebox/img/btn_myinfo.png",
@@ -192,6 +194,13 @@ class LobbyHomePage extends State<LobbyPage> {
     Navigator.of(context).push(PageRouteBuilder(
       opaque: false,
       pageBuilder: (context, _, __) => CharacterPage(),
+    ));
+  }
+
+  void myPage() {
+    Navigator.of(context).push(PageRouteBuilder(
+      opaque: false,
+      pageBuilder: (conetxt, _, __) => MyPage(),
     ));
   }
 
