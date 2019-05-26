@@ -54,15 +54,17 @@ class LobbyHomePage extends State<LobbyPage> {
     return Stack(
       children: <Widget>[
         swipe(size),
-        Align(
-          alignment: AlignmentDirectional.topCenter,
-          child: Image.asset(
-            "assets/gamebox/img/lobby_logo.png",
-            fit: BoxFit.contain,
-            width: 120,
-            height: 100,
+        SafeArea(
+          child: Align(
+            alignment: AlignmentDirectional.topCenter,
+            child: Image.asset(
+              "assets/gamebox/img/lobby_logo.png",
+              fit: BoxFit.contain,
+              width: 120,
+            ),
           ),
         ),
+
         SafeArea(
           child: Padding(
             padding: const EdgeInsets.only(left: 10),
