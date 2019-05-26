@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:lms_flutter/theme.dart';
 
 import 'character.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 
 class SettingsPage extends StatelessWidget {
 
@@ -69,8 +71,22 @@ class SettingsPage extends StatelessWidget {
                   ));
                 },
               ),
-              boxContainer("메인 선택화면으로 이동"),
-              boxContainer("GEC 홈페이지"),
+              InkWell(
+                onTap: (){
+//                  Navigator.popUntil(context, ModalRoute.withName('/Login'));
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+                },
+                child: boxContainer("메인 선택화면으로 이동"),
+              ),
+              InkWell(
+                onTap: (){
+                  _launchURL();
+                },
+                child: boxContainer("GEC 홈페이지"),
+              ),
+
               boxContainer("서비스 이용약관"),
               boxContainer("개인정보 취급 방침"),
               Padding(
@@ -145,4 +161,14 @@ class SettingsPage extends StatelessWidget {
       ),
     );
   }
+
+  _launchURL() async {
+    const url = 'https://www.isgec.or.kr/';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
 }
