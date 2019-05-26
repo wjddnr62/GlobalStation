@@ -135,6 +135,7 @@ class ResultView extends State<Result> {
           lev.toString() +
           ", " +
           cap.toString());
+      Navigator.of(context).pop();
       Navigator.of(context).push(PageRouteBuilder(
           opaque: false,
           pageBuilder: (BuildContext context, _, __) => GameDialog(

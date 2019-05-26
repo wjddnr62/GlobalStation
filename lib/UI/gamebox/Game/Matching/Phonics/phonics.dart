@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:audioplayers/audio_cache.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:lms_flutter/UI/gamebox/public/Result.dart';
 import 'package:lms_flutter/UI/gamebox/public/Timer.dart';
@@ -25,6 +27,9 @@ class Phonics extends StatefulWidget {
 class PhonicsM extends State<Phonics> {
   UserInfo userInfo = UserInfo();
   TimerSet timerSet = TimerSet();
+
+  AudioCache audioCache = AudioCache();
+  AudioPlayer advancedPlayer = AudioPlayer();
 
   String shell1Close = "assets/gamebox/img/match/shell_close.png";
   String shell1Open = "assets/gamebox/img/match/shell.png";
@@ -109,7 +114,9 @@ class PhonicsM extends State<Phonics> {
 
   void nextQ() {
     setState(() {
-      timeFinish = false;
+      if (timeFinish == true) {
+        timeFinish = false;
+      }
       notYea = false;
       next_question = false;
       isOpen = true;
@@ -178,6 +185,7 @@ class PhonicsM extends State<Phonics> {
           ", " +
           answer_finish_count.toString());
       if (answer_all_length != 5 && answer_count == 3) {
+        audioCache.play("gamebox/audio/sucess_sound.mp3");
         answer_finish_count += 1;
         answer_all_length += 1;
         if (answer_all_length == 5) {
@@ -228,6 +236,7 @@ class PhonicsM extends State<Phonics> {
           next_question = true;
           resultView();
         } else {
+//          audioCache.play("gamebox/audio/fail_sound.mp3");
           timeFinish = true;
           answer_one = "";
           answer_two = "";
@@ -391,6 +400,26 @@ class PhonicsM extends State<Phonics> {
                                   ),
                                 ],
                               )),
+                Positioned(
+                  top: size.width / 30,
+                  child: Container(
+                    width: size.width - 20,
+                    height: 20,
+                    padding: EdgeInsets.only(right: 15),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        GestureDetector(
+                          child: Image.asset("assets/gamebox/img/close_button.png"),
+                          onTap: (){
+                            Navigator.of(context).pop();
+                          },
+                        )
+                      ],
+                    ),
+                  ),
+                ),
                 answer_finish
                     ? Text("")
                     : next_question

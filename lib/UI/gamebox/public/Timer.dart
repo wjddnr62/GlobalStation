@@ -19,50 +19,53 @@ class TimerSet extends State<TimerBar> {
   int _defaultSet = 30;
   int timerSet = 30;
 
-  int get defaultSet => _defaultSet;
-
-  set defaultSet(int value) {
-    _defaultSet = value;
-  }
-
-  defaultInit() {
-//    _timer.cancel();
-      _defaultSet = 30;
-        setTimer();
-  }
-
-
-  andTimer() async {
-    return Timer(Duration(seconds: 6), setTimer());
-  }
-
   setTimer() {
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      setState(() {
-        if (_defaultSet == 0) {
-          _timer.cancel();
-          widget.finishTimer();
-          _defaultSet = 30;
-          print("타이머완료");
-          setTimer();
-//          andTimer();
-        } else {
-          _defaultSet -= 1;
-        }
-      });
+      if (_timer.isActive) {
+        setState(() {
+          if (_defaultSet == 1) {
+            _timer.cancel();
+            print("timered2 : " + _timer.isActive.toString());
+            if (!_timer.isActive) {
+              widget.finishTimer();
+            }
+            _defaultSet = 30;
+            print("타이머완료");
+            if(!_timer.isActive) {
+              setTimer();
+            }
+          } else {
+            _defaultSet -= 1;
+          }
+        });
+      }
     });
   }
 
+
   @override
-  void dispose() {
-    _timer.cancel();
-    super.dispose();
+  void didUpdateWidget(TimerBar oldWidget) {
+    print("oldTimer");
   }
 
   @override
   void initState() {
     super.initState();
+    if (_timer != null) {
+      _timer.cancel();
+    }
+
     setTimer();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    print("timerdispose");
+    setState(() {
+      _timer.cancel();
+    });
+    print("timered : " + _timer.isActive.toString());
   }
 
   Widget timerBar() {
