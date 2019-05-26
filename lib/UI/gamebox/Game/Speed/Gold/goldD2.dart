@@ -71,7 +71,7 @@ class Gold extends State<GoldD2> {
                       child: Center(
                         child: Text(
                           widget.question,
-                          style: titleTextStyle,
+                          style: speedGoldQuestionStyle,
                         ),
                       ),
                     ),
@@ -87,13 +87,13 @@ class Gold extends State<GoldD2> {
               child: Center(
                 child: Text(
                   widget.title,
-                  style: titleTextStyle,
+                  style: speedGoldTitleText,
                 ),
               ),
             ),
           ),
           Positioned(
-            top: size.height / 2.1,
+            top: size.height / 2.22,
             child: wood(size),
           ),
         ],
@@ -104,14 +104,14 @@ class Gold extends State<GoldD2> {
   Widget wood(Size size) {
     return Container(
       width: size.width - 20,
-      height: 70,
+      height: 60,
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Stack(
         children: <Widget>[
           Image.asset(
             goldQue,
             width: size.width - 20,
-            height: 70,
+            height: 60,
             fit: BoxFit.fill,
           ),
           Align(

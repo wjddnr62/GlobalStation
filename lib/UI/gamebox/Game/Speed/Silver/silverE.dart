@@ -225,7 +225,7 @@ class SilverE extends StatelessWidget {
               child: Center(
                 child: Text(
                   title,
-                  style: titleTextStyle,
+                  style: speedSilverTitleText,
                 ),
               ),
             ),

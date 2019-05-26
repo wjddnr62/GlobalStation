@@ -54,7 +54,7 @@ class Diamond extends State<DiamondE> {
               child: Center(
                 child: Text(
                   widget.title,
-                  style: titleTextStyle,
+                  style: speedDiaTitleText,
                 ),
               ),
             ),

@@ -57,13 +57,13 @@ class Bronze extends State<BronzeB> {
                     fit: BoxFit.fill,
                   ),
                   Positioned(
-                    top: size.height / 3.5,
+                    top: size.height / 3.4,
                     child: Container(
                       width: size.width,
                       child: Center(
                         child: Text(
                           widget.title,
-                          style: titleTextStyle,
+                          style: speedBronzeTitleStyleB,
                         ),
                       ),
                     ),

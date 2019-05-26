@@ -70,7 +70,7 @@ class Bronze extends State<BronzeC> {
                     child: Container(
                       width: size.width - 100,
                       height: 30,
-                      child: Text(widget.question,style: titleTextStyle,),
+                      child: Text(widget.question,style: speedBronzeQuestionStyle,),
                     ),
                   )
                 ],
@@ -78,13 +78,13 @@ class Bronze extends State<BronzeC> {
             ),
           ),
           Positioned(
-            top: size.height / 2.4,
+            top: size.height / 2.35,
             child: Container(
               width: size.width,
               child: Center(
                 child: Text(
                   widget.title,
-                  style: titleTextStyle,
+                  style: speedBronzeTitleStyle,
                 ),
               ),
             ),

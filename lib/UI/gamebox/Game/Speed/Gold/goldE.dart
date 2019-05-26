@@ -53,19 +53,19 @@ class Gold extends State<GoldE> {
             fit: BoxFit.fill,
           ),
           Positioned(
-            top: size.height / 4,
+            top: size.height / 3.8,
             child: Container(
               width: size.width,
               child: Center(
                 child: Text(
                   widget.title,
-                  style: titleTextStyle,
+                  style: speedGoldTitleText,
                 ),
               ),
             ),
           ),
           Positioned(
-            top: size.height / 2.1,
+            top: size.height / 2.25,
             child: answer(size),
           ),
         ],

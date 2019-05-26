@@ -67,6 +67,89 @@ final resultTextStyle = TextStyle(
   fontWeight: FontWeight.bold,
 );
 
+final speedPhonicsTitleStyle = TextStyle(
+  fontSize: defaultFontSize - 4,
+  color: black,
+  fontFamily: 'JUA',
+  fontWeight: FontWeight.bold,
+);
+
+final speedBronzeTitleStyle = TextStyle(
+  fontSize: defaultFontSize - 2,
+  color: white,
+  fontFamily: 'JUA',
+  fontWeight: FontWeight.bold,
+);
+
+final speedBronzeTitleStyleB = TextStyle(
+  fontSize: defaultFontSize - 2,
+  color: Colors.red,
+  fontFamily: 'JUA',
+  fontWeight: FontWeight.bold,
+);
+
+final speedBronzeQuestionStyle = TextStyle(
+  fontSize: defaultFontSize - 4,
+  color: black,
+  fontFamily: 'JUA',
+  fontWeight: FontWeight.bold,
+);
+
+final speedSilverTitleText = TextStyle(
+  fontSize: defaultFontSize - 2,
+  color: Colors.red,
+  fontFamily: 'JUA',
+  fontWeight: FontWeight.bold,
+);
+
+final speedSilverQuestionStyle = TextStyle(
+  fontSize: defaultFontSize - 4,
+  color: black,
+  fontFamily: 'JUA',
+  fontWeight: FontWeight.bold,
+);
+
+final speedGoldTitleText = TextStyle(
+  fontSize: defaultFontSize - 2,
+  color: Colors.red,
+  fontFamily: 'JUA',
+  fontWeight: FontWeight.bold,
+);
+final speedGoldTitleTextC = TextStyle(
+  fontSize: defaultFontSize - 2,
+  color: white,
+  fontFamily: 'JUA',
+  fontWeight: FontWeight.bold,
+);
+
+final speedGoldQuestionStyle = TextStyle(
+  fontSize: defaultFontSize - 4,
+  color: black,
+  fontFamily: 'JUA',
+  fontWeight: FontWeight.bold,
+);
+
+final speedDiaTitleText = TextStyle(
+  fontSize: defaultFontSize - 2,
+  color: Colors.red,
+  fontFamily: 'JUA',
+  fontWeight: FontWeight.bold,
+);
+final speedDiaTitleTextC = TextStyle(
+  fontSize: defaultFontSize - 2,
+  color: white,
+  fontFamily: 'JUA',
+  fontWeight: FontWeight.bold,
+);
+
+final speedDiaQuestionStyle = TextStyle(
+  fontSize: defaultFontSize - 4,
+  color: black,
+  fontFamily: 'JUA',
+  fontWeight: FontWeight.bold,
+);
+
+
 //color
 final WhiteColor = Color(0xFFFFFFFF);
 final bookboxmainColor = Color(0xFFFB6969);

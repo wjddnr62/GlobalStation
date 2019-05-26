@@ -78,7 +78,7 @@ class Silver extends State<SilverD1> {
                             child:Center(
                               child: Text(
                                 widget.question,
-                                style: titleTextStyle,
+                                style: speedSilverQuestionStyle,
                               ),
                             ),
                           ),
@@ -88,13 +88,13 @@ class Silver extends State<SilverD1> {
                   ),
                 ),
                 Positioned(
-                  top: size.height / 3.8,
+                  top: size.height / 3.7,
                   child: Container(
                     width: size.width,
                     child: Center(
                       child: Text(
                         widget.title,
-                        style: titleTextStyle,
+                        style: speedSilverTitleText,
                       ),
                     ),
                   ),

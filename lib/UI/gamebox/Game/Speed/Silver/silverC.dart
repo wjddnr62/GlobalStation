@@ -99,7 +99,7 @@ class Silver extends State<SilverC> {
                             child:Center(
                               child: Text(
                                 widget.question,
-                                style: titleTextStyle,
+                                style: speedSilverQuestionStyle,
                               ),
                             ),
                           ),
@@ -109,31 +109,31 @@ class Silver extends State<SilverC> {
                   ),
                 ),
                 Positioned(
-                  top: size.height / 2.4,
+                  top: size.height / 2.25,
                   child: Container(
                     width: size.width,
                     child: Center(
                       child: Text(
                         widget.title,
-                        style: titleTextStyle,
+                        style: speedSilverTitleText,
                       ),
                     ),
                   ),
                 ),
                 Positioned(
-                  top: size.height / 2.2,
+                  top: size.height / 2.05,
                   child: wood("A", size,1),
                 ),
                 Positioned(
-                  top: size.height / 1.83,
+                  top: size.height / 1.73,
                   child: wood( "B", size,2),
                 ),
                 Positioned(
-                  top: size.height / 1.56,
+                  top: size.height / 1.495,
                   child: wood("C", size,3),
                 ),
                 Positioned(
-                  top: size.height / 1.36,
+                  top: size.height / 1.315,
                   child: wood("D", size,4),
                 ),
 //                Positioned(

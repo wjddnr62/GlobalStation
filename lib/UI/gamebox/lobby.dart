@@ -6,6 +6,8 @@ import 'Settings/mypage.dart';
 import 'gameDialog.dart';
 import 'package:lms_flutter/model/UserInfo.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:audioplayers/audio_cache.dart';
+import 'package:flutter_sound/flutter_sound.dart';
 
 class LobbyPage extends StatefulWidget {
   @override
@@ -21,6 +23,15 @@ class LobbyHomePage extends State<LobbyPage> {
 //      print("suc");
 //    }
 //  }
+  FlutterSound flutterSound = new FlutterSound();
+
+  void play() async{
+    await flutterSound.startPlayer("assets/gamebox/audio/backgroundmusic.mp3");
+  }
+
+  AudioCache audioCache = AudioCache();
+  AudioPlayer advancedPlayer = AudioPlayer();
+
 
   int level = UserInfo().member_level;
 
@@ -104,18 +115,114 @@ class LobbyHomePage extends State<LobbyPage> {
         ),
         Align(
           alignment: AlignmentDirectional.bottomCenter,
-          child: Image.asset(
-            "assets/gamebox/img/navi.png",
-            fit: BoxFit.contain,
+          child: Container(
+            width: double.infinity,
+            height: 85,
+            child: Stack(
+              children: <Widget>[
+                Positioned.fill(
+                  child: Image.asset(
+                    "assets/gamebox/img/navi.png",
+                    fit: BoxFit.contain,
+                  ),
+                ),
+
+                Positioned(
+                  left: 10,
+                  child: Container(
+                    width: 70,
+                    height: 80,
+                    child: InkWell(
+                      onTap: (){
+//                        if(currentIdx != 0)
+//                          setState(() {
+//                            currentIdx--;
+//                          });
+
+                      },
+                    ),
+                  ),
+                ),
+
+                Positioned(
+                  right: 10,
+                  child: Container(
+                    width: 70,
+                    height: 80,
+                    child: InkWell(
+                      onTap: (){
+//                        if(currentIdx != 15)
+//                          setState(() {
+//                            currentIdx = currentIdx + 1;
+//                          });
+
+                      },
+                    ),
+                  ),
+                ),
+
+                Align(
+                  alignment: AlignmentDirectional.center,
+                  child: Container(
+                    width: 80,
+                    height: 80,
+                    child: InkWell(
+                      onTap: (){
+                        gameStart(viewIdx, viewlev, viewCap);
+                      },
+                    ),
+                  ),
+                ),
+
+              ],
+            ),
           ),
+
         ),
       ],
     );
   }
+  int viewIdx;
+  int viewCap;
+  String viewlev;
+  int currentIdx = 0;
+
 
   Widget swipe(Size size) {
     return Swiper(
+      index: currentIdx,
+      onIndexChanged: (index){
+        setState(() {
+          currentIdx = index;
+          print(currentIdx.toString());
+        });
+      },
       itemBuilder: (context, idx) {
+        if (idx <= level) {
+          var lev = "";
+          var cap = 0;
+          if (idx <= 2) {
+            lev = "P";
+            cap = idx + 1;
+          } else if (idx <= 5) {
+            lev = "B";
+            cap = idx - 2;
+          } else if (idx <= 8) {
+            lev = "S";
+            cap = idx - 5;
+          } else if (idx <= 11) {
+            lev = "G";
+            cap = idx - 8;
+          } else if (idx <= 14) {
+            lev = "D";
+            cap = idx - 11;
+          }
+          viewIdx = idx;
+          viewCap = cap;
+          viewlev = lev;
+
+        }
+
         return InkWell(
           onTap: () {
             if (idx <= level) {
@@ -137,6 +244,9 @@ class LobbyHomePage extends State<LobbyPage> {
                 lev = "D";
                 cap = idx - 11;
               }
+              viewIdx = idx;
+              viewCap = cap;
+              viewlev = lev;
 
               gameStart(idx, lev, cap);
             }
@@ -206,6 +316,7 @@ class LobbyHomePage extends State<LobbyPage> {
 
   @override
   void dispose() {
+//    advancedPlayer.stop();
     super.dispose();
   }
 
@@ -213,11 +324,13 @@ class LobbyHomePage extends State<LobbyPage> {
   void initState() {
     super.initState();
     print("level = ${level}");
+//    play();
   }
 
   @override
   Widget build(BuildContext context) {
 //    play();
+    audioCache.loop('/gamebox/audio/backgroundmusic.mp3');
     return Scaffold(
       body: body(MediaQuery.of(context).size),
     );

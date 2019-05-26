@@ -76,14 +76,14 @@ class Gold extends State<GoldD1> {
                         ),
 
                         Positioned(
-                          top: 20,
+                          top: 30,
                           left: 55,
                           child: Container(
                             width: size.width - 100,
                             child:Center(
                               child: Text(
                                 widget.question,
-                                style: titleTextStyle,
+                                style: speedGoldQuestionStyle,
                               ),
                             ),
                           ),
@@ -99,25 +99,25 @@ class Gold extends State<GoldD1> {
                     child: Center(
                       child: Text(
                         widget.title,
-                        style: titleTextStyle,
+                        style: speedGoldTitleText,
                       ),
                     ),
                   ),
                 ),
                 Positioned(
-                  top: size.height / 2.1,
+                  top: size.height / 2.22,
                   child: brick("A", answerList[0].contents, size,1),
                 ),
                 Positioned(
-                  top: size.height / 1.681,
+                  top: size.height / 1.8,
                   child: brick("B", answerList[1].contents, size,2),
                 ),
                 Positioned(
-                  top: size.height / 1.41,
+                  top: size.height / 1.52,
                   child: brick("C", answerList[2].contents, size,3),
                 ),
                 Positioned(
-                  top: size.height / 1.22,
+                  top: size.height / 1.315,
                   child: brick("D", answerList[3].contents, size,4),
                 ),
               ],
@@ -135,7 +135,7 @@ class Gold extends State<GoldD1> {
   Widget brick(String type, String text, Size size,int idx) {
     return Container(
       width: size.width - 20,
-      height: 70,
+      height: 60,
       padding: const EdgeInsets.symmetric(horizontal: 15),
       child:InkWell(
         onTap: (){
@@ -150,7 +150,7 @@ class Gold extends State<GoldD1> {
             Image.asset(
               glodBrick,
               width: size.width - 20,
-              height: 70,
+              height: 600,
               fit: BoxFit.fill,
             ),
             Align(

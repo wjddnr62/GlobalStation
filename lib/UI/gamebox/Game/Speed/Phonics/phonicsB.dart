@@ -69,7 +69,7 @@ class Phonics extends State<PhonicsB> {
                       child: Center(
                         child: Text(
                           widget.title,
-                          style: titleTextStyle,
+                          style: speedPhonicsTitleStyle,
                         ),
                       ),
                     ),

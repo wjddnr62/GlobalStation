@@ -79,7 +79,7 @@ class Gold extends State<GoldC> {
                             child:Center(
                               child: Text(
                                 widget.question,
-                                style: titleTextStyle,
+                                style: speedGoldQuestionStyle,
                               ),
                             ),
                           ),
@@ -89,31 +89,31 @@ class Gold extends State<GoldC> {
                   ),
                 ),
                 Positioned(
-                  top: size.height / 2.5,
+                  top: size.height / 2.55,
                   child: Container(
                     width: size.width,
                     child: Center(
                       child: Text(
                         widget.title,
-                        style: titleTextStyle,
+                        style: speedGoldTitleTextC,
                       ),
                     ),
                   ),
                 ),
                 Positioned(
-                  top: size.height / 2.1,
+                  top: size.height / 2.22,
                   child: brick("A", size,1),
                 ),
                 Positioned(
-                  top: size.height / 1.681,
+                  top: size.height / 1.8,
                   child: brick( "B", size,2),
                 ),
                 Positioned(
-                  top: size.height / 1.41,
+                  top: size.height / 1.52,
                   child: brick("C", size,3),
                 ),
                 Positioned(
-                  top: size.height / 1.22,
+                  top: size.height / 1.315,
                   child: brick("D", size,4),
                 ),
               ],
@@ -131,7 +131,7 @@ class Gold extends State<GoldC> {
   Widget brick(String text, Size size, int idx) {
     return Container(
       width: size.width - 20,
-      height: 70,
+      height: 60,
       padding: const EdgeInsets.symmetric(horizontal: 15),
       child: InkWell(
         onTap: (){
@@ -146,7 +146,7 @@ class Gold extends State<GoldC> {
             Image.asset(
               goldBrick,
               width: (idx == clickAnswer) ? size.width - 30: size.width - 50,
-              height: 70,
+              height: 60,
               fit: BoxFit.fill,
             ),
             Align(
@@ -160,17 +160,4 @@ class Gold extends State<GoldC> {
     );
   }
 
-  Widget nextBtn(Size size) {
-    return Container(
-      width: size.width,
-      height: 50,
-      child: Center(
-        child: Image.asset(
-          "assets/gamebox/img/next_btn.png",
-          width: 100,
-          height: 50,
-        ),
-      ),
-    );
-  }
 }

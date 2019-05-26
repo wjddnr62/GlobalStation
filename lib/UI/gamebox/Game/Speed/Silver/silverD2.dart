@@ -216,7 +216,7 @@ class SilverD2 extends StatelessWidget{
                       child:Center(
                         child: Text(
                           question,
-                          style: titleTextStyle,
+                          style: speedSilverQuestionStyle,
                         ),
                       ),
                     ),
@@ -232,7 +232,7 @@ class SilverD2 extends StatelessWidget{
               child: Center(
                 child: Text(
                   title,
-                  style: titleTextStyle,
+                  style: speedSilverTitleText,
                 ),
               ),
             ),
