@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:audioplayers/audio_cache.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:lms_flutter/UI/gamebox/public/Result.dart';
 import 'package:lms_flutter/UI/gamebox/public/Timer.dart';
@@ -23,6 +25,9 @@ class Diamond extends StatefulWidget {
 
 class DiamondM extends State<Diamond> {
   UserInfo userInfo = UserInfo();
+
+  AudioCache audioCache = AudioCache();
+  AudioPlayer advancedPlayer = AudioPlayer();
 
   String cardClose = "assets/gamebox/img/match/card_close.png";
   String cardOpen = "assets/gamebox/img/match/card_open.png";
@@ -218,6 +223,7 @@ class DiamondM extends State<Diamond> {
           ", " +
           answer_finish_count.toString());
       if (answer_all_length != 8 && answer_count == 6) {
+        audioCache.play("gamebox/audio/sucess_sound.mp3");
         answer_finish_count += 1;
         answer_all_length += 1;
         if (answer_all_length == 8) {
@@ -471,7 +477,7 @@ class DiamondM extends State<Diamond> {
                 ),
                 answer_finish
                     ? Text("")
-                    : Positioned(
+                    : next_question ? Text("") : Positioned(
                         top: size.width / 15,
                         child: TimerBar(
                           width: size.width,

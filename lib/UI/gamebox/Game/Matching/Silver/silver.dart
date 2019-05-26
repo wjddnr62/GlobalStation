@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:audioplayers/audio_cache.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:lms_flutter/UI/gamebox/public/Result.dart';
 import 'package:lms_flutter/UI/gamebox/public/Timer.dart';
@@ -23,6 +25,9 @@ class Silver extends StatefulWidget {
 
 class SilverM extends State<Silver> {
   UserInfo userInfo = UserInfo();
+
+  AudioCache audioCache = AudioCache();
+  AudioPlayer advancedPlayer = AudioPlayer();
 
   String eggBack = "assets/gamebox/img/match/egg_back.png";
   String eggFront = "assets/gamebox/img/match/egg_front.png";
@@ -190,6 +195,7 @@ class SilverM extends State<Silver> {
           ", " +
           answer_finish_count.toString());
       if (answer_all_length != 8 && answer_count == 4) {
+        audioCache.play("gamebox/audio/sucess_sound.mp3");
         answer_finish_count += 1;
         answer_all_length += 1;
         if (answer_all_length == 8) {
@@ -455,7 +461,7 @@ class SilverM extends State<Silver> {
                 ),
                 answer_finish
                     ? Text("")
-                    : Positioned(
+                    : next_question ? Text("") : Positioned(
                         top: size.width / 15,
                         child: TimerBar(
                           width: size.width,

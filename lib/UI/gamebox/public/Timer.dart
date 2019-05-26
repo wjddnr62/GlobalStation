@@ -21,25 +21,31 @@ class TimerSet extends State<TimerBar> {
 
   setTimer() {
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      setState(() {
-        if (_defaultSet == 0) {
-          _timer.cancel();
-          widget.finishTimer();
-          _defaultSet = 30;
-          print("타이머완료");
-//          setTimer();
-        } else {
-          _defaultSet -= 1;
-        }
-      });
+      if (_timer.isActive) {
+        setState(() {
+          if (_defaultSet == 1) {
+            _timer.cancel();
+            print("timered2 : " + _timer.isActive.toString());
+            if (!_timer.isActive) {
+              widget.finishTimer();
+            }
+            _defaultSet = 30;
+            print("타이머완료");
+            if(!_timer.isActive) {
+              setTimer();
+            }
+          } else {
+            _defaultSet -= 1;
+          }
+        });
+      }
     });
   }
 
+
   @override
-  void dispose() {
-    super.dispose();
-    print("timerdispose");
-    _timer.cancel();
+  void didUpdateWidget(TimerBar oldWidget) {
+    print("oldTimer");
   }
 
   @override
@@ -50,6 +56,16 @@ class TimerSet extends State<TimerBar> {
     }
 
     setTimer();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    print("timerdispose");
+    setState(() {
+      _timer.cancel();
+    });
+    print("timered : " + _timer.isActive.toString());
   }
 
   Widget timerBar() {

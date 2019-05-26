@@ -185,7 +185,7 @@ class PhonicsM extends State<Phonics> {
           ", " +
           answer_finish_count.toString());
       if (answer_all_length != 5 && answer_count == 3) {
-//        audioCache.play("gamebox/audio/sucess_sound.mp3");
+        audioCache.play("gamebox/audio/sucess_sound.mp3");
         answer_finish_count += 1;
         answer_all_length += 1;
         if (answer_all_length == 5) {
@@ -236,6 +236,7 @@ class PhonicsM extends State<Phonics> {
           next_question = true;
           resultView();
         } else {
+//          audioCache.play("gamebox/audio/fail_sound.mp3");
           timeFinish = true;
           answer_one = "";
           answer_two = "";
