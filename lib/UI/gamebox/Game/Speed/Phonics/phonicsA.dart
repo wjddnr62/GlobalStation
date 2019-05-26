@@ -145,7 +145,7 @@ class Phonics extends State<PhonicsA> {
                 height: 100,
                 child: Center(
                   child: Image.network(
-                    "https://ga.oig.kr/laon_api/api/asset/" + data,
+                    "https://ga.oig.kr/laon_api/api/asset" + data,
                     fit: BoxFit.contain,
                     width: 80,
                     height: 80,

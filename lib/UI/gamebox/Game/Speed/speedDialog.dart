@@ -46,7 +46,7 @@ class SpeedGameDialogState extends State<SpeedGameDialog> {
     speedBloc.getQuestionList2().then((value) {
       String jsonValue = value;
       List<QuestionList> qList = speedBloc.questListToList(jsonValue);
-      setState(() {
+//      setState(() {
         Navigator.of(context).pop();
         Navigator.of(context).push(PageRouteBuilder(
             opaque: false,
@@ -56,7 +56,7 @@ class SpeedGameDialogState extends State<SpeedGameDialog> {
               stage: widget.stage,
               qList: qList,
             )));
-      });
+//      });
     });
 
     return Scaffold(

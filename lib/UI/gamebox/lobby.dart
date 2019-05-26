@@ -123,10 +123,9 @@ class LobbyHomePage extends State<LobbyPage> {
                     height: 80,
                     child: InkWell(
                       onTap: (){
-//                        if(currentIdx != 0)
-//                          setState(() {
-//                            currentIdx--;
-//                          });
+                          setState(() {
+                            controller.previous();
+                          });
 
                       },
                     ),
@@ -140,11 +139,9 @@ class LobbyHomePage extends State<LobbyPage> {
                     height: 80,
                     child: InkWell(
                       onTap: (){
-//                        if(currentIdx != 15)
-//                          setState(() {
-//                            currentIdx = currentIdx + 1;
-//                          });
-
+                        setState(() {
+                          controller.next();
+                        });
                       },
                     ),
                   ),
@@ -175,11 +172,13 @@ class LobbyHomePage extends State<LobbyPage> {
   int viewCap;
   String viewlev;
   int currentIdx = 0;
+  SwiperController controller = new SwiperController();
 
 
   Widget swipe(Size size) {
     return Swiper(
       index: currentIdx,
+      controller: controller,
       onIndexChanged: (index){
         setState(() {
           currentIdx = index;
@@ -317,13 +316,14 @@ class LobbyHomePage extends State<LobbyPage> {
   void initState() {
     super.initState();
     print("level = ${level}");
+    audioCache.loop('gamebox/audio/backgroundmusic.mp3');
 //    play();
   }
 
   @override
   Widget build(BuildContext context) {
 //    play();
-    audioCache.play('gamebox/audio/backgroundmusic.mp3');
+
     return Scaffold(
       body: body(MediaQuery.of(context).size),
     );

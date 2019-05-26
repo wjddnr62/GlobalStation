@@ -100,34 +100,35 @@ class MyPage extends StatelessWidget {
   Widget stageList(context) {
     return Stack(
       children: <Widget>[
-        stageImg(top: 270, left: 30, width: 80, height: 80, img: "1_stage.png"),
+        stageImg(top: 270, left: 30, width: 80, height: 80, img: "1_stage.png",type: 2,idx: 1),
         stageImg(
-            top: 260, left: 100, width: 80, height: 80, img: "2_stage.png"),
+            top: 260, left: 100, width: 80, height: 80, img: "2_stage.png",type: 1,idx: 2),
         stageImg(
-            top: 250, left: 180, width: 90, height: 90, img: "3_stage.png"),
+            top: 250, left: 180, width: 90, height: 90, img: "3_stage.png",type: 2,idx: 3),
         stageImg(
-            top: 300, left: 260, width: 80, height: 80, img: "4_stage.png"),
+            top: 300, left: 260, width: 80, height: 80, img: "4_stage.png",type: 1,idx: 4),
         stageImg(
-            top: 350, left: 40, width: 140, height: 80, img: "5_stage.png"),
+            top: 350, left: 40, width: 140, height: 80, img: "5_stage.png",type: 2,idx: 5),
         stageImg(
-            top: 330, left: 165, width: 80, height: 100, img: "6_stage.png"),
+            top: 330, left: 165, width: 80, height: 100, img: "6_stage.png",type: 1,idx: 6),
         stageImg(
-            top: 330, left: 210, width: 80, height: 100, img: "7_stage.png"),
+            top: 330, left: 210, width: 80, height: 100, img: "7_stage.png",type: 2,idx: 7),
         stageImg(
-            top: 380, left: 280, width: 50, height: 50, img: "8_stage.png"),
-        stageImg(top: 430, left: 40, width: 60, height: 60, img: "9_stage.png"),
+            top: 380, left: 280, width: 50, height: 50, img: "8_stage.png",type: 1
+            ,idx: 8),
+        stageImg(top: 430, left: 40, width: 60, height: 60, img: "9_stage.png",type: 2,idx: 9),
         stageImg(
-            top: 430, left: 110, width: 60, height: 60, img: "10_stage.png"),
+            top: 430, left: 110, width: 60, height: 60, img: "10_stage.png",type: 1,idx: 10),
         stageImg(
-            top: 430, left: 180, width: 60, height: 60, img: "11_stage.png"),
+            top: 430, left: 180, width: 60, height: 60, img: "11_stage.png",type: 2,idx: 11),
         stageImg(
-            top: 430, left: 250, width: 100, height: 60, img: "12_stage.png"),
+            top: 430, left: 250, width: 100, height: 60, img: "12_stage.png",type: 1,idx: 12),
         stageImg(
-            top: 490, left: 40, width: 130, height: 60, img: "13_stage.png"),
+            top: 490, left: 40, width: 130, height: 60, img: "13_stage.png",type: 2,idx: 13),
         stageImg(
-            top: 490, left: 190, width: 60, height: 60, img: "14_stage.png"),
+            top: 490, left: 190, width: 60, height: 60, img: "14_stage.png",type: 1,idx: 14),
         stageImg(
-            top: 490, left: 270, width: 60, height: 60, img: "15_stage.png"),
+            top: 490, left: 270, width: 60, height: 60, img: "15_stage.png",type: 2,idx: 15),
       ],
     );
   }
@@ -139,7 +140,9 @@ class MyPage extends StatelessWidget {
       double left,
       double width,
       double height,
-      String img}) {
+      String img,
+        int idx,
+      int type}) {
     return Positioned(
       top: top,
       bottom: bottom,
@@ -156,17 +159,18 @@ class MyPage extends StatelessWidget {
                   fit: BoxFit.contain,
                 ),
               ),
-              Positioned(
-                bottom: 0,
+
+      (idx <= userInfo.member_level) ? Positioned(
+                bottom: 10,
                 right: 10,
                 child: Container(
-                  width: width / 3,
+                  width: width / 2.5,
                   child: Image.asset(
-                    defaultUrl + "complete1.png",
+                    defaultUrl + "complete${type}.png",
                     fit: BoxFit.contain,
                   ),
                 ),
-              ),
+              ) : SizedBox(width: 0,height: 0,),
             ],
           )),
     );
