@@ -446,6 +446,26 @@ class BronzeM extends State<Bronze> {
                                   ),
                                 ],
                               )),
+                Positioned(
+                  top: size.width / 30,
+                  child: Container(
+                    width: size.width - 20,
+                    height: 20,
+                    padding: EdgeInsets.only(right: 15),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        GestureDetector(
+                          child: Image.asset("assets/gamebox/img/close_button.png"),
+                          onTap: (){
+                            Navigator.of(context).pop();
+                          },
+                        )
+                      ],
+                    ),
+                  ),
+                ),
                 answer_finish
                     ? Text("")
                     : Positioned(

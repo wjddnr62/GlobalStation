@@ -323,7 +323,7 @@ class LobbyHomePage extends State<LobbyPage> {
   @override
   Widget build(BuildContext context) {
 //    play();
-    audioCache.play('/gamebox/audio/backgroundmusic.mp3');
+    audioCache.play('gamebox/audio/backgroundmusic.mp3');
     return Scaffold(
       body: body(MediaQuery.of(context).size),
     );

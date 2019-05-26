@@ -433,6 +433,26 @@ class SilverM extends State<Silver> {
                                   ),
                                 ],
                               )),
+                Positioned(
+                  top: size.width / 30,
+                  child: Container(
+                    width: size.width - 20,
+                    height: 20,
+                    padding: EdgeInsets.only(right: 15),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        GestureDetector(
+                          child: Image.asset("assets/gamebox/img/close_button.png"),
+                          onTap: (){
+                            Navigator.of(context).pop();
+                          },
+                        )
+                      ],
+                    ),
+                  ),
+                ),
                 answer_finish
                     ? Text("")
                     : Positioned(
@@ -704,27 +724,33 @@ class SilverM extends State<Silver> {
             child: Center(
               child: (type == 1)
                   ? this.isOpen
-                      ? Text(
-                          param,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                            color: Colors.black,
-                            fontFamily: 'Jua',
+                      ? Container(
+                          width: 50,
+                          child: Text(
+                            param,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              color: Colors.black,
+                              fontFamily: 'Jua',
+                            ),
+                            textAlign: TextAlign.center,
                           ),
-                          textAlign: TextAlign.center,
                         )
                       : Text("")
                   : this.isOpen
-                      ? Text(
-                          param,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                            color: Colors.black,
-                            fontFamily: 'Jua',
+                      ? Container(
+                          width: 50,
+                          child: Text(
+                            param,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              color: Colors.black,
+                              fontFamily: 'Jua',
+                            ),
+                            textAlign: TextAlign.center,
                           ),
-                          textAlign: TextAlign.center,
                         )
                       : Text(""),
             ),

@@ -19,23 +19,6 @@ class TimerSet extends State<TimerBar> {
   int _defaultSet = 30;
   int timerSet = 30;
 
-  int get defaultSet => _defaultSet;
-
-  set defaultSet(int value) {
-    _defaultSet = value;
-  }
-
-  defaultInit() {
-//    _timer.cancel();
-      _defaultSet = 30;
-        setTimer();
-  }
-
-
-  andTimer() async {
-    return Timer(Duration(seconds: 6), setTimer());
-  }
-
   setTimer() {
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       setState(() {
@@ -45,7 +28,6 @@ class TimerSet extends State<TimerBar> {
           _defaultSet = 30;
           print("타이머완료");
           setTimer();
-//          andTimer();
         } else {
           _defaultSet -= 1;
         }
