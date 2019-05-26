@@ -2,16 +2,18 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:lms_flutter/UI/gamebox/public/Result.dart';
+import 'package:lms_flutter/UI/gamebox/public/Timer.dart';
 import 'package:lms_flutter/UI/gamebox/public/questionStatus.dart';
+import 'package:lms_flutter/bloc/game_public_bloc.dart';
 import 'package:lms_flutter/bloc/match_game_bloc.dart';
 import 'package:lms_flutter/model/Match/answerList.dart';
+import 'package:lms_flutter/model/UserInfo.dart';
 
 class Phonics extends StatefulWidget {
   final String level;
   final int chapter;
   final int stage;
   final int question_num;
-
 
   Phonics({Key key, this.level, this.chapter, this.stage, this.question_num})
       : super(key: key);
@@ -21,6 +23,9 @@ class Phonics extends StatefulWidget {
 }
 
 class PhonicsM extends State<Phonics> {
+  UserInfo userInfo = UserInfo();
+  TimerSet timerSet = TimerSet();
+
   String shell1Close = "assets/gamebox/img/match/shell_close.png";
   String shell1Open = "assets/gamebox/img/match/shell.png";
 
@@ -66,8 +71,10 @@ class PhonicsM extends State<Phonics> {
   double opacity = 1;
 
   bool isOpen = true;
+  bool notYea = false;
+  bool timeFinish = false;
 
-
+  int memberLevel;
 
   void isOpenChange() {
     print("Open_Change : " + this.isOpen.toString());
@@ -80,7 +87,7 @@ class PhonicsM extends State<Phonics> {
   }
 
   inVisible() async {
-    var _duration = Duration(seconds: 2);
+    var _duration = Duration(seconds: 3);
     return Timer(_duration, isOpenChange);
   }
 
@@ -102,12 +109,13 @@ class PhonicsM extends State<Phonics> {
 
   void nextQ() {
     setState(() {
+      timeFinish = false;
+      notYea = false;
       next_question = false;
-//      this.isOpen = true;
+      isOpen = true;
       answer_count = 0;
       next_problem = 1;
       dataSetCheck = 0;
-//      inVisible();
     });
   }
 
@@ -176,6 +184,7 @@ class PhonicsM extends State<Phonics> {
           next_question = true;
           resultView();
         } else {
+//          timerSet.defaultInit();
           print("next_question");
           next_question = true;
           nextQuestion();
@@ -197,18 +206,66 @@ class PhonicsM extends State<Phonics> {
     }
   }
 
-  void resetGame() {
-    print("P_M_reset");
+  timerAnd() {
+    setState(() {
+      dataSetCheck = 0;
+      rowData(1);
+      rowData(2);
+      next_question = true;
+      nextQuestion();
+      rowData(1);
+      rowData(2);
+      inVisible();
+    });
   }
 
-  void resultNextGame() {
-    print("P_M_resultNextGame");
+  void finishTimer() {
+    setState(() {
+      this.isOpen = true;
+      if (answer_all_length != 5) {
+        answer_all_length += 1;
+        if (answer_all_length == 5) {
+          next_question = true;
+          resultView();
+        } else {
+          timeFinish = true;
+          answer_one = "";
+          answer_two = "";
+          print("finishtime else");
+          timerAnd();
+        }
+      }
+    });
+  }
+
+  void resetGame() {
+    setState(() {
+      answer_finish = false;
+      answer_all_length = 0;
+      answer_finish_count = 0;
+      answer_count = 0;
+      answer_one = "";
+      answer_two = "";
+      answer_check = false;
+      notYea = true;
+      dataSetCheck = 0;
+      rowData(1);
+      rowData(2);
+      next_question = true;
+      nextQuestion();
+      rowData(1);
+      rowData(2);
+      inVisible();
+    });
   }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    memberLevel = userInfo.member_level;
+    print("phonics : " + memberLevel.toString());
+
     inVisible();
     print("invisible");
   }
@@ -301,34 +358,21 @@ class PhonicsM extends State<Phonics> {
                                   "assets/gamebox/img/effect/result_background.png"),
                               Center(
                                 child: Result(
-                                    level: widget.level,
-                                    chapter: widget.chapter,
-                                    stage: widget.stage,
-                                    score: answer_finish_count,
-                                    scoreLength: answer_all_length,
-                                    sizeWidth:
-                                        MediaQuery.of(context).size.width,
-                                    resetGame: resetGame,
-                                    resultNextGame: resultNextGame),
+                                  level: widget.level,
+                                  chapter: widget.chapter,
+                                  stage: widget.stage,
+                                  score: answer_finish_count,
+                                  scoreLength: answer_all_length,
+                                  sizeWidth: MediaQuery.of(context).size.width,
+                                  resetGame: () => resetGame(),
+                                  memberLevel: memberLevel,
+                                ),
                               )
                             ],
                           )
                         : next_question
                             ? Column(
                                 children: <Widget>[
-//                              Positioned(
-//                                left: 0,
-//                                child: Opacity(
-//                                    opacity: 0.5,
-//                                    child: Container(
-//                                      width: size.width,
-//                                      height: size.height,
-//                                      decoration: BoxDecoration(
-//                                          borderRadius:
-//                                              BorderRadius.circular(10),
-//                                          color: Colors.black),
-//                                    )),
-//                              ),
                                   Image.asset(
                                     "assets/gamebox/img/match/18.png",
                                     fit: BoxFit.fill,
@@ -347,14 +391,27 @@ class PhonicsM extends State<Phonics> {
                                   ),
                                 ],
                               )),
-//                Positioned(
-//                  top: size.width / 4,
-//                  child: questionStatus(
-//                      question_all_length: 5,
-//                      question_count: answer_count,
-//                      width: size.width,
-//                    ),
-//                ),
+                answer_finish
+                    ? Text("")
+                    : next_question
+                        ? Text("")
+                        : Positioned(
+                            top: size.width / 15,
+                            child: TimerBar(
+                              width: size.width,
+                              finishTimer: () => finishTimer(),
+                            ),
+                          ),
+                answer_finish
+                    ? Text("")
+                    : Positioned(
+                        top: size.width / 5,
+                        child: QuestionStatus(
+                          question_all_length: 5,
+                          question_count: answer_all_length,
+                          width: size.width,
+                        ),
+                      ),
                 Positioned(
                   top: size.width / 3.5,
                   child: Container(
@@ -367,15 +424,41 @@ class PhonicsM extends State<Phonics> {
                         answer_finish
                             ? Text("")
                             : next_question
-                                ? Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: <Widget>[
-                                      Image.asset(
-                                          "assets/gamebox/img/effect/yay.png")
-                                    ],
-                                  )
+                                ? timeFinish
+                                    ? Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: <Widget>[
+                                          Align(
+                                            alignment: Alignment.center,
+                                            child: Image.asset(
+                                              "assets/gamebox/img/effect/nope.png",
+                                              width: 300,
+                                              height: 300,
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                    : notYea
+                                        ? Text("")
+                                        : Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: <Widget>[
+                                              Align(
+                                                alignment: Alignment.center,
+                                                child: Image.asset(
+                                                  "assets/gamebox/img/effect/yay.png",
+                                                  width: 300,
+                                                  height: 300,
+                                                ),
+                                              )
+                                            ],
+                                          )
                                 : Image.asset(
                                     "assets/gamebox/img/match/17.png",
                                     width: size.width - 20,
@@ -415,29 +498,31 @@ class PhonicsM extends State<Phonics> {
   }
 
   Widget rowData(int upDown) {
-    return (upDown == 1)
-        ? Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              shell(firstShell[0].type, firstShell[0].isOpen,
-                  firstShell[0].param, firstShell[0].opacity),
-              shell(firstShell[1].type, firstShell[1].isOpen,
-                  firstShell[1].param, firstShell[1].opacity),
-              shell(firstShell[2].type, firstShell[2].isOpen,
-                  firstShell[2].param, firstShell[2].opacity),
-            ],
-          )
-        : Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              shell(secondShell[0].type, secondShell[0].isOpen,
-                  secondShell[0].param, secondShell[0].opacity),
-              shell(secondShell[1].type, secondShell[1].isOpen,
-                  secondShell[1].param, secondShell[1].opacity),
-              shell(secondShell[2].type, secondShell[2].isOpen,
-                  secondShell[2].param, secondShell[2].opacity),
-            ],
-          );
+    return answer_finish
+        ? Text("")
+        : (upDown == 1)
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  shell(firstShell[0].type, firstShell[0].isOpen,
+                      firstShell[0].param, firstShell[0].opacity),
+                  shell(firstShell[1].type, firstShell[1].isOpen,
+                      firstShell[1].param, firstShell[1].opacity),
+                  shell(firstShell[2].type, firstShell[2].isOpen,
+                      firstShell[2].param, firstShell[2].opacity),
+                ],
+              )
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  shell(secondShell[0].type, secondShell[0].isOpen,
+                      secondShell[0].param, secondShell[0].opacity),
+                  shell(secondShell[1].type, secondShell[1].isOpen,
+                      secondShell[1].param, secondShell[1].opacity),
+                  shell(secondShell[2].type, secondShell[2].isOpen,
+                      secondShell[2].param, secondShell[2].opacity),
+                ],
+              );
   }
 
   Widget shell(int type, bool isOpen, String param, double opacity) {

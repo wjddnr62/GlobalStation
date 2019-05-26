@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 import '../../../theme.dart';
 
-class questionStatus extends StatefulWidget {
+class QuestionStatus extends StatefulWidget {
   int question_all_length;
   int question_count;
   double width;
 
-  questionStatus(
+  QuestionStatus(
       {Key key, this.question_all_length, this.question_count, this.width})
       : super(key: key);
 
@@ -15,7 +15,7 @@ class questionStatus extends StatefulWidget {
   Status createState() => Status();
 }
 
-class Status extends State<questionStatus> {
+class Status extends State<QuestionStatus> {
   int question_all_length;
   int question_count;
 
@@ -25,44 +25,56 @@ class Status extends State<questionStatus> {
   }
 
   Widget StatusBar() {
-    countSet();
+//    print("Status test");
+//    countSet();
     return Container(
       width: widget.width - 20,
-      height: 100,
-      child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            ClipOval(
-              child: Container(
-                width: 50,
-                height: 50,
-                color: StatusBarLeftColor,
+      child: Stack(
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            children: <Widget>[
+              Flexible(
+                child: ClipOval(
+                  child: Container(
+                    width: 20,
+                    height: 20,
+                    color: StatusBarLeftColor,
+                  ),
+                ),
               ),
-            ),
-            LinearProgressIndicator(
-              backgroundColor: StatusBarRightColor,
-              valueColor: AlwaysStoppedAnimation<Color>(
-                StatusBarLeftColor,
+              Flexible(
+                flex: 5,
+                child: LinearProgressIndicator(
+                  backgroundColor: StatusBarRightColor,
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    StatusBarLeftColor,
+                  ),
+                  value: widget.question_count / widget.question_all_length,
+                ),
               ),
-              value: question_count / question_all_length,
-            ),
-            ClipOval(
-              child: Container(
-                width: 50,
-                height: 50,
-                color: StatusBarRightColor,
+              Flexible(
+                child: ClipOval(
+                  child: Container(
+                    width: 20,
+                    height: 20,
+                    color: StatusBarRightColor,
+                  ),
+                ),
               ),
-            ),
-          ],
-        ),
+            ],
+          )
+        ],
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    question_all_length = widget.question_all_length;
-    question_count = widget.question_count;
+//    question_all_length = widget.question_all_length;
+//    question_count = widget.question_count;
     return StatusBar();
   }
 }

@@ -23,12 +23,20 @@ class GamePublicBloc {
   Function(int) get changeChapter => _chapter.sink.add;
 
   String _response;
+  int _idx;
 
   set response(String value) {
     _response = value;
   }
 
   String get response => _response;
+
+
+  int get idx => _idx;
+
+  set idx(int value) {
+    _idx = value;
+  }
 
   Future<String> getStageList(String gameType) {
     if(gameType == "S")

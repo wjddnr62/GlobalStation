@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:lms_flutter/UI/gamebox/gameDialog.dart';
+import 'package:lms_flutter/bloc/game_public_bloc.dart';
+import 'package:lms_flutter/model/UserInfo.dart';
 
 import '../../../theme.dart';
 
@@ -9,8 +12,8 @@ class Result extends StatefulWidget {
   int score;
   int scoreLength;
   double sizeWidth;
-  Function resetGame;
-  Function resultNextGame;
+  VoidCallback resetGame;
+  int memberLevel;
 
   Result(
       {Key key,
@@ -21,7 +24,7 @@ class Result extends StatefulWidget {
       this.scoreLength,
       this.sizeWidth,
       this.resetGame,
-      this.resultNextGame})
+      this.memberLevel})
       : super(key: key);
 
   @override
@@ -31,8 +34,134 @@ class Result extends StatefulWidget {
 class ResultView extends State<Result> {
   String level_full;
   String resultImgUrl;
-  Function nextGame;
-  Function resetGame;
+
+  int memberLevel;
+  int idx;
+
+  bool NotNextGame = false;
+  bool RowLevel = false;
+
+  String lev;
+  int cap;
+
+  @override
+  void initState() {
+    memberLevel = widget.memberLevel;
+
+    print("resultMember : " + memberLevel.toString());
+
+    if (widget.level == "P") {
+      if (widget.chapter == 1) {
+        idx = 0;
+      } else if (widget.chapter == 2) {
+        idx = 1;
+      } else if (widget.chapter == 3) {
+        idx = 2;
+      }
+    } else if (widget.level == "B") {
+      if (widget.chapter == 1) {
+        idx = 3;
+      } else if (widget.chapter == 2) {
+        idx = 4;
+      } else if (widget.chapter == 3) {
+        idx = 5;
+      }
+    } else if (widget.level == "S") {
+      if (widget.chapter == 1) {
+        idx = 6;
+      } else if (widget.chapter == 2) {
+        idx = 7;
+      } else if (widget.chapter == 3) {
+        idx = 8;
+      }
+    } else if (widget.level == "G") {
+      if (widget.chapter == 1) {
+        idx = 9;
+      } else if (widget.chapter == 2) {
+        idx = 10;
+      } else if (widget.chapter == 3) {
+        idx = 11;
+      }
+    } else if (widget.level == "D") {
+      if (widget.chapter == 1) {
+        idx = 12;
+      } else if (widget.chapter == 2) {
+        idx = 13;
+      } else if (widget.chapter == 3) {
+        idx = 14;
+      }
+    }
+
+    if (idx != null) {
+      idx += 1;
+      print("idx : " + idx.toString());
+      if (idx == 15) {
+        NotNextGame = true;
+        setState(() {});
+      }
+      if (idx <= memberLevel) {
+        var lev = "";
+        var cap = 0;
+        if (idx <= 2) {
+          lev = "P";
+          cap = idx + 1;
+        } else if (idx <= 5) {
+          lev = "B";
+          cap = idx - 2;
+        } else if (idx <= 8) {
+          lev = "S";
+          cap = idx - 5;
+        } else if (idx <= 11) {
+          lev = "G";
+          cap = idx - 8;
+        } else if (idx <= 14) {
+          lev = "D";
+          cap = idx - 11;
+        }
+      } else {
+        RowLevel = true;
+        setState(() {});
+      }
+    } else {
+      print("idx null!!!!");
+    }
+  }
+
+  nextGame() {
+    if (!RowLevel) {
+      print("resultData : " +
+          idx.toString() +
+          ", " +
+          lev.toString() +
+          ", " +
+          cap.toString());
+      Navigator.of(context).push(PageRouteBuilder(
+          opaque: false,
+          pageBuilder: (BuildContext context, _, __) => GameDialog(
+                idx: idx,
+                lev: lev,
+                cap: cap,
+              )));
+    } else {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              content: new Text(
+                  "Game Box는 현재 학생의 레벨까지만 이용이 가능합니다. 더 높은 레벨을 위해 열심히 노력하세요!"),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text("확인"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            );
+          });
+    }
+  }
 
   level_set() {
     if (widget.level == "P") {
@@ -46,8 +175,6 @@ class ResultView extends State<Result> {
     } else if (widget.level == "D") {
       level_full = "Diamond";
     }
-    nextGame = widget.resultNextGame;
-    resetGame = widget.resetGame;
   }
 
   resultImgSet() {
@@ -142,17 +269,22 @@ class ResultView extends State<Result> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: <Widget>[
+                    NotNextGame
+                        ? Text("")
+                        : GestureDetector(
+                            onTap: () {
+                              widget.resetGame();
+                            },
+                            child: Image.asset(
+                              "assets/gamebox/img/effect/back_btn.png",
+                              width: 100,
+                              height: 50,
+                            ),
+                          ),
                     GestureDetector(
-                      onTap: () => resetGame
-                      ,
-                      child: Image.asset(
-                        "assets/gamebox/img/effect/back_btn.png",
-                        width: 100,
-                        height: 50,
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () => widget.resultNextGame,
+                      onTap: () {
+                        nextGame();
+                      },
                       child: Image.asset(
                         "assets/gamebox/img/effect/next_btn.png",
                         width: 100,

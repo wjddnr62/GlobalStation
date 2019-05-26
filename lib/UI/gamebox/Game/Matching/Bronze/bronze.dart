@@ -2,8 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:lms_flutter/UI/gamebox/public/Result.dart';
+import 'package:lms_flutter/UI/gamebox/public/Timer.dart';
+import 'package:lms_flutter/UI/gamebox/public/questionStatus.dart';
 import 'package:lms_flutter/bloc/match_game_bloc.dart';
 import 'package:lms_flutter/model/Match/answerList.dart';
+import 'package:lms_flutter/model/UserInfo.dart';
 
 class Bronze extends StatefulWidget {
   final String level;
@@ -19,6 +22,8 @@ class Bronze extends StatefulWidget {
 }
 
 class BronzeM extends State<Bronze> {
+  UserInfo userInfo = UserInfo();
+
   String windowClose = "assets/gamebox/img/match/window_close.png";
   String windowOpen = "assets/gamebox/img/match/window_open.png";
   String whiteWindowClose = "assets/gamebox/img/match/white_window_close.png";
@@ -65,6 +70,10 @@ class BronzeM extends State<Bronze> {
   double opacity = 1;
 
   bool isOpen = true;
+  bool notYea = false;
+  bool timeFinish = false;
+
+  int memberLevel;
 
   void isOpenChange() {
     print("Open_Change : " + this.isOpen.toString());
@@ -77,7 +86,7 @@ class BronzeM extends State<Bronze> {
   }
 
   inVisible() async {
-    var _duration = Duration(seconds: 2);
+    var _duration = Duration(seconds: 3);
     return Timer(_duration, isOpenChange);
   }
 
@@ -212,18 +221,64 @@ class BronzeM extends State<Bronze> {
     }
   }
 
-  resetGame() {
-    print("B_M_reset");
+  timerAnd() {
+    setState(() {
+      dataSetCheck = 0;
+      rowData(1);
+      rowData(2);
+      next_question = true;
+      nextQuestion();
+      rowData(1);
+      rowData(2);
+      inVisible();
+    });
   }
 
-  resultNextGame() {
-    print("B_M_resultNextGame");
+  void finishTimer() {
+    setState(() {
+      this.isOpen = true;
+      if (answer_all_length != 5) {
+        answer_all_length += 1;
+        if (answer_all_length == 5) {
+          next_question = true;
+          resultView();
+        } else {
+          timeFinish = true;
+          answer_one = "";
+          answer_two = "";
+          print("finishtime else");
+          timerAnd();
+        }
+      }
+    });
+  }
+
+  void resetGame() {
+    setState(() {
+      answer_finish = false;
+      answer_all_length = 0;
+      answer_finish_count = 0;
+      answer_count = 0;
+      answer_one = "";
+      answer_two = "";
+      answer_check = false;
+      notYea = true;
+      dataSetCheck = 0;
+      rowData(1);
+      rowData(2);
+      next_question = true;
+      nextQuestion();
+      rowData(1);
+      rowData(2);
+      inVisible();
+    });
   }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    memberLevel = userInfo.member_level;
     inVisible();
     print("invisible");
   }
@@ -358,15 +413,15 @@ class BronzeM extends State<Bronze> {
                                   "assets/gamebox/img/effect/result_background.png"),
                               Center(
                                 child: Result(
-                                    level: widget.level,
-                                    chapter: widget.chapter,
-                                    stage: widget.stage,
-                                    score: answer_finish_count,
-                                    scoreLength: answer_all_length,
-                                    sizeWidth:
-                                        MediaQuery.of(context).size.width,
-                                    resetGame: resetGame(),
-                                    resultNextGame: resultNextGame()),
+                                  level: widget.level,
+                                  chapter: widget.chapter,
+                                  stage: widget.stage,
+                                  score: answer_finish_count,
+                                  scoreLength: answer_all_length,
+                                  sizeWidth: MediaQuery.of(context).size.width,
+                                  resetGame: () => resetGame(),
+                                  memberLevel: memberLevel,
+                                ),
                               )
                             ],
                           )
@@ -391,6 +446,25 @@ class BronzeM extends State<Bronze> {
                                   ),
                                 ],
                               )),
+                answer_finish
+                    ? Text("")
+                    : Positioned(
+                        top: size.width / 15,
+                        child: TimerBar(
+                          width: size.width,
+                          finishTimer: () => finishTimer(),
+                        ),
+                      ),
+                answer_finish
+                    ? Text("")
+                    : Positioned(
+                        top: size.width / 5,
+                        child: QuestionStatus(
+                          question_all_length: 5,
+                          question_count: answer_all_length,
+                          width: size.width,
+                        ),
+                      ),
                 Positioned(
                   top: size.width / 3.5,
                   child: Container(
@@ -403,15 +477,41 @@ class BronzeM extends State<Bronze> {
                         answer_finish
                             ? Text("")
                             : next_question
-                                ? Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: <Widget>[
-                                      Image.asset(
-                                          "assets/gamebox/img/effect/yay.png")
-                                    ],
-                                  )
+                                ? timeFinish
+                                    ? Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: <Widget>[
+                                          Align(
+                                            alignment: Alignment.center,
+                                            child: Image.asset(
+                                              "assets/gamebox/img/effect/nope.png",
+                                              width: 300,
+                                              height: 300,
+                                            ),
+                                          )
+                                        ],
+                                      )
+                                    : notYea
+                                        ? Text("")
+                                        : Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: <Widget>[
+                                              Align(
+                                                alignment: Alignment.center,
+                                                child: Image.asset(
+                                                  "assets/gamebox/img/effect/yay.png",
+                                                  width: 300,
+                                                  height: 300,
+                                                ),
+                                              )
+                                            ],
+                                          )
                                 : Padding(
                                     padding: EdgeInsets.only(
                                         left: 10.0, right: 10.0),
@@ -453,49 +553,51 @@ class BronzeM extends State<Bronze> {
   }
 
   Widget rowData(int upDown) {
-    return (upDown == 1)
-        ? Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              winDow(
-                  whiteWindow[0].type,
-                  whiteWindow[0].isOpen,
-                  whiteWindow[0].param,
-                  whiteWindow[0].opacity,
-                  whiteWindow[0].question_num),
-              winDow(window[0].type, window[0].isOpen, window[0].param,
-                  window[0].opacity, window[0].question_num),
-              winDow(
-                  whiteWindow[1].type,
-                  whiteWindow[1].isOpen,
-                  whiteWindow[1].param,
-                  whiteWindow[1].opacity,
-                  whiteWindow[1].question_num),
-              winDow(window[1].type, window[1].isOpen, window[1].param,
-                  window[1].opacity, window[1].question_num),
-            ],
-          )
-        : Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              winDow(
-                  whiteWindow[2].type,
-                  whiteWindow[2].isOpen,
-                  whiteWindow[2].param,
-                  whiteWindow[2].opacity,
-                  whiteWindow[2].question_num),
-              winDow(window[2].type, window[2].isOpen, window[2].param,
-                  window[2].opacity, window[2].question_num),
-              winDow(
-                  whiteWindow[3].type,
-                  whiteWindow[3].isOpen,
-                  whiteWindow[3].param,
-                  whiteWindow[3].opacity,
-                  whiteWindow[3].question_num),
-              winDow(window[3].type, window[3].isOpen, window[3].param,
-                  window[3].opacity, window[3].question_num),
-            ],
-          );
+    return answer_finish
+        ? Text("")
+        : (upDown == 1)
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  winDow(
+                      whiteWindow[0].type,
+                      whiteWindow[0].isOpen,
+                      whiteWindow[0].param,
+                      whiteWindow[0].opacity,
+                      whiteWindow[0].question_num),
+                  winDow(window[0].type, window[0].isOpen, window[0].param,
+                      window[0].opacity, window[0].question_num),
+                  winDow(
+                      whiteWindow[1].type,
+                      whiteWindow[1].isOpen,
+                      whiteWindow[1].param,
+                      whiteWindow[1].opacity,
+                      whiteWindow[1].question_num),
+                  winDow(window[1].type, window[1].isOpen, window[1].param,
+                      window[1].opacity, window[1].question_num),
+                ],
+              )
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  winDow(
+                      whiteWindow[2].type,
+                      whiteWindow[2].isOpen,
+                      whiteWindow[2].param,
+                      whiteWindow[2].opacity,
+                      whiteWindow[2].question_num),
+                  winDow(window[2].type, window[2].isOpen, window[2].param,
+                      window[2].opacity, window[2].question_num),
+                  winDow(
+                      whiteWindow[3].type,
+                      whiteWindow[3].isOpen,
+                      whiteWindow[3].param,
+                      whiteWindow[3].opacity,
+                      whiteWindow[3].question_num),
+                  winDow(window[3].type, window[3].isOpen, window[3].param,
+                      window[3].opacity, window[3].question_num),
+                ],
+              );
   }
 
   Widget winDow(

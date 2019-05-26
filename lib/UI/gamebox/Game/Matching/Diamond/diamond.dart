@@ -2,8 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:lms_flutter/UI/gamebox/public/Result.dart';
+import 'package:lms_flutter/UI/gamebox/public/Timer.dart';
+import 'package:lms_flutter/UI/gamebox/public/questionStatus.dart';
 import 'package:lms_flutter/bloc/match_game_bloc.dart';
 import 'package:lms_flutter/model/Match/answerList.dart';
+import 'package:lms_flutter/model/UserInfo.dart';
 
 class Diamond extends StatefulWidget {
   final String level;
@@ -19,6 +22,8 @@ class Diamond extends StatefulWidget {
 }
 
 class DiamondM extends State<Diamond> {
+  UserInfo userInfo = UserInfo();
+
   String cardClose = "assets/gamebox/img/match/card_close.png";
   String cardOpen = "assets/gamebox/img/match/card_open.png";
 
@@ -63,6 +68,10 @@ class DiamondM extends State<Diamond> {
   double opacity = 1;
 
   bool isOpen = true;
+  bool notYea = false;
+  bool timeFinish = false;
+
+  int memberLevel;
 
   void isOpenChange() {
     print("Open_Change : " + this.isOpen.toString());
@@ -75,7 +84,7 @@ class DiamondM extends State<Diamond> {
   }
 
   inVisible() async {
-    var _duration = Duration(seconds: 2);
+    var _duration = Duration(seconds: 3);
     return Timer(_duration, isOpenChange);
   }
 
@@ -236,12 +245,61 @@ class DiamondM extends State<Diamond> {
     }
   }
 
-  resetGame() {
-    print("P_M_reset");
+  timerAnd() {
+    setState(() {
+      dataSetCheck = 0;
+      rowData(1);
+      rowData(2);
+      rowData(3);
+      next_question = true;
+      nextQuestion();
+      rowData(1);
+      rowData(2);
+      rowData(3);
+      inVisible();
+    });
   }
 
-  resultNextGame() {
-    print("P_M_resultNextGame");
+  void finishTimer() {
+    setState(() {
+      this.isOpen = true;
+      if (answer_all_length != 5) {
+        answer_all_length += 1;
+        if (answer_all_length == 5) {
+          next_question = true;
+          resultView();
+        } else {
+          timeFinish = true;
+          answer_one = "";
+          answer_two = "";
+          print("finishtime else");
+          timerAnd();
+        }
+      }
+    });
+  }
+
+  void resetGame() {
+    setState(() {
+      answer_finish = false;
+      answer_all_length = 0;
+      answer_finish_count = 0;
+      answer_count = 0;
+      answer_one = "";
+      answer_two = "";
+      answer_check = false;
+      notYea = true;
+      dataSetCheck = 0;
+      rowData(1);
+      rowData(2);
+      rowData(3);
+      next_question = true;
+      nextQuestion();
+      rowData(1);
+      rowData(2);
+      rowData(3);
+      inVisible();
+    });
   }
 
   @override
@@ -358,15 +416,15 @@ class DiamondM extends State<Diamond> {
                                   "assets/gamebox/img/effect/result_background.png"),
                               Center(
                                 child: Result(
-                                    level: widget.level,
-                                    chapter: widget.chapter,
-                                    stage: widget.stage,
-                                    score: answer_finish_count,
-                                    scoreLength: answer_all_length,
-                                    sizeWidth:
-                                        MediaQuery.of(context).size.width,
-                                    resetGame: resetGame(),
-                                    resultNextGame: resultNextGame()),
+                                  level: widget.level,
+                                  chapter: widget.chapter,
+                                  stage: widget.stage,
+                                  score: answer_finish_count,
+                                  scoreLength: answer_all_length,
+                                  sizeWidth: MediaQuery.of(context).size.width,
+                                  resetGame: () => resetGame(),
+                                  memberLevel: memberLevel,
+                                ),
                               )
                             ],
                           )
@@ -391,6 +449,25 @@ class DiamondM extends State<Diamond> {
                                   ),
                                 ],
                               )),
+                answer_finish
+                    ? Text("")
+                    : Positioned(
+                        top: size.width / 15,
+                        child: TimerBar(
+                          width: size.width,
+                          finishTimer: () => finishTimer(),
+                        ),
+                      ),
+                answer_finish
+                    ? Text("")
+                    : Positioned(
+                        top: size.width / 5,
+                        child: QuestionStatus(
+                          question_all_length: 8,
+                          question_count: answer_all_length,
+                          width: size.width,
+                        ),
+                      ),
                 Positioned(
                   top: size.width / 3.5,
                   child: Container(
@@ -403,15 +480,41 @@ class DiamondM extends State<Diamond> {
                         answer_finish
                             ? Text("")
                             : next_question
-                                ? Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: <Widget>[
-                                      Image.asset(
-                                          "assets/gamebox/img/effect/yay.png")
-                                    ],
-                                  )
+                                ? timeFinish
+                                    ? Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: <Widget>[
+                                          Align(
+                                            alignment: Alignment.center,
+                                            child: Image.asset(
+                                              "assets/gamebox/img/effect/nope.png",
+                                              width: 300,
+                                              height: 300,
+                                            ),
+                                          )
+                                        ],
+                                      )
+                                    : notYea
+                                        ? Text("")
+                                        : Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: <Widget>[
+                                              Align(
+                                                alignment: Alignment.center,
+                                                child: Image.asset(
+                                                  "assets/gamebox/img/effect/yay.png",
+                                                  width: 300,
+                                                  height: 300,
+                                                ),
+                                              )
+                                            ],
+                                          )
                                 : Padding(
                                     padding: EdgeInsets.only(
                                         left: 10.0, right: 10.0),
@@ -454,48 +557,52 @@ class DiamondM extends State<Diamond> {
   }
 
   Widget rowData(int upDown) {
-    if (upDown == 1) {
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          Card(card[0].type, card[0].isOpen, card[0].param, card[0].opacity,
-              card[0].question_num),
-          Card(card[1].type, card[1].isOpen, card[1].param, card[1].opacity,
-              card[1].question_num),
-          Card(card[2].type, card[2].isOpen, card[2].param, card[2].opacity,
-              card[2].question_num),
-          Card(card[3].type, card[3].isOpen, card[3].param, card[3].opacity,
-              card[3].question_num),
-        ],
-      );
-    } else if (upDown == 2) {
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          Card(cardTwo[0].type, cardTwo[0].isOpen, cardTwo[0].param,
-              cardTwo[0].opacity, cardTwo[0].question_num),
-          Card(cardTwo[1].type, cardTwo[1].isOpen, cardTwo[1].param,
-              cardTwo[1].opacity, cardTwo[1].question_num),
-          Card(cardTwo[2].type, cardTwo[2].isOpen, cardTwo[2].param,
-              cardTwo[2].opacity, cardTwo[2].question_num),
-          Card(cardTwo[3].type, cardTwo[3].isOpen, cardTwo[3].param,
-              cardTwo[3].opacity, cardTwo[3].question_num),
-        ],
-      );
-    } else if (upDown == 3) {
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          Card(cardThree[0].type, cardThree[0].isOpen, cardThree[0].param,
-              cardThree[0].opacity, cardThree[0].question_num),
-          Card(cardThree[1].type, cardThree[1].isOpen, cardThree[1].param,
-              cardThree[1].opacity, cardThree[1].question_num),
-          Card(cardThree[2].type, cardThree[2].isOpen, cardThree[2].param,
-              cardThree[2].opacity, cardThree[2].question_num),
-          Card(cardThree[3].type, cardThree[3].isOpen, cardThree[3].param,
-              cardThree[3].opacity, cardThree[3].question_num),
-        ],
-      );
+    if (answer_finish) {
+      return Text("");
+    } else {
+      if (upDown == 1) {
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            Card(card[0].type, card[0].isOpen, card[0].param, card[0].opacity,
+                card[0].question_num),
+            Card(card[1].type, card[1].isOpen, card[1].param, card[1].opacity,
+                card[1].question_num),
+            Card(card[2].type, card[2].isOpen, card[2].param, card[2].opacity,
+                card[2].question_num),
+            Card(card[3].type, card[3].isOpen, card[3].param, card[3].opacity,
+                card[3].question_num),
+          ],
+        );
+      } else if (upDown == 2) {
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            Card(cardTwo[0].type, cardTwo[0].isOpen, cardTwo[0].param,
+                cardTwo[0].opacity, cardTwo[0].question_num),
+            Card(cardTwo[1].type, cardTwo[1].isOpen, cardTwo[1].param,
+                cardTwo[1].opacity, cardTwo[1].question_num),
+            Card(cardTwo[2].type, cardTwo[2].isOpen, cardTwo[2].param,
+                cardTwo[2].opacity, cardTwo[2].question_num),
+            Card(cardTwo[3].type, cardTwo[3].isOpen, cardTwo[3].param,
+                cardTwo[3].opacity, cardTwo[3].question_num),
+          ],
+        );
+      } else if (upDown == 3) {
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            Card(cardThree[0].type, cardThree[0].isOpen, cardThree[0].param,
+                cardThree[0].opacity, cardThree[0].question_num),
+            Card(cardThree[1].type, cardThree[1].isOpen, cardThree[1].param,
+                cardThree[1].opacity, cardThree[1].question_num),
+            Card(cardThree[2].type, cardThree[2].isOpen, cardThree[2].param,
+                cardThree[2].opacity, cardThree[2].question_num),
+            Card(cardThree[3].type, cardThree[3].isOpen, cardThree[3].param,
+                cardThree[3].opacity, cardThree[3].question_num),
+          ],
+        );
+      }
     }
   }
 

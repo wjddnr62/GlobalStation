@@ -2,8 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:lms_flutter/UI/gamebox/public/Result.dart';
+import 'package:lms_flutter/UI/gamebox/public/Timer.dart';
+import 'package:lms_flutter/UI/gamebox/public/questionStatus.dart';
 import 'package:lms_flutter/bloc/match_game_bloc.dart';
 import 'package:lms_flutter/model/Match/answerList.dart';
+import 'package:lms_flutter/model/UserInfo.dart';
 
 class Gold extends StatefulWidget {
   final String level;
@@ -19,6 +22,8 @@ class Gold extends StatefulWidget {
 }
 
 class GoldM extends State<Gold> {
+  UserInfo userInfo = UserInfo();
+
   String gloveClose = "assets/gamebox/img/match/glove_close.png";
   String gloveOpen = "assets/gamebox/img/match/glove_open.png";
 
@@ -63,6 +68,10 @@ class GoldM extends State<Gold> {
   double opacity = 1;
 
   bool isOpen = true;
+  bool notYea = false;
+  bool timeFinish = false;
+
+  int memberLevel;
 
   void isOpenChange() {
     print("Open_Change : " + this.isOpen.toString());
@@ -75,7 +84,7 @@ class GoldM extends State<Gold> {
   }
 
   inVisible() async {
-    var _duration = Duration(seconds: 2);
+    var _duration = Duration(seconds: 3);
     return Timer(_duration, isOpenChange);
   }
 
@@ -237,12 +246,61 @@ class GoldM extends State<Gold> {
     }
   }
 
-  resetGame() {
-    print("P_M_reset");
+  timerAnd() {
+    setState(() {
+      dataSetCheck = 0;
+      rowData(1);
+      rowData(2);
+      rowData(3);
+      next_question = true;
+      nextQuestion();
+      rowData(1);
+      rowData(2);
+      rowData(3);
+      inVisible();
+    });
   }
 
-  resultNextGame() {
-    print("P_M_resultNextGame");
+  void finishTimer() {
+    setState(() {
+      this.isOpen = true;
+      if (answer_all_length != 5) {
+        answer_all_length += 1;
+        if (answer_all_length == 5) {
+          next_question = true;
+          resultView();
+        } else {
+          timeFinish = true;
+          answer_one = "";
+          answer_two = "";
+          print("finishtime else");
+          timerAnd();
+        }
+      }
+    });
+  }
+
+  void resetGame() {
+    setState(() {
+      answer_finish = false;
+      answer_all_length = 0;
+      answer_finish_count = 0;
+      answer_count = 0;
+      answer_one = "";
+      answer_two = "";
+      answer_check = false;
+      notYea = true;
+      dataSetCheck = 0;
+      rowData(1);
+      rowData(2);
+      rowData(3);
+      next_question = true;
+      nextQuestion();
+      rowData(1);
+      rowData(2);
+      rowData(3);
+      inVisible();
+    });
   }
 
   @override
@@ -367,15 +425,15 @@ class GoldM extends State<Gold> {
                                   "assets/gamebox/img/effect/result_background.png"),
                               Center(
                                 child: Result(
-                                    level: widget.level,
-                                    chapter: widget.chapter,
-                                    stage: widget.stage,
-                                    score: answer_finish_count,
-                                    scoreLength: answer_all_length,
-                                    sizeWidth:
-                                        MediaQuery.of(context).size.width,
-                                    resetGame: resetGame(),
-                                    resultNextGame: resultNextGame()),
+                                  level: widget.level,
+                                  chapter: widget.chapter,
+                                  stage: widget.stage,
+                                  score: answer_finish_count,
+                                  scoreLength: answer_all_length,
+                                  sizeWidth: MediaQuery.of(context).size.width,
+                                  resetGame: () => resetGame(),
+                                  memberLevel: memberLevel,
+                                ),
                               )
                             ],
                           )
@@ -400,6 +458,25 @@ class GoldM extends State<Gold> {
                                   ),
                                 ],
                               )),
+                answer_finish
+                    ? Text("")
+                    : Positioned(
+                        top: size.width / 15,
+                        child: TimerBar(
+                          width: size.width,
+                          finishTimer: () => finishTimer(),
+                        ),
+                      ),
+                answer_finish
+                    ? Text("")
+                    : Positioned(
+                        top: size.width / 5,
+                        child: QuestionStatus(
+                          question_all_length: 8,
+                          question_count: answer_all_length,
+                          width: size.width,
+                        ),
+                      ),
                 Positioned(
                   top: size.width / 3.5,
                   child: Container(
@@ -412,15 +489,41 @@ class GoldM extends State<Gold> {
                         answer_finish
                             ? Text("")
                             : next_question
-                                ? Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: <Widget>[
-                                      Image.asset(
-                                          "assets/gamebox/img/effect/yay.png")
-                                    ],
-                                  )
+                                ? timeFinish
+                                    ? Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: <Widget>[
+                                          Align(
+                                            alignment: Alignment.center,
+                                            child: Image.asset(
+                                              "assets/gamebox/img/effect/nope.png",
+                                              width: 300,
+                                              height: 300,
+                                            ),
+                                          )
+                                        ],
+                                      )
+                                    : notYea
+                                        ? Text("")
+                                        : Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: <Widget>[
+                                              Align(
+                                                alignment: Alignment.center,
+                                                child: Image.asset(
+                                                  "assets/gamebox/img/effect/yay.png",
+                                                  width: 300,
+                                                  height: 300,
+                                                ),
+                                              )
+                                            ],
+                                          )
                                 : Padding(
                                     padding: EdgeInsets.only(
                                         left: 10.0, right: 10.0),
@@ -463,64 +566,52 @@ class GoldM extends State<Gold> {
   }
 
   Widget rowData(int upDown) {
-    if (upDown == 1) {
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          Glove(glove[0].type, glove[0].isOpen, glove[0].param,
-              glove[0].opacity, glove[0].question_num),
-          Glove(glove[1].type, glove[1].isOpen, glove[1].param,
-              glove[1].opacity, glove[1].question_num),
-          Glove(glove[2].type, glove[2].isOpen, glove[2].param,
-              glove[2].opacity, glove[2].question_num),
-          Glove(glove[3].type, glove[3].isOpen, glove[3].param,
-              glove[3].opacity, glove[3].question_num),
-        ],
-      );
-    } else if (upDown == 2) {
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          Glove(gloveTwo[0].type, gloveTwo[0].isOpen, gloveTwo[0].param,
-              gloveTwo[0].opacity, gloveTwo[0].question_num),
-          Glove(gloveTwo[1].type, gloveTwo[1].isOpen, gloveTwo[1].param,
-              gloveTwo[1].opacity, gloveTwo[1].question_num),
-          Glove(gloveTwo[2].type, gloveTwo[2].isOpen, gloveTwo[2].param,
-              gloveTwo[2].opacity, gloveTwo[2].question_num),
-          Glove(gloveTwo[3].type, gloveTwo[3].isOpen, gloveTwo[3].param,
-              gloveTwo[3].opacity, gloveTwo[3].question_num),
-        ],
-      );
-    } else if (upDown == 3) {
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          Glove(
-              gloveThree[0].type,
-              gloveThree[0].isOpen,
-              gloveThree[0].param,
-              gloveThree[0].opacity,
-              gloveThree[0].question_num),
-          Glove(
-              gloveThree[1].type,
-              gloveThree[1].isOpen,
-              gloveThree[1].param,
-              gloveThree[1].opacity,
-              gloveThree[1].question_num),
-          Glove(
-              gloveThree[2].type,
-              gloveThree[2].isOpen,
-              gloveThree[2].param,
-              gloveThree[2].opacity,
-              gloveThree[2].question_num),
-          Glove(
-              gloveThree[3].type,
-              gloveThree[3].isOpen,
-              gloveThree[3].param,
-              gloveThree[3].opacity,
-              gloveThree[3].question_num),
-        ],
-      );
+    if (answer_finish) {
+      return Text("");
+    } else {
+      if (upDown == 1) {
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            Glove(glove[0].type, glove[0].isOpen, glove[0].param,
+                glove[0].opacity, glove[0].question_num),
+            Glove(glove[1].type, glove[1].isOpen, glove[1].param,
+                glove[1].opacity, glove[1].question_num),
+            Glove(glove[2].type, glove[2].isOpen, glove[2].param,
+                glove[2].opacity, glove[2].question_num),
+            Glove(glove[3].type, glove[3].isOpen, glove[3].param,
+                glove[3].opacity, glove[3].question_num),
+          ],
+        );
+      } else if (upDown == 2) {
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            Glove(gloveTwo[0].type, gloveTwo[0].isOpen, gloveTwo[0].param,
+                gloveTwo[0].opacity, gloveTwo[0].question_num),
+            Glove(gloveTwo[1].type, gloveTwo[1].isOpen, gloveTwo[1].param,
+                gloveTwo[1].opacity, gloveTwo[1].question_num),
+            Glove(gloveTwo[2].type, gloveTwo[2].isOpen, gloveTwo[2].param,
+                gloveTwo[2].opacity, gloveTwo[2].question_num),
+            Glove(gloveTwo[3].type, gloveTwo[3].isOpen, gloveTwo[3].param,
+                gloveTwo[3].opacity, gloveTwo[3].question_num),
+          ],
+        );
+      } else if (upDown == 3) {
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            Glove(gloveThree[0].type, gloveThree[0].isOpen, gloveThree[0].param,
+                gloveThree[0].opacity, gloveThree[0].question_num),
+            Glove(gloveThree[1].type, gloveThree[1].isOpen, gloveThree[1].param,
+                gloveThree[1].opacity, gloveThree[1].question_num),
+            Glove(gloveThree[2].type, gloveThree[2].isOpen, gloveThree[2].param,
+                gloveThree[2].opacity, gloveThree[2].question_num),
+            Glove(gloveThree[3].type, gloveThree[3].isOpen, gloveThree[3].param,
+                gloveThree[3].opacity, gloveThree[3].question_num),
+          ],
+        );
+      }
     }
   }
 
@@ -535,7 +626,12 @@ class GoldM extends State<Gold> {
         child: GestureDetector(
           onTap: () {
             setState(() {
-              print("touch : " + type.toString() + ", " + param + ", " + question_num.toString());
+              print("touch : " +
+                  type.toString() +
+                  ", " +
+                  param +
+                  ", " +
+                  question_num.toString());
               if (type == 1) {
                 for (int i = 0; i < glove.length; i++) {
                   if (glove[i].type == 1 &&
@@ -721,7 +817,8 @@ class GoldM extends State<Gold> {
               child: (type == 1)
                   ? this.isOpen
                       ? Padding(
-                          padding: EdgeInsets.only(bottom: 20.0, left: 10.0, right: 10.0),
+                          padding: EdgeInsets.only(
+                              bottom: 20.0, left: 10.0, right: 10.0),
                           child: Text(
                             param,
                             style: TextStyle(
@@ -736,7 +833,8 @@ class GoldM extends State<Gold> {
                       : Text("")
                   : this.isOpen
                       ? Padding(
-                          padding: EdgeInsets.only(bottom: 20.0, left: 10.0, right: 10.0),
+                          padding: EdgeInsets.only(
+                              bottom: 20.0, left: 10.0, right: 10.0),
                           child: Text(
                             param,
                             style: TextStyle(
