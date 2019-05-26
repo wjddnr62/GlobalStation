@@ -5,16 +5,20 @@ import 'package:lms_flutter/theme.dart';
 import 'package:lms_flutter/UI/gamebox/public/Timer.dart';
 
 class QuizS extends StatefulWidget {
-
   final String level;
   final int chapter;
   final int stage;
   final int question_num;
   final String title;
 
-  QuizS({Key key, this.level, this.chapter, this.stage, this.question_num,this.title})
+  QuizS(
+      {Key key,
+      this.level,
+      this.chapter,
+      this.stage,
+      this.question_num,
+      this.title})
       : super(key: key);
-
 
   @override
   Silver createState() => Silver();
@@ -31,7 +35,6 @@ class Silver extends State<QuizS> {
   }
 
   Widget body(Size size) {
-
     return Container(
       width: size.width,
       height: size.height - 40,
@@ -40,8 +43,8 @@ class Silver extends State<QuizS> {
       ),
       child: StreamBuilder(
         stream: quizBloc.getAnswerList(widget.question_num),
-        builder: (context, snapshot){
-          if(snapshot.hasData){
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
             String jsonValue = snapshot.data;
             List<AnswerList> answerList = quizBloc.answerListToList(jsonValue);
             return Stack(
@@ -76,17 +79,24 @@ class Silver extends State<QuizS> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
-                              SizedBox(height: 30,),
+                              SizedBox(
+                                height: 30,
+                              ),
                               Container(
                                 width: 200,
                                 height: 100,
                                 child: Align(
                                   alignment: AlignmentDirectional.centerStart,
-                                  child: Text(widget.title),
+                                  child: Text(
+                                    widget.title,
+                                    style: TextStyle(
+                                      fontSize: defaultFontSize,
+                                      color: black,
+                                      fontFamily: 'Jua',
+                                    ),
+                                  ),
                                 ),
-
                               ),
-
                               Image.asset(
                                 "assets/gamebox/img/quiz/quiz_info.png",
                                 width: 130,
@@ -94,11 +104,13 @@ class Silver extends State<QuizS> {
                               SizedBox(
                                 height: 20,
                               ),
-                              answerRow(answerList[0].contents, answerList[1].contents,1),
+                              answerRow(answerList[0].contents,
+                                  answerList[1].contents, 1),
                               SizedBox(
                                 height: 10,
                               ),
-                              answerRow(answerList[2].contents, answerList[3].contents,2),
+                              answerRow(answerList[2].contents,
+                                  answerList[3].contents, 2),
                             ],
                           ),
                         ),
@@ -112,51 +124,54 @@ class Silver extends State<QuizS> {
           return CircularProgressIndicator();
         },
       ),
-
     );
   }
 
   int clickAnswer = 0;
 
-  Widget answerRow(String ans1, String ans2,int type) {
+  Widget answerRow(String ans1, String ans2, int type) {
     int ans1Num = 0;
     int ans2Num = 0;
-    if (type == 1){
+    if (type == 1) {
       ans1Num = 1;
       ans2Num = 2;
-    }else {
+    } else {
       ans1Num = 3;
       ans2Num = 4;
     }
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        answer(ans1,ans1Num),
+        answer(ans1, ans1Num),
         SizedBox(
           width: 20,
         ),
-        answer(ans2,ans2Num),
+        answer(ans2, ans2Num),
       ],
     );
   }
 
-  Widget answer(String answer,int num) {
+  Widget answer(String answer, int num) {
     return Container(
       width: 100,
       height: 40,
-      decoration: (clickAnswer == num)? quizSilverSelectBoxContainer : quizSilverBoxContainer,
+      decoration: (clickAnswer == num)
+          ? quizSilverSelectBoxContainer
+          : quizSilverBoxContainer,
       child: InkWell(
-        onTap: (){
+        onTap: () {
           setState(() {
             clickAnswer = num;
           });
           quizBloc.answer = num;
         },
         child: Center(
-          child: Text(answer,style: TextStyle(color: white),),
+          child: Text(
+            answer,
+            style: TextStyle(color: white),
+          ),
         ),
       ),
-
     );
   }
 }

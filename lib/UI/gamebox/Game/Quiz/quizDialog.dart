@@ -9,6 +9,8 @@ import 'package:lms_flutter/UI/gamebox/public/Timer.dart';
 import 'package:lms_flutter/UI/gamebox/public/questionStatus.dart';
 import 'package:lms_flutter/UI/gamebox/public/Result.dart';
 import 'package:lms_flutter/model/UserInfo.dart';
+import 'package:audioplayers/audio_cache.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 import 'phonics.dart';
 import 'bronze.dart';
@@ -326,14 +328,18 @@ class GameListState extends State<GameList> {
       ),
     );
   }
+  AudioCache audioCache = AudioCache();
+  AudioPlayer advancedPlayer = AudioPlayer();
 
   Widget checkAnswer() {
     String img = "";
     if (answer == 'Y') {
       yay++;
       img = "assets/gamebox/img/quiz/yay.png";
+      audioCache.play("gamebox/audio/sucess_sound.mp3");
     } else if (answer == 'N') {
       img = "assets/gamebox/img/quiz/nope.png";
+      audioCache.play("gamebox/audio/fail_sound.mp3");
     }
 
     if (answer == "") {
