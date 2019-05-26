@@ -27,7 +27,7 @@ class TimerSet extends State<TimerBar> {
           widget.finishTimer();
           _defaultSet = 30;
           print("타이머완료");
-          setTimer();
+//          setTimer();
         } else {
           _defaultSet -= 1;
         }
@@ -37,13 +37,18 @@ class TimerSet extends State<TimerBar> {
 
   @override
   void dispose() {
-    _timer.cancel();
     super.dispose();
+    print("timerdispose");
+    _timer.cancel();
   }
 
   @override
   void initState() {
     super.initState();
+    if (_timer != null) {
+      _timer.cancel();
+    }
+
     setTimer();
   }
 
