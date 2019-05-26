@@ -2,8 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:lms_flutter/UI/gamebox/public/Result.dart';
+import 'package:lms_flutter/UI/gamebox/public/Timer.dart';
+import 'package:lms_flutter/UI/gamebox/public/questionStatus.dart';
 import 'package:lms_flutter/bloc/match_game_bloc.dart';
 import 'package:lms_flutter/model/Match/answerList.dart';
+import 'package:lms_flutter/model/UserInfo.dart';
 
 class Silver extends StatefulWidget {
   final String level;
@@ -11,13 +14,16 @@ class Silver extends StatefulWidget {
   final int stage;
   final int question_num;
 
-  Silver({Key key, this.level, this.chapter, this.stage, this.question_num}) : super(key: key);
+  Silver({Key key, this.level, this.chapter, this.stage, this.question_num})
+      : super(key: key);
 
   @override
   SilverM createState() => SilverM();
 }
 
 class SilverM extends State<Silver> {
+  UserInfo userInfo = UserInfo();
+
   String eggBack = "assets/gamebox/img/match/egg_back.png";
   String eggFront = "assets/gamebox/img/match/egg_front.png";
 
@@ -60,7 +66,10 @@ class SilverM extends State<Silver> {
   double opacity = 1;
 
   bool isOpen = true;
+  bool notYea = false;
+  bool timeFinish = false;
 
+  int memberLevel;
 
   void isOpenChange() {
     print("Open_Change : " + this.isOpen.toString());
@@ -73,7 +82,7 @@ class SilverM extends State<Silver> {
   }
 
   inVisible() async {
-    var _duration = Duration(seconds: 2);
+    var _duration = Duration(seconds: 3);
     return Timer(_duration, isOpenChange);
   }
 
@@ -208,12 +217,57 @@ class SilverM extends State<Silver> {
     }
   }
 
-  resetGame() {
-    print("P_M_reset");
+  timerAnd() {
+    setState(() {
+      dataSetCheck = 0;
+      rowData(1);
+      rowData(2);
+      next_question = true;
+      nextQuestion();
+      rowData(1);
+      rowData(2);
+      inVisible();
+    });
   }
 
-  resultNextGame() {
-    print("P_M_resultNextGame");
+  void finishTimer() {
+    setState(() {
+      this.isOpen = true;
+      if (answer_all_length != 5) {
+        answer_all_length += 1;
+        if (answer_all_length == 5) {
+          next_question = true;
+          resultView();
+        } else {
+          timeFinish = true;
+          answer_one = "";
+          answer_two = "";
+          print("finishtime else");
+          timerAnd();
+        }
+      }
+    });
+  }
+
+  void resetGame() {
+    setState(() {
+      answer_finish = false;
+      answer_all_length = 0;
+      answer_finish_count = 0;
+      answer_count = 0;
+      answer_one = "";
+      answer_two = "";
+      answer_check = false;
+      notYea = true;
+      dataSetCheck = 0;
+      rowData(1);
+      rowData(2);
+      next_question = true;
+      nextQuestion();
+      rowData(1);
+      rowData(2);
+      inVisible();
+    });
   }
 
   @override
@@ -262,8 +316,8 @@ class SilverM extends State<Silver> {
                           answerList[i].question_num));
                       print("type 1 0-4 window");
                     } else if (i % 2 == 1) {
-                      eggTwo.add(eggData(1, this.isOpen,
-                          answerList[i].ko, 1, answerList[i].question_num));
+                      eggTwo.add(eggData(1, this.isOpen, answerList[i].ko, 1,
+                          answerList[i].question_num));
                       print("type 1 0-4 whitewindow");
                     }
                   } else {
@@ -276,8 +330,8 @@ class SilverM extends State<Silver> {
                           answerList[i].question_num));
                       print('type 2 0-4 window');
                     } else if (i % 2 == 1) {
-                      eggTwo.add(eggData(2, this.isOpen,
-                          answerList[i].en, 1, answerList[i].question_num));
+                      eggTwo.add(eggData(2, this.isOpen, answerList[i].en, 1,
+                          answerList[i].question_num));
                       print('type 2 0-4 whitewindow');
                     }
                   }
@@ -289,8 +343,8 @@ class SilverM extends State<Silver> {
                           answerList[i].question_num));
                       print('type 1 4-8 window');
                     } else if (i % 2 == 1) {
-                      eggTwo.add(eggData(1, this.isOpen,
-                          answerList[i].ko, 1, answerList[i].question_num));
+                      eggTwo.add(eggData(1, this.isOpen, answerList[i].ko, 1,
+                          answerList[i].question_num));
                       print('type 1 4-8 whitewindow');
                     }
                   } else {
@@ -299,8 +353,8 @@ class SilverM extends State<Silver> {
                           answerList[i].question_num));
                       print('type 2 4-8 window');
                     } else if (i % 2 == 1) {
-                      eggTwo.add(eggData(2, this.isOpen,
-                          answerList[i].en, 1, answerList[i].question_num));
+                      eggTwo.add(eggData(2, this.isOpen, answerList[i].en, 1,
+                          answerList[i].question_num));
                       print('type 2 4-8 whitewindow');
                     }
                   }
@@ -309,17 +363,13 @@ class SilverM extends State<Silver> {
                 if (next_problem == 1) {
                   egg_sub.clear();
                   for (int i = 0; i < egg.length; i++) {
-                    egg_sub.add(eggData(egg[i].type, this.isOpen,
-                        egg[i].param, 1, egg[i].question_num));
+                    egg_sub.add(eggData(egg[i].type, this.isOpen, egg[i].param,
+                        1, egg[i].question_num));
                   }
                   eggTwo_sub.clear();
                   for (int i = 0; i < eggTwo.length; i++) {
-                    eggTwo_sub.add(eggData(
-                        eggTwo[i].type,
-                        this.isOpen,
-                        eggTwo[i].param,
-                        1,
-                        eggTwo[i].question_num));
+                    eggTwo_sub.add(eggData(eggTwo[i].type, this.isOpen,
+                        eggTwo[i].param, 1, eggTwo[i].question_num));
                   }
                   next_problem = 2;
                 }
@@ -327,17 +377,13 @@ class SilverM extends State<Silver> {
             } else if (next_problem == 2 && dataSetCheck != 1) {
               egg.clear();
               for (int i = 0; i < egg_sub.length; i++) {
-                egg.add(eggData(egg_sub[i].type, this.isOpen,
-                    egg_sub[i].param, 1, egg_sub[i].question_num));
+                egg.add(eggData(egg_sub[i].type, this.isOpen, egg_sub[i].param,
+                    1, egg_sub[i].question_num));
               }
               eggTwo.clear();
               for (int i = 0; i < eggTwo_sub.length; i++) {
-                eggTwo.add(eggData(
-                    eggTwo_sub[i].type,
-                    this.isOpen,
-                    eggTwo_sub[i].param,
-                    1,
-                    eggTwo_sub[i].question_num));
+                eggTwo.add(eggData(eggTwo_sub[i].type, this.isOpen,
+                    eggTwo_sub[i].param, 1, eggTwo_sub[i].question_num));
               }
             }
 
@@ -349,91 +395,136 @@ class SilverM extends State<Silver> {
                     height: size.height,
                     child: answer_finish
                         ? Stack(
-                      children: <Widget>[
-                        Image.asset(
-                            "assets/gamebox/img/effect/result_background.png"),
-                        Center(
-                          child: Result(
-                              level: widget.level,
-                              chapter: widget.chapter,
-                              stage: widget.stage,
-                              score: answer_finish_count,
-                              scoreLength: answer_all_length,
-                              sizeWidth:
-                              MediaQuery.of(context).size.width,
-                              resetGame: resetGame(),
-                              resultNextGame: resultNextGame()),
-                        )
-                      ],
-                    )
+                            children: <Widget>[
+                              Image.asset(
+                                  "assets/gamebox/img/effect/result_background.png"),
+                              Center(
+                                child: Result(
+                                  level: widget.level,
+                                  chapter: widget.chapter,
+                                  stage: widget.stage,
+                                  score: answer_finish_count,
+                                  scoreLength: answer_all_length,
+                                  sizeWidth: MediaQuery.of(context).size.width,
+                                  resetGame: () => resetGame(),
+                                  memberLevel: memberLevel,
+                                ),
+                              )
+                            ],
+                          )
                         : next_question
-                        ? Column(
-                      children: <Widget>[
-                        Image.asset(
-                          "assets/gamebox/img/match/18.png",
-                          fit: BoxFit.fill,
+                            ? Column(
+                                children: <Widget>[
+                                  Image.asset(
+                                    "assets/gamebox/img/match/18.png",
+                                    fit: BoxFit.fill,
+                                    width: size.width,
+                                    height: size.height,
+                                  ),
+                                ],
+                              )
+                            : Column(
+                                children: <Widget>[
+                                  Image.asset(
+                                    "assets/gamebox/img/match/18.png",
+                                    fit: BoxFit.fill,
+                                    width: size.width,
+                                    height: size.height,
+                                  ),
+                                ],
+                              )),
+                answer_finish
+                    ? Text("")
+                    : Positioned(
+                        top: size.width / 15,
+                        child: TimerBar(
                           width: size.width,
-                          height: size.height,
+                          finishTimer: () => finishTimer(),
                         ),
-                      ],
-                    )
-                        : Column(
-                      children: <Widget>[
-                        Image.asset(
-                          "assets/gamebox/img/match/18.png",
-                          fit: BoxFit.fill,
+                      ),
+                answer_finish
+                    ? Text("")
+                    : Positioned(
+                        top: size.width / 5,
+                        child: QuestionStatus(
+                          question_all_length: 8,
+                          question_count: answer_all_length,
                           width: size.width,
-                          height: size.height,
                         ),
-                      ],
-                    )),
+                      ),
                 Positioned(
                   top: size.width / 3.5,
                   child: Container(
                     width: size.width - 20,
                     height: 420,
                     padding:
-                    const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+                        const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
                     child: Stack(
                       children: <Widget>[
                         answer_finish
                             ? Text("")
                             : next_question
-                            ? Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment:
-                          CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Image.asset(
-                                "assets/gamebox/img/effect/yay.png")
-                          ],
-                        )
-                            : Padding(
-                          padding: EdgeInsets.only(
-                              left: 10.0, right: 10.0),
-                          child: Image.asset(
-                            "assets/gamebox/img/match/match_silver.png",
-                            width: size.width - 20,
-                            height: 420,
-                            fit: BoxFit.fill,
-                          ),
-                        ),
+                                ? timeFinish
+                                    ? Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: <Widget>[
+                                          Align(
+                                            alignment: Alignment.center,
+                                            child: Image.asset(
+                                              "assets/gamebox/img/effect/nope.png",
+                                              width: 300,
+                                              height: 300,
+                                            ),
+                                          )
+                                        ],
+                                      )
+                                    : notYea
+                                        ? Text("")
+                                        : Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: <Widget>[
+                                              Align(
+                                                alignment: Alignment.center,
+                                                child: Image.asset(
+                                                  "assets/gamebox/img/effect/yay.png",
+                                                  width: 300,
+                                                  height: 300,
+                                                ),
+                                              )
+                                            ],
+                                          )
+                                : Padding(
+                                    padding: EdgeInsets.only(
+                                        left: 10.0, right: 10.0),
+                                    child: Image.asset(
+                                      "assets/gamebox/img/match/match_silver.png",
+                                      width: size.width - 20,
+                                      height: 420,
+                                      fit: BoxFit.fill,
+                                    ),
+                                  ),
                         Align(
                           alignment: AlignmentDirectional.topCenter,
                           child: next_question
                               ? Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[],
-                          )
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[],
+                                )
                               : Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              rowData(1),
-                              rowData(2),
-                            ],
-                          ),
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    rowData(1),
+                                    rowData(2),
+                                  ],
+                                ),
                         ),
                       ],
                     ),
@@ -449,49 +540,35 @@ class SilverM extends State<Silver> {
   }
 
   Widget rowData(int upDown) {
-    return (upDown == 1)
-        ? Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: <Widget>[
-        Egg(
-            eggTwo[0].type,
-            eggTwo[0].isOpen,
-            eggTwo[0].param,
-            eggTwo[0].opacity,
-            eggTwo[0].question_num),
-        Egg(egg[0].type, egg[0].isOpen, egg[0].param,
-            egg[0].opacity, egg[0].question_num),
-        Egg(
-            eggTwo[1].type,
-            eggTwo[1].isOpen,
-            eggTwo[1].param,
-            eggTwo[1].opacity,
-            eggTwo[1].question_num),
-        Egg(egg[1].type, egg[1].isOpen, egg[1].param,
-            egg[1].opacity, egg[1].question_num),
-      ],
-    )
-        : Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: <Widget>[
-        Egg(
-            eggTwo[2].type,
-            eggTwo[2].isOpen,
-            eggTwo[2].param,
-            eggTwo[2].opacity,
-            eggTwo[2].question_num),
-        Egg(egg[2].type, egg[2].isOpen, egg[2].param,
-            egg[2].opacity, egg[2].question_num),
-        Egg(
-            eggTwo[3].type,
-            eggTwo[3].isOpen,
-            eggTwo[3].param,
-            eggTwo[3].opacity,
-            eggTwo[3].question_num),
-        Egg(egg[3].type, egg[3].isOpen, egg[3].param,
-            egg[3].opacity, egg[3].question_num),
-      ],
-    );
+    return answer_finish
+        ? Text("")
+        : (upDown == 1)
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Egg(eggTwo[0].type, eggTwo[0].isOpen, eggTwo[0].param,
+                      eggTwo[0].opacity, eggTwo[0].question_num),
+                  Egg(egg[0].type, egg[0].isOpen, egg[0].param, egg[0].opacity,
+                      egg[0].question_num),
+                  Egg(eggTwo[1].type, eggTwo[1].isOpen, eggTwo[1].param,
+                      eggTwo[1].opacity, eggTwo[1].question_num),
+                  Egg(egg[1].type, egg[1].isOpen, egg[1].param, egg[1].opacity,
+                      egg[1].question_num),
+                ],
+              )
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Egg(eggTwo[2].type, eggTwo[2].isOpen, eggTwo[2].param,
+                      eggTwo[2].opacity, eggTwo[2].question_num),
+                  Egg(egg[2].type, egg[2].isOpen, egg[2].param, egg[2].opacity,
+                      egg[2].question_num),
+                  Egg(eggTwo[3].type, eggTwo[3].isOpen, eggTwo[3].param,
+                      eggTwo[3].opacity, eggTwo[3].question_num),
+                  Egg(egg[3].type, egg[3].isOpen, egg[3].param, egg[3].opacity,
+                      egg[3].question_num),
+                ],
+              );
   }
 
   Widget Egg(
@@ -507,11 +584,9 @@ class SilverM extends State<Silver> {
             setState(() {
               if (type == 1) {
                 for (int i = 0; i < egg.length; i++) {
-                  if (egg[i].type == 1 &&
-                      egg[i].question_num == question_num) {
+                  if (egg[i].type == 1 && egg[i].question_num == question_num) {
                     egg.removeAt(i);
-                    egg.insert(
-                        i, eggData(type, true, param, 1, question_num));
+                    egg.insert(i, eggData(type, true, param, 1, question_num));
                     rowData(1);
                     rowData(2);
                     if (answer_one == "") {
@@ -558,11 +633,9 @@ class SilverM extends State<Silver> {
                 }
               } else if (type == 2) {
                 for (int i = 0; i < egg.length; i++) {
-                  if (egg[i].type == 2 &&
-                      egg[i].question_num == question_num) {
+                  if (egg[i].type == 2 && egg[i].question_num == question_num) {
                     egg.removeAt(i);
-                    egg.insert(
-                        i, eggData(type, true, param, 1, question_num));
+                    egg.insert(i, eggData(type, true, param, 1, question_num));
                     rowData(1);
                     rowData(2);
                     if (answer_one == "") {
@@ -631,29 +704,29 @@ class SilverM extends State<Silver> {
             child: Center(
               child: (type == 1)
                   ? this.isOpen
-                  ? Text(
-                param,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                  color: Colors.black,
-                  fontFamily: 'Jua',
-                ),
-                textAlign: TextAlign.center,
-              )
-                  : Text("")
+                      ? Text(
+                          param,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            color: Colors.black,
+                            fontFamily: 'Jua',
+                          ),
+                          textAlign: TextAlign.center,
+                        )
+                      : Text("")
                   : this.isOpen
-                  ? Text(
-                param,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                  color: Colors.black,
-                  fontFamily: 'Jua',
-                ),
-                textAlign: TextAlign.center,
-              )
-                  : Text(""),
+                      ? Text(
+                          param,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                            color: Colors.black,
+                            fontFamily: 'Jua',
+                          ),
+                          textAlign: TextAlign.center,
+                        )
+                      : Text(""),
             ),
             decoration: BoxDecoration(
               image: DecorationImage(
@@ -668,8 +741,6 @@ class SilverM extends State<Silver> {
   }
 }
 
-
-
 class eggData {
   final int type;
   final bool isOpen;
@@ -677,9 +748,7 @@ class eggData {
   final double opacity;
   final int question_num;
 
-  eggData(
-      this.type, this.isOpen, this.param, this.opacity, this.question_num
-      );
+  eggData(this.type, this.isOpen, this.param, this.opacity, this.question_num);
 }
 
 class eggParam {

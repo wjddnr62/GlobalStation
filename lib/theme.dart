@@ -163,6 +163,9 @@ final backbtnColor = Color(0xFF8A8A8A);
 final resultStageColor = Color(0xFFF76666);
 final StatusBarLeftColor = Color(0xFF29a787);
 final StatusBarRightColor = Color(0xFFffd851);
+final animationTimerColor = Color(0xFFFB6969);
+final BackTimerColor = Color(0xFFFFD851);
+final CircleTimerColor = Color(0xFF29A787);
 //------------------------------------
 
 //---boxDecoration--------------------

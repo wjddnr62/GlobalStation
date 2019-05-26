@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:lms_flutter/UI/gamebox/Settings/character.dart';
 import 'package:lms_flutter/UI/gamebox/Settings/setting.dart';
+import 'package:lms_flutter/bloc/game_public_bloc.dart';
 import 'Settings/mypage.dart';
 import 'gameDialog.dart';
 import 'package:lms_flutter/model/UserInfo.dart';
@@ -15,6 +16,7 @@ class LobbyPage extends StatefulWidget {
 }
 
 class LobbyHomePage extends State<LobbyPage> {
+  GamePublicBloc gamePublicBloc = GamePublicBloc();
 //  AudioPlayer audioPlayer = new AudioPlayer();
 //
 //  play() async {
@@ -225,6 +227,7 @@ class LobbyHomePage extends State<LobbyPage> {
 
         return InkWell(
           onTap: () {
+            print(idx.toString());
             if (idx <= level) {
               var lev = "";
               var cap = 0;
@@ -284,6 +287,9 @@ class LobbyHomePage extends State<LobbyPage> {
   }
 
   void gameStart(int idx, String lev, int cap) {
+    print("gameStart idx : " + idx.toString());
+    gamePublicBloc.idx = idx;
+    print("gameBloc idx : " + gamePublicBloc.idx.toString());
     Navigator.of(context).push(PageRouteBuilder(
         opaque: false,
         pageBuilder: (BuildContext context, _, __) => GameDialog(
