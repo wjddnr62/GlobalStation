@@ -34,13 +34,9 @@ class Phonics extends State<PhonicsA> {
   AudioPlayer advancedPlayer = AudioPlayer();
 
   playSound(String level, String chapter,String stage, String question_num) {
-//  audioCache.load("https://ga.oig.kr/laon_api/api/asset/sound/P/1/S1/3");
-//  https://ga.oig.kr/laon_api/api/asset/sound/P/1/S1/3
-//    audioCache.play("https://ga.oig.kr/laon_api/api/asset/sound/P/1/S1/3");
-  print("level = ${level}, chapter = ${chapter}, stage = ${stage}, question = ${question_num}");
     setState(() {
       advancedPlayer
-          .play("https://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
+          .play("http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
     });
   }
 
@@ -145,7 +141,7 @@ class Phonics extends State<PhonicsA> {
                 height: 100,
                 child: Center(
                   child: Image.network(
-                    "https://ga.oig.kr/laon_api/api/asset" + data,
+                    "http://ga.oig.kr/laon_api/api/asset" + data,
                     fit: BoxFit.contain,
                     width: 80,
                     height: 80,
