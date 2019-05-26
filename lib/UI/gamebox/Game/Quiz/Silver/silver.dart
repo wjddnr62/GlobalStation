@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lms_flutter/bloc/quiz_game_bloc.dart';
 import 'package:lms_flutter/model/Quiz/answerList.dart';
 import 'package:lms_flutter/theme.dart';
+import 'package:lms_flutter/UI/gamebox/public/Timer.dart';
 
 class QuizS extends StatefulWidget {
 

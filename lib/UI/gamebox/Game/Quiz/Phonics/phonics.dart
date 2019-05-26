@@ -55,7 +55,6 @@ class Phonics extends State<QuizP> {
                     height: size.height,
                   ),
                 ),
-
                 Positioned(
                   bottom: 50,
                   child: Container(

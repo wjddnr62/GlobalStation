@@ -8,7 +8,6 @@ import 'gameDialog.dart';
 import 'package:lms_flutter/model/UserInfo.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:audioplayers/audio_cache.dart';
-import 'package:flutter_sound/flutter_sound.dart';
 
 class LobbyPage extends StatefulWidget {
   @override
@@ -17,19 +16,7 @@ class LobbyPage extends StatefulWidget {
 
 class LobbyHomePage extends State<LobbyPage> {
   GamePublicBloc gamePublicBloc = GamePublicBloc();
-//  AudioPlayer audioPlayer = new AudioPlayer();
-//
-//  play() async {
-//    int result = await audioPlayer.play("assets/gamebox/audio/backgroundmusic.mp3",isLocal: true);
-//    if (result == 1){
-//      print("suc");
-//    }
-//  }
-  FlutterSound flutterSound = new FlutterSound();
 
-  void play() async{
-    await flutterSound.startPlayer("assets/gamebox/audio/backgroundmusic.mp3");
-  }
 
   AudioCache audioCache = AudioCache();
   AudioPlayer advancedPlayer = AudioPlayer();
@@ -336,7 +323,7 @@ class LobbyHomePage extends State<LobbyPage> {
   @override
   Widget build(BuildContext context) {
 //    play();
-    audioCache.loop('/gamebox/audio/backgroundmusic.mp3');
+    audioCache.play('/gamebox/audio/backgroundmusic.mp3');
     return Scaffold(
       body: body(MediaQuery.of(context).size),
     );

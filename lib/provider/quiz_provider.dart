@@ -53,9 +53,8 @@ class QuizProvider {
       'chapter': chapter.toString(),
       'stage': stage.toString(),
       'question_num': question_num.toString(),
-      'answer_num': question_num.toString(),
+      'answer_num': answer_num.toString(),
     });
-
     return response.body;
   }
 }

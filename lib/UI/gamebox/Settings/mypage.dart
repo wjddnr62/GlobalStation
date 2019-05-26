@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:lms_flutter/model/UserInfo.dart';
 import 'package:lms_flutter/theme.dart';
 
 class MyPage extends StatelessWidget {
   final String defaultUrl = "assets/gamebox/img/mypage/";
+  UserInfo userInfo = UserInfo();
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
       backgroundColor: Colors.black.withOpacity(0.5),
       body: SafeArea(
@@ -64,11 +65,12 @@ class MyPage extends StatelessWidget {
   }
 
   Widget nowLearning(context) {
+    List level = userInfo.levelList;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         Text("현재 학습"),
-        Text("Diamond 2"),
+        Text(level[userInfo.member_level]),
       ],
     );
   }
@@ -88,7 +90,7 @@ class MyPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Text("코인"),
-            Text("260"),
+            Text(userInfo.member_coin.toString()),
           ],
         ),
       ],
@@ -99,25 +101,33 @@ class MyPage extends StatelessWidget {
     return Stack(
       children: <Widget>[
         stageImg(top: 270, left: 30, width: 80, height: 80, img: "1_stage.png"),
-        stageImg(top: 260, left: 100, width: 80, height: 80, img: "2_stage.png"),
-        stageImg(top: 250, left: 180, width: 90, height: 90, img: "3_stage.png"),
-        stageImg(top: 300, left: 260, width: 80, height: 80, img: "4_stage.png"),
-
-        stageImg(top: 350, left: 40, width: 140, height: 80, img: "5_stage.png"),
-        stageImg(top: 330, left: 165, width: 80, height: 100, img: "6_stage.png"),
-        stageImg(top: 330, left: 210, width: 80, height: 100, img: "7_stage.png"),
-        stageImg(top: 380, left: 280, width: 50, height: 50, img: "8_stage.png"),
-
+        stageImg(
+            top: 260, left: 100, width: 80, height: 80, img: "2_stage.png"),
+        stageImg(
+            top: 250, left: 180, width: 90, height: 90, img: "3_stage.png"),
+        stageImg(
+            top: 300, left: 260, width: 80, height: 80, img: "4_stage.png"),
+        stageImg(
+            top: 350, left: 40, width: 140, height: 80, img: "5_stage.png"),
+        stageImg(
+            top: 330, left: 165, width: 80, height: 100, img: "6_stage.png"),
+        stageImg(
+            top: 330, left: 210, width: 80, height: 100, img: "7_stage.png"),
+        stageImg(
+            top: 380, left: 280, width: 50, height: 50, img: "8_stage.png"),
         stageImg(top: 430, left: 40, width: 60, height: 60, img: "9_stage.png"),
-        stageImg(top: 430, left: 110, width: 60, height: 60, img: "10_stage.png"),
-        stageImg(top: 430, left: 180, width: 60, height: 60, img: "11_stage.png"),
-        stageImg(top: 430, left: 250, width: 100, height: 60, img: "12_stage.png"),
-
-        stageImg(top: 490, left: 40, width: 130, height: 60, img: "13_stage.png"),
-        stageImg(top: 490, left: 190, width: 60, height: 60, img: "14_stage.png"),
-        stageImg(top: 490, left: 270, width: 60, height: 60, img: "15_stage.png"),
-
-
+        stageImg(
+            top: 430, left: 110, width: 60, height: 60, img: "10_stage.png"),
+        stageImg(
+            top: 430, left: 180, width: 60, height: 60, img: "11_stage.png"),
+        stageImg(
+            top: 430, left: 250, width: 100, height: 60, img: "12_stage.png"),
+        stageImg(
+            top: 490, left: 40, width: 130, height: 60, img: "13_stage.png"),
+        stageImg(
+            top: 490, left: 190, width: 60, height: 60, img: "14_stage.png"),
+        stageImg(
+            top: 490, left: 270, width: 60, height: 60, img: "15_stage.png"),
       ],
     );
   }
@@ -136,13 +146,29 @@ class MyPage extends StatelessWidget {
       right: right,
       left: left,
       child: Container(
-        width: width,
-        height: height,
-        child: Image.asset(
-          defaultUrl + img,
-          fit: BoxFit.contain,
-        ),
-      ),
+          width: width,
+          height: height,
+          child: Stack(
+            children: <Widget>[
+              Positioned.fill(
+                child: Image.asset(
+                  defaultUrl + img,
+                  fit: BoxFit.contain,
+                ),
+              ),
+              Positioned(
+                bottom: 0,
+                right: 10,
+                child: Container(
+                  width: width / 3,
+                  child: Image.asset(
+                    defaultUrl + "complete1.png",
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              ),
+            ],
+          )),
     );
   }
 

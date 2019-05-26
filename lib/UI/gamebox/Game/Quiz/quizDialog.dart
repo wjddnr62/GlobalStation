@@ -5,6 +5,10 @@ import 'package:flutter/widgets.dart';
 import 'package:lms_flutter/UI/gamebox/public/progressBar.dart';
 import 'package:lms_flutter/bloc/quiz_game_bloc.dart';
 import 'package:lms_flutter/model/Quiz/questionList.dart';
+import 'package:lms_flutter/UI/gamebox/public/Timer.dart';
+import 'package:lms_flutter/UI/gamebox/public/questionStatus.dart';
+import 'package:lms_flutter/UI/gamebox/public/Result.dart';
+import 'package:lms_flutter/model/UserInfo.dart';
 
 import 'phonics.dart';
 import 'bronze.dart';
@@ -17,6 +21,8 @@ import 'dart:convert';
 int viewidx;
 int question_num = 0;
 int maxLen;
+int memberLevel;
+int yay = 0;
 
 class QuizGameDialog extends StatefulWidget {
   String level;
@@ -31,9 +37,12 @@ class QuizGameDialog extends StatefulWidget {
 }
 
 class QuizGameDialogState extends State<QuizGameDialog> {
+  UserInfo userInfo = UserInfo();
+  int review = 0;
+
   @override
   Widget build(BuildContext context) {
-    print(widget.level);
+    memberLevel = userInfo.member_level;
     quizBloc.getLevel(widget.level);
     quizBloc.getChapter(widget.chapter);
     quizBloc.getStage(widget.stage);
@@ -44,34 +53,54 @@ class QuizGameDialogState extends State<QuizGameDialog> {
             child: StreamBuilder(
               stream: quizBloc.getQuestionList(),
               builder: (context, snapshot) {
-                print("questionList = " + snapshot.hasData.toString());
                 if (snapshot.hasData) {
                   String jsonValue = snapshot.data;
                   List<QuestionList> qList =
                       quizBloc.questListToList(jsonValue);
                   if (widget.level == "P") {
                     return GameList(
-                        item: QuizPhonics(qList: qList).getViews(),
-                        size: MediaQuery.of(context).size);
+                      item: QuizPhonics(qList: qList).getViews(),
+                      size: MediaQuery.of(context).size,
+                      level: widget.level,
+                      chapter: widget.chapter,
+                      stage: widget.stage,
+                      restartView: restartView,
+                    );
                   } else if (widget.level == "B") {
                     return GameList(
                         item: QuizBronze(qList: qList).getViews(),
-                        size: MediaQuery.of(context).size);
+                        size: MediaQuery.of(context).size,
+                        level: widget.level,
+                        chapter: widget.chapter,
+                        stage: widget.stage,
+                        restartView: restartView);
                   } else if (widget.level == "S") {
                     return GameList(
                         item: QuizSilver(qList: qList).getViews(),
-                        size: MediaQuery.of(context).size);
+                        size: MediaQuery.of(context).size,
+                        level: widget.level,
+                        chapter: widget.chapter,
+                        stage: widget.stage,
+                        restartView: restartView);
                   } else if (widget.level == "G") {
                     return GameList(
                         item: QuizGold(qList: qList).getViews(),
-                        size: MediaQuery.of(context).size);
+                        size: MediaQuery.of(context).size,
+                        level: widget.level,
+                        chapter: widget.chapter,
+                        stage: widget.stage,
+                        restartView: restartView);
                   } else if (widget.level == "D") {
                     return GameList(
                         item: QuizDiamond(qList: qList).getViews(),
-                        size: MediaQuery.of(context).size);
+                        size: MediaQuery.of(context).size,
+                        level: widget.level,
+                        chapter: widget.chapter,
+                        stage: widget.stage,
+                        restartView: restartView);
                   }
-
                 }
+
                 return SizedBox(
                   width: 100.0,
                   height: 100.0,
@@ -82,13 +111,31 @@ class QuizGameDialogState extends State<QuizGameDialog> {
           ),
         ));
   }
+
+  restartView() {
+    setState(() {
+      review++;
+    });
+  }
 }
 
 class GameList extends StatefulWidget {
   final List<Widget> item;
   final Size size;
+  String level;
+  int chapter;
+  int stage;
+  VoidCallback restartView;
 
-  GameList({Key key, this.item, this.size}) : super(key: key);
+  GameList(
+      {Key key,
+      this.item,
+      this.size,
+      this.level,
+      this.chapter,
+      this.stage,
+      this.restartView})
+      : super(key: key);
 
   @override
   GameListState createState() => GameListState();
@@ -96,17 +143,52 @@ class GameList extends StatefulWidget {
 
 class GameListState extends State<GameList> {
   String answer;
+  bool viewTimer = true;
+  bool resultView = false;
+  bool restartGame = false;
 
   @override
   void initState() {
     viewidx = 0;
     answer = "";
+    viewTimer = true;
+    resultView = false;
+    restartGame = false;
+    yay = 0;
+  }
+
+  void finishTimer() {
+    setState(() {
+      viewTimer = false;
+    });
+    quizBloc.getAnswer(quizBloc.question_num).then((value) {
+      Map<String, dynamic> json = jsonDecode(value);
+
+      setState(() {
+        answer = json['data'];
+        quizBloc.answer = 0;
+        quizBloc.question_num = 0;
+      });
+
+      if (viewidx == maxLen - 1) {
+        print("끝");
+        setState(() {
+          resultView = true;
+        });
+      } else {
+        handleTimeout();
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     maxLen = widget.item.length;
-    print(maxLen);
+    return mainGame();
+
+  }
+
+  Widget mainGame(){
     return Stack(
       children: <Widget>[
         Positioned.fill(
@@ -119,6 +201,26 @@ class GameListState extends State<GameList> {
                   Positioned(
                     bottom: 20,
                     child: nextBtn(widget.size),
+                  ),
+                  (viewTimer)
+                      ? Positioned(
+                    top: MediaQuery.of(context).size.width / 15,
+                    child: TimerBar(
+                      width: MediaQuery.of(context).size.width,
+                      finishTimer: () => finishTimer(),
+                    ),
+                  )
+                      : SizedBox(
+                    width: 0,
+                    height: 0,
+                  ),
+                  Positioned(
+                    top: MediaQuery.of(context).size.width / 5,
+                    child: QuestionStatus(
+                      question_all_length: maxLen,
+                      question_count: viewidx,
+                      width: MediaQuery.of(context).size.width,
+                    ),
                   ),
                 ],
               );
@@ -141,22 +243,60 @@ class GameListState extends State<GameList> {
           ),
         ),
         checkAnswer(),
+
+        (resultView)
+            ? Positioned.fill(
+          child: Stack(
+            children: <Widget>[
+              Image.asset(
+                  "assets/gamebox/img/effect/result_background.png"),
+              Center(
+                child: Result(
+                  level: widget.level,
+                  chapter: widget.chapter,
+                  stage: widget.stage,
+                  score: maxLen,
+                  scoreLength: yay,
+                  sizeWidth: double.infinity,
+                  resetGame: () => restart(),
+                  memberLevel: memberLevel,
+                ),
+              )
+            ],
+          ),
+        ): Positioned(
+          top: 0,
+          child: SizedBox(
+            width: 0,
+            height: 0,
+          ),
+        ),
+
       ],
     );
+  }
+
+  void restart(){
+    setState(() {
+      print("restart");
+      viewidx = 0;
+      answer = "";
+      viewTimer = true;
+      resultView = false;
+      restartGame = false;
+      yay = 0;
+    });
   }
 
   Widget nextBtn(Size size) {
     return InkWell(
       onTap: () {
+        print(quizBloc.answer);
         quizBloc.getAnswer(quizBloc.question_num).then((value) {
           Map<String, dynamic> json = jsonDecode(value);
 
-//          if (json['data'] == 'Y') {
-//            print("정답");
-//          } else if (json['data'] == 'N') {
-//            print("오답");
-//          }
           setState(() {
+            viewTimer = false;
             answer = json['data'];
             quizBloc.answer = 0;
             quizBloc.question_num = 0;
@@ -164,13 +304,11 @@ class GameListState extends State<GameList> {
 
           if (viewidx == maxLen - 1) {
             print("끝");
-            Navigator.of(context).pop();
+            setState(() {
+              resultView = true;
+            });
           } else {
             handleTimeout();
-//            setState(() {
-//              print(viewidx);
-//              viewidx++;
-//            });
           }
         });
       },
@@ -191,9 +329,12 @@ class GameListState extends State<GameList> {
 
   Widget checkAnswer() {
     String img = "";
-    if (answer == 'Y')
+    if (answer == 'Y') {
+      yay++;
       img = "assets/gamebox/img/quiz/yay.png";
-    else if (answer == 'N') img = "assets/gamebox/img/quiz/nope.png";
+    } else if (answer == 'N') {
+      img = "assets/gamebox/img/quiz/nope.png";
+    }
 
     if (answer == "") {
       answer = "";
@@ -220,6 +361,7 @@ class GameListState extends State<GameList> {
     _timer = new Timer(timeout, () {
       setState(() {
         answer = "";
+        viewTimer = true;
         viewidx++;
       });
     });
@@ -227,8 +369,7 @@ class GameListState extends State<GameList> {
 
   @override
   void dispose() {
-    if(_timer != null)
-      _timer.cancel();
+    if (_timer != null) _timer.cancel();
 
     super.dispose();
   }

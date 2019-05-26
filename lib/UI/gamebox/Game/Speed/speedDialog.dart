@@ -18,7 +18,6 @@ import 'dart:async';
 
 int viewidx;
 int question_num = 0;
-int maxLen;
 
 class SpeedGameDialog extends StatefulWidget {
   String level;

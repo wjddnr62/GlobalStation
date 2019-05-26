@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:lms_flutter/bloc/speed_game_bloc.dart';
 import 'package:lms_flutter/model/Speed/answerList.dart';
 import 'package:lms_flutter/theme.dart';
+import 'package:audioplayers/audioplayers.dart';
+import 'package:audioplayers/audio_cache.dart';
 
 class PhonicsA extends StatefulWidget {
   final String level;
@@ -13,12 +15,13 @@ class PhonicsA extends StatefulWidget {
   final int question_num;
   final String title;
 
-  PhonicsA({Key key,
-    this.level,
-    this.chapter,
-    this.stage,
-    this.question_num,
-    this.title})
+  PhonicsA(
+      {Key key,
+      this.level,
+      this.chapter,
+      this.stage,
+      this.question_num,
+      this.title})
       : super(key: key);
 
   @override
@@ -27,6 +30,19 @@ class PhonicsA extends StatefulWidget {
 
 class Phonics extends State<PhonicsA> {
 //  String title = "Listen and choose the correct word.";
+  AudioCache audioCache = AudioCache();
+  AudioPlayer advancedPlayer = AudioPlayer();
+
+  playSound(String level, String chapter,String stage, String question_num) {
+//  audioCache.load("https://ga.oig.kr/laon_api/api/asset/sound/P/1/S1/3");
+//  https://ga.oig.kr/laon_api/api/asset/sound/P/1/S1/3
+//    audioCache.play("https://ga.oig.kr/laon_api/api/asset/sound/P/1/S1/3");
+  print("level = ${level}, chapter = ${chapter}, stage = ${stage}, question = ${question_num}");
+    setState(() {
+      advancedPlayer
+          .play("https://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,9 +51,8 @@ class Phonics extends State<PhonicsA> {
     speedBloc.getChapter(widget.chapter);
     speedBloc.getStage(widget.stage);
     speedBloc.question_num = widget.question_num;
-    return body(MediaQuery
-        .of(context)
-        .size);
+    playSound(widget.level, widget.chapter.toString(), widget.stage.toString(), widget.question_num.toString());
+    return body(MediaQuery.of(context).size);
   }
 
   Widget body(Size size) {
@@ -50,10 +65,10 @@ class Phonics extends State<PhonicsA> {
       child: StreamBuilder(
           stream: speedBloc.getAnswerList(widget.question_num),
           builder: (context, snapshot) {
-            if(snapshot.hasData) {
+            if (snapshot.hasData) {
               String jsonValue = snapshot.data;
-              List<AnswerList> answerList = speedBloc.answerListToList(
-                  jsonValue);
+              List<AnswerList> answerList =
+                  speedBloc.answerListToList(jsonValue);
               return Stack(
                 children: <Widget>[
                   Container(
@@ -79,53 +94,47 @@ class Phonics extends State<PhonicsA> {
                     ),
                   ),
                   Positioned(
-                    top: size.height / 2.5,
-                    right: 30,
-                    child: SizedBox(width: 0,height: 0,),
-                  ),
+                      top: size.height / 2.5,
+                      right: 30,
+                      child: questionPicture(answerList[0].img, 1)),
                   Positioned(
-                    top: size.height / 2.5,
-                    left: 30,
-                    child: SizedBox(width: 0,height: 0,),
-                  ),
+                      top: size.height / 2.5,
+                      left: 30,
+                      child: questionPicture(answerList[1].img, 2)),
                   Positioned(
-                    top: size.height / 1.8,
-                    right: 30,
-                    child: SizedBox(width: 0,height: 0,),
-                  ),
+                      top: size.height / 1.8,
+                      right: 30,
+                      child: questionPicture(answerList[2].img, 3)),
                   Positioned(
-                    top: size.height / 1.8,
-                    left: 30,
-                    child: SizedBox(width: 0,height: 0,),
-                  ),
+                      top: size.height / 1.8,
+                      left: 30,
+                      child: questionPicture(answerList[3].img, 4)),
                 ],
               );
             }
             return CircularProgressIndicator();
-          }
-      ),
-
+          }),
     );
   }
 
   int clickAnswer = 0;
 
-    Widget questionPicture(String data, int idx) {
+  Widget questionPicture(String data, int idx) {
     return Container(
       width: 150,
       height: 250,
       child: InkWell(
-        onTap: (){
+        onTap: () {
           speedBloc.answer = idx;
           setState(() {
             clickAnswer = idx;
           });
         },
-        child:  Stack(
+        child: Stack(
           children: <Widget>[
             Image.asset(
               "assets/gamebox/img/speed/balloon.png",
-              width: (idx == clickAnswer)? 160 : 150,
+              width: (idx == clickAnswer) ? 160 : 150,
               height: 250,
               fit: BoxFit.contain,
             ),
@@ -135,18 +144,18 @@ class Phonics extends State<PhonicsA> {
                 width: 100,
                 height: 100,
                 child: Center(
-                  child: Image.network(data),
+                  child: Image.network(
+                    "https://ga.oig.kr/laon_api/api/asset/" + data,
+                    fit: BoxFit.contain,
+                    width: 80,
+                    height: 80,
+                  ),
                 ),
               ),
             ),
           ],
         ),
       ),
-
     );
   }
-
-
-
 }
-

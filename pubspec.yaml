@@ -31,7 +31,6 @@ dependencies:
   flutter_swiper: ^1.1.6
 #  audioplayers: ^0.12.0
   flutter_svg: ^0.12.4+1
-  flutter_sound: ^1.4.1
   audioplayers: ^0.7.8
 
 

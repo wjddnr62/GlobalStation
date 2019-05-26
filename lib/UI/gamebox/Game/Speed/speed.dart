@@ -3,6 +3,10 @@ import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lms_flutter/model/Speed/questionList.dart';
+import 'package:lms_flutter/UI/gamebox/public/Timer.dart';
+import 'package:lms_flutter/UI/gamebox/public/questionStatus.dart';
+import 'package:lms_flutter/UI/gamebox/public/Result.dart';
+import 'package:lms_flutter/model/UserInfo.dart';
 
 import 'phonics.dart';
 import 'bronze.dart';
@@ -19,6 +23,8 @@ import 'dart:async';
 int viewidx;
 int question_num = 0;
 int maxLen;
+int memberLevel;
+int yay = 0;
 
 class SpeedGame extends StatelessWidget {
   final String level;
@@ -29,45 +35,16 @@ class SpeedGame extends StatelessWidget {
   SpeedGame({Key key, this.level, this.chapter, this.stage, this.qList})
       : super(key: key);
 
+  UserInfo userInfo = UserInfo();
+  int review = 0;
+
   @override
   Widget build(BuildContext context) {
+    memberLevel = userInfo.member_level;
     return Scaffold(
         backgroundColor: Colors.black.withOpacity(0.5),
         body: SafeArea(
           child: Padding(
-//            child: StreamBuilder(
-//              stream: _loadQuest,
-//              builder: (context, snapshot) {
-//                print("questionList = " + snapshot.hasData.toString());
-//                if (snapshot.hasData) {
-//                  String jsonValue = snapshot.data;
-//                  List<QuestionList> qList =
-//                  speedBloc.questListToList(jsonValue);
-//                  if (widget.level == "B") {
-//                    return GameList(
-//                        item: SpeedBronze(qList: qList).getViews(),
-//                        size: MediaQuery.of(context).size);
-//                  }else if(widget.level == "S"){
-//                    return GameList(
-//                        item: SpeedSilver(qList: qList).getViews(),
-//                        size: MediaQuery.of(context).size);
-//                  }else if(widget.level == "G"){
-//                    return GameList(
-//                        item: SpeedGold(qList: qList).getViews(),
-//                        size: MediaQuery.of(context).size);
-//                  }else if(widget.level == "D"){
-//                    return GameList(
-//                        item: SpeedDiamond(qList: qList).getViews(),
-//                        size: MediaQuery.of(context).size);
-//                  }
-//
-//                }
-//                return SizedBox(
-//                  width: 100.0,
-//                  height: 100.0,
-//                );
-//              },
-//            ),
             child: view(MediaQuery.of(context).size),
             padding: const EdgeInsets.all(10),
           ),
@@ -75,30 +52,45 @@ class SpeedGame extends StatelessWidget {
   }
 
   Widget view(Size size) {
-    if( level == "P")
+    if (level == "P")
       return GameList(
         item: SpeedPhonics(qList: qList).getViews(),
         size: size,
+        level: level,
+        chapter: chapter,
+        stage: stage,
       );
     if (level == "B")
       return GameList(
         item: SpeedBronze(qList: qList).getViews(),
         size: size,
+        level: level,
+        chapter: chapter,
+        stage: stage,
       );
     if (level == "S")
       return GameList(
         item: SpeedSilver(qList: qList).getViews(),
         size: size,
+        level: level,
+        chapter: chapter,
+        stage: stage,
       );
     if (level == "G")
       return GameList(
         item: SpeedGold(qList: qList).getViews(),
         size: size,
+        level: level,
+        chapter: chapter,
+        stage: stage,
       );
     if (level == "D")
       return GameList(
         item: SpeedDiamond(qList: qList).getViews(),
         size: size,
+        level: level,
+        chapter: chapter,
+        stage: stage,
       );
   }
 }
@@ -106,8 +98,18 @@ class SpeedGame extends StatelessWidget {
 class GameList extends StatefulWidget {
   final List<Widget> item;
   final Size size;
+  String level;
+  int chapter;
+  int stage;
 
-  GameList({Key key, this.item, this.size}) : super(key: key);
+  GameList({
+    Key key,
+    this.item,
+    this.size,
+    this.level,
+    this.chapter,
+    this.stage,
+  }) : super(key: key);
 
   @override
   GameListState createState() => GameListState();
@@ -115,10 +117,44 @@ class GameList extends StatefulWidget {
 
 class GameListState extends State<GameList> {
   String answer;
+  bool viewTimer = true;
+  bool resultView = false;
+  bool restartGame = false;
+
   @override
   void initState() {
     viewidx = 0;
     answer = "";
+    viewTimer = true;
+    resultView = false;
+    restartGame = false;
+    yay = 0;
+  }
+
+  void finishTimer() {
+    setState(() {
+      viewTimer = false;
+    });
+    speedBloc.getAnswer(speedBloc.question_num).then((value) {
+      Map<String, dynamic> json = jsonDecode(value);
+
+      setState(() {
+        answer = json['data'];
+        speedBloc.answer = 0;
+        speedBloc.question_num = 0;
+        speedBloc.answerA = "";
+        speedBloc.answerType = 0;
+      });
+
+      if (viewidx == maxLen - 1) {
+        print("끝");
+        setState(() {
+          resultView = true;
+        });
+      } else {
+        handleTimeout();
+      }
+    });
   }
 
   @override
@@ -136,6 +172,26 @@ class GameListState extends State<GameList> {
                   Positioned(
                     bottom: 10,
                     child: nextBtn(widget.size),
+                  ),
+                  (viewTimer)
+                      ? Positioned(
+                    top: MediaQuery.of(context).size.width / 15,
+                    child: TimerBar(
+                      width: MediaQuery.of(context).size.width,
+                      finishTimer: () => finishTimer(),
+                    ),
+                  )
+                      : SizedBox(
+                    width: 0,
+                    height: 0,
+                  ),
+                  Positioned(
+                    top: MediaQuery.of(context).size.width / 5,
+                    child: QuestionStatus(
+                      question_all_length: maxLen,
+                      question_count: viewidx,
+                      width: MediaQuery.of(context).size.width,
+                    ),
                   ),
                 ],
               );
@@ -158,6 +214,34 @@ class GameListState extends State<GameList> {
           ),
         ),
         checkAnswer(),
+
+        (resultView)
+            ? Positioned.fill(
+          child: Stack(
+            children: <Widget>[
+              Image.asset(
+                  "assets/gamebox/img/effect/result_background.png"),
+              Center(
+                child: Result(
+                  level: widget.level,
+                  chapter: widget.chapter,
+                  stage: widget.stage,
+                  score: maxLen,
+                  scoreLength: yay,
+                  sizeWidth: double.infinity,
+                  resetGame: () => restart(),
+                  memberLevel: memberLevel,
+                ),
+              )
+            ],
+          ),
+        ): Positioned(
+          top: 0,
+          child: SizedBox(
+            width: 0,
+            height: 0,
+          ),
+        ),
       ],
     );
   }
@@ -167,34 +251,24 @@ class GameListState extends State<GameList> {
       onTap: () {
         speedBloc.getAnswer(speedBloc.question_num).then((value) {
           Map<String, dynamic> json = jsonDecode(value);
-//          if (json['data'] == 'Y') {
-//            print("정답");
-//          } else if (json['data'] == 'N') {
-//            print("오답");
-//          }
-//          speedBloc.answer = 0;
-//          speedBloc.question_num = 0;
-//          speedBloc.answerA = "";
-//          speedBloc.answerType = 0;
 
           setState(() {
+            viewTimer = false;
             answer = json['data'];
             speedBloc.answer = 0;
             speedBloc.question_num = 0;
             speedBloc.answerA = "";
-            speedBloc.answerType = 0;;
+            speedBloc.answerType = 0;
+            ;
           });
-
 
           if (viewidx == maxLen - 1) {
             print("끝");
-            Navigator.of(context).pop();
+            setState(() {
+              resultView = true;
+            });
           } else {
             handleTimeout();
-//            setState(() {
-//              print(viewidx);
-//              viewidx++;
-//            });
           }
         });
       },
@@ -212,11 +286,25 @@ class GameListState extends State<GameList> {
       ),
     );
   }
+  void restart(){
+    setState(() {
+      print("restart");
+      viewidx = 0;
+      answer = "";
+      viewTimer = true;
+      resultView = false;
+      restartGame = false;
+      yay = 0;
+    });
+  }
+
+
   Widget checkAnswer() {
     String img = "";
-    if (answer == 'Y')
+    if (answer == 'Y'){
       img = "assets/gamebox/img/quiz/yay.png";
-    else if (answer == 'N') img = "assets/gamebox/img/quiz/nope.png";
+      yay++;
+    } else if (answer == 'N') img = "assets/gamebox/img/quiz/nope.png";
 
     if (answer == "") {
       answer = "";
@@ -243,6 +331,7 @@ class GameListState extends State<GameList> {
     _timer = new Timer(timeout, () {
       setState(() {
         answer = "";
+        viewTimer = true;
         viewidx++;
       });
     });
@@ -250,8 +339,7 @@ class GameListState extends State<GameList> {
 
   @override
   void dispose() {
-    if(_timer != null)
-      _timer.cancel();
+    if (_timer != null) _timer.cancel();
 
     super.dispose();
   }

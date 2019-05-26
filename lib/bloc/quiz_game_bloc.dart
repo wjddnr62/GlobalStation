@@ -52,9 +52,12 @@ class SpeedGameBloc {
           _level.value, _chapter.value, _stage.value));
 
 
-  Future<String> getAnswer(int question_num) =>
-      _repository.getQuizAnwer(
-          _level.value, _chapter.value, _stage.value, question_num, answer);
+  Future<String> getAnswer(int question_num) {
+    print("question = ${question_num} + answer = ${answer}");
+    return _repository.getQuizAnwer(
+        _level.value, _chapter.value, _stage.value, question_num, answer);
+  }
+
 
 
   List<QuestionList> questListToList(String value) {
