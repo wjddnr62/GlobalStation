@@ -22,26 +22,31 @@ class TimerSet extends State<TimerBar> {
   setTimer() {
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       if (_timer.isActive) {
+        if (_defaultSet == 0) {
+          _timer.cancel();
+          print("timered2 : " + _timer.isActive.toString());
+          if (!_timer.isActive) {
+            widget.finishTimer();
+            setState(() {
+              _defaultSet = 30;
+              timerSet = 30;
+            });
 
-          if (_defaultSet == 0) {
-            _timer.cancel();
-            print("timered2 : " + _timer.isActive.toString());
-            if (!_timer.isActive) {
-              widget.finishTimer();
-            }
-            _defaultSet = 30;
-            print("타이머완료");
-            if (!_timer.isActive) {
-              setTimer();
-            }
-          } else {
-            _defaultSet -= 1;
           }
+          print("타이머완료");
+//            if(!_timer.isActive) {
+//              setTimer();
+//            }
+        } else {
           setState(() {
-        });
+            _defaultSet -= 1;
+          });
+        }
       }
     });
   }
+
+
 
   @override
   void initState() {
@@ -55,12 +60,10 @@ class TimerSet extends State<TimerBar> {
 
   @override
   void dispose() {
-    super.dispose();
     print("timerdispose");
-    setState(() {
-      _timer.cancel();
-    });
+    _timer.cancel();
     print("timered : " + _timer.isActive.toString());
+    super.dispose();
   }
 
   Widget timerBar() {
@@ -114,31 +117,23 @@ class TimerSet extends State<TimerBar> {
                           left: 5.0,
                           right: 5.0,
                         ),
-                        child: Row(
-                          children: <Widget>[
-                            Flexible(
-                              child: Container(
-                                height: 15,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20.0),
-                                    border:
-                                        Border.all(color: Colors.transparent)),
-                                child: PhysicalModel(
-                                  color: Colors.transparent,
-                                  borderRadius: BorderRadius.circular(20.0),
-                                  clipBehavior: Clip.antiAlias,
-                                  child: LinearProgressIndicator(
-                                    backgroundColor: Colors.transparent,
-                                    valueColor: AlwaysStoppedAnimation<Color>(
-                                      animationTimerColor,
-                                    ),
-                                    value: _defaultSet / timerSet,
-                                  ),
-                                ),
+                        child: Container(
+                          height: 15,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20.0),
+                              border: Border.all(color: Colors.transparent)),
+                          child: PhysicalModel(
+                            color: Colors.transparent,
+                            borderRadius: BorderRadius.circular(20.0),
+                            clipBehavior: Clip.antiAlias,
+                            child: LinearProgressIndicator(
+                              backgroundColor: Colors.transparent,
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                animationTimerColor,
                               ),
+                              value: _defaultSet / timerSet,
                             ),
-
-                          ],
+                          ),
                         ),
                       ),
                     ),
@@ -146,7 +141,14 @@ class TimerSet extends State<TimerBar> {
                 ),
               )
             ],
-          )
+          ),
+//          Positioned(
+//            top: 3,
+//            child: Container(
+//              height: 15,
+//              color: Colors.black,
+//            ),
+//          )
         ],
       ),
     );

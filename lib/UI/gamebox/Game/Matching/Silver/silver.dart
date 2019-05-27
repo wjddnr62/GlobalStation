@@ -280,6 +280,7 @@ class SilverM extends State<Silver> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    memberLevel = userInfo.member_level;
     inVisible();
     print("invisible");
   }
@@ -450,8 +451,9 @@ class SilverM extends State<Silver> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         GestureDetector(
-                          child: Image.asset("assets/gamebox/img/close_button.png"),
-                          onTap: (){
+                          child: Image.asset(
+                              "assets/gamebox/img/close_button.png"),
+                          onTap: () {
                             Navigator.of(context).pop();
                           },
                         )
@@ -461,13 +463,15 @@ class SilverM extends State<Silver> {
                 ),
                 answer_finish
                     ? Text("")
-                    : next_question ? Text("") : Positioned(
-                        top: size.width / 15,
-                        child: TimerBar(
-                          width: size.width,
-                          finishTimer: () => finishTimer(),
-                        ),
-                      ),
+                    : next_question
+                        ? Text("")
+                        : Positioned(
+                            top: size.width / 15,
+                            child: TimerBar(
+                              width: size.width,
+                              finishTimer: () => finishTimer(),
+                            ),
+                          ),
                 answer_finish
                     ? Text("")
                     : Positioned(
@@ -497,14 +501,36 @@ class SilverM extends State<Silver> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.center,
                                         children: <Widget>[
-                                          Align(
-                                            alignment: Alignment.center,
-                                            child: Image.asset(
-                                              "assets/gamebox/img/effect/nope.png",
-                                              width: 300,
-                                              height: 300,
-                                            ),
-                                          )
+                                          Stack(
+                                            children: <Widget>[
+                                              Positioned(
+                                                child: Align(
+                                                    alignment: Alignment.center,
+                                                    child: Padding(
+                                                      padding: EdgeInsets.only(
+                                                          left: 10.0,
+                                                          right: 10.0),
+                                                      child: Image.asset(
+                                                        "assets/gamebox/img/match/match_silver.png",
+                                                        width: size.width - 20,
+                                                        height: 400,
+                                                        fit: BoxFit.fill,
+                                                      ),
+                                                    )),
+                                              ),
+                                              Positioned(
+                                                child: Align(
+                                                  alignment:
+                                                      Alignment.topCenter,
+                                                  child: Image.asset(
+                                                    "assets/gamebox/img/timeout.png",
+                                                    width: size.width - 20,
+                                                    height: 280,
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          ),
                                         ],
                                       )
                                     : notYea
@@ -515,14 +541,39 @@ class SilverM extends State<Silver> {
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.center,
                                             children: <Widget>[
-                                              Align(
-                                                alignment: Alignment.center,
-                                                child: Image.asset(
-                                                  "assets/gamebox/img/effect/yay.png",
-                                                  width: 300,
-                                                  height: 300,
-                                                ),
-                                              )
+                                              Stack(
+                                                children: <Widget>[
+                                                  Positioned(
+                                                    child: Align(
+                                                        alignment:
+                                                            Alignment.center,
+                                                        child: Padding(
+                                                          padding:
+                                                              EdgeInsets.only(
+                                                                  left: 10.0,
+                                                                  right: 10.0),
+                                                          child: Image.asset(
+                                                            "assets/gamebox/img/match/match_silver.png",
+                                                            width:
+                                                                size.width - 20,
+                                                            height: 400,
+                                                            fit: BoxFit.fill,
+                                                          ),
+                                                        )),
+                                                  ),
+                                                  Positioned(
+                                                    child: Align(
+                                                      alignment:
+                                                          Alignment.topCenter,
+                                                      child: Image.asset(
+                                                        "assets/gamebox/img/effect/yay.png",
+                                                        width: size.width - 20,
+                                                        height: 280,
+                                                      ),
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
                                             ],
                                           )
                                 : Padding(

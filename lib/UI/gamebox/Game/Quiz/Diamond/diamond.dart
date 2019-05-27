@@ -30,6 +30,7 @@ class Diamond extends State<QuizD> {
     quizBloc.getChapter(widget.chapter);
     quizBloc.getStage(widget.stage);
     quizBloc.question_num = widget.question_num;
+    clickAnswer = quizBloc.answer;
     return body(MediaQuery.of(context).size);
   }
 

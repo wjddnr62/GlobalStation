@@ -318,10 +318,7 @@ class LobbyHomePage extends State<LobbyPage> {
   void initState() {
     super.initState();
     print("level = ${level}");
-//    audioCache.disableLog();
     audioCache.loop('gamebox/audio/backgroundmusic.mp3');
-    AudioPlayer.logEnabled = false;
-    audioCache.disableLog();
 //    play();
   }
 

@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:http/http.dart' as http;
 
 class MatchProvider {
-  static final String defaultUrl = "http://ga.oig.kr/laon_api/api/match/";
+  static final String defaultUrl = "http://ga.oig.kr/laon_api_v2/api/match/";
 
   String getStage = defaultUrl + "stageList?";
   String getQuest = defaultUrl + "questList?";

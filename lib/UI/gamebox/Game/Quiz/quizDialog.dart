@@ -170,6 +170,7 @@ class GameListState extends State<GameList> {
         answer = json['data'];
         quizBloc.answer = 0;
         quizBloc.question_num = 0;
+        if(answer == 'N') answer = 'T';
       });
 
       if (viewidx == maxLen - 1) {
@@ -191,6 +192,7 @@ class GameListState extends State<GameList> {
   }
 
   Widget mainGame(){
+    print("mainGameRebuild");
     return Stack(
       children: <Widget>[
         Positioned.fill(
@@ -339,6 +341,9 @@ class GameListState extends State<GameList> {
       audioCache.play("gamebox/audio/sucess_sound.mp3");
     } else if (answer == 'N') {
       img = "assets/gamebox/img/quiz/nope.png";
+      audioCache.play("gamebox/audio/fail_sound.mp3");
+    } else if(answer == 'T') {
+      img = "assets/gamebox/img/timeout.png";
       audioCache.play("gamebox/audio/fail_sound.mp3");
     }
 

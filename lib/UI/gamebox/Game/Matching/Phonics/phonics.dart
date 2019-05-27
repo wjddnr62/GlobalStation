@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:lms_flutter/UI/gamebox/public/Result.dart';
 import 'package:lms_flutter/UI/gamebox/public/Timer.dart';
 import 'package:lms_flutter/UI/gamebox/public/questionStatus.dart';
-import 'package:lms_flutter/bloc/game_public_bloc.dart';
 import 'package:lms_flutter/bloc/match_game_bloc.dart';
 import 'package:lms_flutter/model/Match/answerList.dart';
 import 'package:lms_flutter/model/UserInfo.dart';
@@ -411,8 +410,9 @@ class PhonicsM extends State<Phonics> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         GestureDetector(
-                          child: Image.asset("assets/gamebox/img/close_button.png"),
-                          onTap: (){
+                          child: Image.asset(
+                              "assets/gamebox/img/close_button.png"),
+                          onTap: () {
                             Navigator.of(context).pop();
                           },
                         )
@@ -460,13 +460,31 @@ class PhonicsM extends State<Phonics> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.center,
                                         children: <Widget>[
-                                          Align(
-                                            alignment: Alignment.center,
-                                            child: Image.asset(
-                                              "assets/gamebox/img/effect/nope.png",
-                                              width: 300,
-                                              height: 300,
-                                            ),
+                                          Stack(
+                                            children: <Widget>[
+                                              Positioned(
+                                                child: Align(
+                                                  alignment: Alignment.center,
+                                                  child: Image.asset(
+                                                    "assets/gamebox/img/match/17.png",
+                                                    width: size.width - 20,
+                                                    height: 340,
+                                                    fit: BoxFit.fill,
+                                                  ),
+                                                ),
+                                              ),
+                                              Positioned(
+                                                child: Align(
+                                                  alignment:
+                                                      Alignment.topCenter,
+                                                  child: Image.asset(
+                                                    "assets/gamebox/img/timeout.png",
+                                                    width: size.width - 20,
+                                                    height: 280,
+                                                  ),
+                                                ),
+                                              )
+                                            ],
                                           ),
                                         ],
                                       )
@@ -478,14 +496,33 @@ class PhonicsM extends State<Phonics> {
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.center,
                                             children: <Widget>[
-                                              Align(
-                                                alignment: Alignment.center,
-                                                child: Image.asset(
-                                                  "assets/gamebox/img/effect/yay.png",
-                                                  width: 300,
-                                                  height: 300,
-                                                ),
-                                              )
+                                              Stack(
+                                                children: <Widget>[
+                                                  Positioned(
+                                                    child: Align(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: Image.asset(
+                                                        "assets/gamebox/img/match/17.png",
+                                                        width: size.width - 20,
+                                                        height: 340,
+                                                        fit: BoxFit.fill,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Positioned(
+                                                    child: Align(
+                                                      alignment:
+                                                          Alignment.topCenter,
+                                                      child: Image.asset(
+                                                        "assets/gamebox/img/effect/yay.png",
+                                                        width: size.width - 20,
+                                                        height: 280,
+                                                      ),
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
                                             ],
                                           )
                                 : Image.asset(
