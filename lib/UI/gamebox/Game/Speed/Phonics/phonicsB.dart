@@ -33,6 +33,7 @@ class Phonics extends State<PhonicsB> {
     speedBloc.getChapter(widget.chapter);
     speedBloc.getStage(widget.stage);
     speedBloc.question_num = widget.question_num;
+    clickAnswer = speedBloc.answer;
     return body(MediaQuery.of(context).size);
   }
 

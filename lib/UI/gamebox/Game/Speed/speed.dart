@@ -146,6 +146,7 @@ class GameListState extends State<GameList> {
         speedBloc.question_num = 0;
         speedBloc.answerA = "";
         speedBloc.answerType = 0;
+        if(answer == 'N') answer = 'T';
       });
 
       if (viewidx == maxLen - 1) {
@@ -312,6 +313,9 @@ class GameListState extends State<GameList> {
     } else if (answer == 'N') {
       audioCache.play("gamebox/audio/fail_sound.mp3");
       img = "assets/gamebox/img/quiz/nope.png";
+    } else if(answer == 'T') {
+      img = "assets/gamebox/img/timeout.png";
+      audioCache.play("gamebox/audio/fail_sound.mp3");
     }
 
     if (answer == "") {

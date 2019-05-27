@@ -28,12 +28,14 @@ class TimerSet extends State<TimerBar> {
             print("timered2 : " + _timer.isActive.toString());
             if (!_timer.isActive) {
               widget.finishTimer();
+              _defaultSet = 30;
+              timerSet = 30;
             }
             _defaultSet = 30;
             print("타이머완료");
-            if(!_timer.isActive) {
-              setTimer();
-            }
+//            if(!_timer.isActive) {
+//              setTimer();
+//            }
           } else {
             _defaultSet -= 1;
           }
@@ -60,12 +62,10 @@ class TimerSet extends State<TimerBar> {
 
   @override
   void dispose() {
-    super.dispose();
     print("timerdispose");
-    setState(() {
-      _timer.cancel();
-    });
+    _timer.cancel();
     print("timered : " + _timer.isActive.toString());
+    super.dispose();
   }
 
   Widget timerBar() {

@@ -20,12 +20,16 @@ class QuizP extends StatefulWidget {
 
 class Phonics extends State<QuizP> {
 
+  int clickAnswer = 0;
+
   @override
   Widget build(BuildContext context) {
     quizBloc.getLevel(widget.level);
     quizBloc.getChapter(widget.chapter);
     quizBloc.getStage(widget.stage);
     quizBloc.question_num = widget.question_num;
+    clickAnswer = quizBloc.answer;
+
     return body(MediaQuery.of(context).size);
   }
 
@@ -103,8 +107,6 @@ class Phonics extends State<QuizP> {
 
     );
   }
-
-  int clickAnswer = 0;
 
   Widget answerRow(String ans1, String ans2,int type){
     int ans1Num = 0;
