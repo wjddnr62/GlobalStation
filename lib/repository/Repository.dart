@@ -1,4 +1,5 @@
 import 'package:http/http.dart' as http;
+import 'package:lms_flutter/provider/character_provider.dart';
 import 'package:lms_flutter/provider/tbl_book_api.dart';
 import '../provider/login_api.dart';
 import 'package:lms_flutter/provider/tbl_problem_answer_api.dart';
@@ -25,9 +26,13 @@ class Repository {
   final _speedProvider = SpeedProvider();
   final _quizProvider = QuizProvider();
   final _matchProvider = MatchProvider();
+  final _characterProvider = CharacterProvider();
 
   Future<String> fetchUser(http.Client client, String id, String pass) =>
       _loginProvider.fetchUser(client, id, pass);
+
+  Future<String> updateCharacter(String id, int type,int hair,int eye,int skin, int hat) =>
+      _loginProvider.updateCharacter(id, type, hair, eye, skin, hat);
 
   Future<String> fetchDetailUser(http.Client client, String userNo) =>
       _loginProvider.fetchDetailUser(client, userNo);
@@ -96,4 +101,7 @@ class Repository {
   Future<String> getQuizAnwer(String level, int chapter, int stage,
       int question_num, int answer_num) =>
       _quizProvider.getCheckAnswer(level, chapter, stage, question_num, answer_num);
+
+  Future<String> getCharacter() =>
+      _characterProvider.getCharacterInfo();
 }
