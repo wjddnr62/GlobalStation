@@ -338,6 +338,7 @@ class GameListState extends State<GameList> {
   void handleTimeout() {
     _timer = new Timer(timeout, () {
       setState(() {
+        print("speedTimeout");
         answer = "";
         viewTimer = true;
         viewidx++;

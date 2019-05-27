@@ -22,8 +22,8 @@ class TimerSet extends State<TimerBar> {
   setTimer() {
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       if (_timer.isActive) {
-        setState(() {
-          if (_defaultSet == 1) {
+
+          if (_defaultSet == 0) {
             _timer.cancel();
             print("timered2 : " + _timer.isActive.toString());
             if (!_timer.isActive) {
@@ -31,21 +31,16 @@ class TimerSet extends State<TimerBar> {
             }
             _defaultSet = 30;
             print("타이머완료");
-            if(!_timer.isActive) {
+            if (!_timer.isActive) {
               setTimer();
             }
           } else {
             _defaultSet -= 1;
           }
+          setState(() {
         });
       }
     });
-  }
-
-
-  @override
-  void didUpdateWidget(TimerBar oldWidget) {
-    print("oldTimer");
   }
 
   @override
@@ -119,23 +114,31 @@ class TimerSet extends State<TimerBar> {
                           left: 5.0,
                           right: 5.0,
                         ),
-                        child: Container(
-                          height: 15,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20.0),
-                              border: Border.all(color: Colors.transparent)),
-                          child: PhysicalModel(
-                            color: Colors.transparent,
-                            borderRadius: BorderRadius.circular(20.0),
-                            clipBehavior: Clip.antiAlias,
-                            child: LinearProgressIndicator(
-                              backgroundColor: Colors.transparent,
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                animationTimerColor,
+                        child: Row(
+                          children: <Widget>[
+                            Flexible(
+                              child: Container(
+                                height: 15,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                    border:
+                                        Border.all(color: Colors.transparent)),
+                                child: PhysicalModel(
+                                  color: Colors.transparent,
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  clipBehavior: Clip.antiAlias,
+                                  child: LinearProgressIndicator(
+                                    backgroundColor: Colors.transparent,
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                      animationTimerColor,
+                                    ),
+                                    value: _defaultSet / timerSet,
+                                  ),
+                                ),
                               ),
-                              value: _defaultSet / timerSet,
                             ),
-                          ),
+
+                          ],
                         ),
                       ),
                     ),

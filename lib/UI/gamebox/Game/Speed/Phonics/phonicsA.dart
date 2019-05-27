@@ -1,12 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:lms_flutter/theme.dart';
-
+import 'package:audioplayers/audio_cache.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:lms_flutter/bloc/speed_game_bloc.dart';
 import 'package:lms_flutter/model/Speed/answerList.dart';
 import 'package:lms_flutter/theme.dart';
-import 'package:audioplayers/audioplayers.dart';
-import 'package:audioplayers/audio_cache.dart';
 
 class PhonicsA extends StatefulWidget {
   final String level;
@@ -33,10 +30,13 @@ class Phonics extends State<PhonicsA> {
   AudioCache audioCache = AudioCache();
   AudioPlayer advancedPlayer = AudioPlayer();
 
-  playSound(String level, String chapter,String stage, String question_num) {
+  playSound(
+      String level, String chapter, String stage, String question_num) async {
+    print(
+        "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
     setState(() {
-      advancedPlayer
-          .play("http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
+      advancedPlayer.play(
+          "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
     });
   }
 
@@ -47,7 +47,8 @@ class Phonics extends State<PhonicsA> {
     speedBloc.getChapter(widget.chapter);
     speedBloc.getStage(widget.stage);
     speedBloc.question_num = widget.question_num;
-    playSound(widget.level, widget.chapter.toString(), widget.stage.toString(), widget.question_num.toString());
+    playSound(widget.level, widget.chapter.toString(), widget.stage.toString(),
+        widget.question_num.toString());
     return body(MediaQuery.of(context).size);
   }
 

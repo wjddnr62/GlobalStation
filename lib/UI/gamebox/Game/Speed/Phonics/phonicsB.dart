@@ -1,3 +1,5 @@
+import 'package:audioplayers/audio_cache.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:lms_flutter/bloc/speed_game_bloc.dart';
 import 'package:lms_flutter/model/Speed/answerList.dart';
@@ -26,6 +28,19 @@ class PhonicsB extends StatefulWidget {
 class Phonics extends State<PhonicsB> {
 //  String title = "Listen and choose the correct word.";
 
+  AudioCache audioCache = AudioCache();
+  AudioPlayer advancedPlayer = AudioPlayer();
+
+  playSound(
+      String level, String chapter, String stage, String question_num) async {
+    print(
+        "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
+    setState(() {
+      advancedPlayer.play(
+          "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     speedBloc.answerType = 1;
@@ -33,6 +48,8 @@ class Phonics extends State<PhonicsB> {
     speedBloc.getChapter(widget.chapter);
     speedBloc.getStage(widget.stage);
     speedBloc.question_num = widget.question_num;
+    playSound(widget.level, widget.chapter.toString(), widget.stage.toString(),
+        widget.question_num.toString());
     return body(MediaQuery.of(context).size);
   }
 
