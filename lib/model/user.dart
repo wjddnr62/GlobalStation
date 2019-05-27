@@ -24,6 +24,11 @@ class DetailUser {
   final int coin;
   final dynamic created_at;
   final dynamic updated_at;
+  final int hair_type;
+  final int hair_color;
+  final int eye_color;
+  final int skin_color;
+  final int hat;
 
   DetailUser(
       this.user_id,
@@ -32,7 +37,12 @@ class DetailUser {
       this.level,
       this.coin,
       this.created_at,
-      this.updated_at);
+      this.updated_at,
+      this.hair_type,
+      this.hair_color,
+      this.eye_color,
+      this.skin_color,
+      this.hat);
 
   factory DetailUser.fromJson(Map<String, dynamic> json) {
     return DetailUser(
@@ -42,6 +52,11 @@ class DetailUser {
         json['level'],
         json['coin'],
         json['created_at'],
-        json['updated_at']);
+        json['updated_at'],
+        json['hair_type'],
+        json['hair_color'],
+        json['eye_color'],
+        json['skin_color'],
+        json['hat']);
   }
 }

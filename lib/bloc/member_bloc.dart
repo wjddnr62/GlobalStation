@@ -15,6 +15,10 @@ class MemberBloc{
     return _repository.fetchDetailUser(http.Client(), _userno.value);
   }
 
+  Future<String> updateCharacter(String id, int type,int hair,int eye,int skin, int hat){
+    return _repository.updateCharacter(id, type, hair, eye, skin, hat);
+  }
+
   void dispose(){
     _userno.close();
   }

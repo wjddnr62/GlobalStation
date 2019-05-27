@@ -41,6 +41,12 @@ class Phonics extends State<PhonicsA> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    playSound(widget.level, widget.chapter.toString(), widget.stage.toString(), widget.question_num.toString());
+  }
+
+  @override
   Widget build(BuildContext context) {
     speedBloc.answerType = 1;
     speedBloc.getLevel(widget.level);
@@ -48,7 +54,7 @@ class Phonics extends State<PhonicsA> {
     speedBloc.getStage(widget.stage);
     speedBloc.question_num = widget.question_num;
     clickAnswer = speedBloc.answer;
-    playSound(widget.level, widget.chapter.toString(), widget.stage.toString(), widget.question_num.toString());
+
     return body(MediaQuery.of(context).size);
   }
 
@@ -131,7 +137,7 @@ class Phonics extends State<PhonicsA> {
           children: <Widget>[
             Image.asset(
               "assets/gamebox/img/speed/balloon.png",
-              width: (idx == clickAnswer) ? 160 : 150,
+              width: 150,
               height: 250,
               fit: BoxFit.contain,
             ),
@@ -144,7 +150,7 @@ class Phonics extends State<PhonicsA> {
                   child: Image.network(
                     "http://ga.oig.kr/laon_api/api/asset" + data,
                     fit: BoxFit.contain,
-                    width: 80,
+                    width: (idx == clickAnswer) ? 100 : 80,
                     height: 80,
                   ),
                 ),

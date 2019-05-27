@@ -3,6 +3,7 @@ import 'dart:async';
 
 class LoginProvider {
   final String url = "http://ga.oig.kr/laon_api_v2/api";
+  http.Client client = http.Client();
 
   Future<String> fetchUser(http.Client client, String id, String pass) async {
     final response =
@@ -15,7 +16,6 @@ class LoginProvider {
     return responseBody;
   }
 
-
   Future<String> fetchDetailUser(http.Client client, String userNo) async {
     final response =
     await client.get(url + '/auth/userData?user_no=' + userNo);
@@ -25,5 +25,18 @@ class LoginProvider {
 
   String DetailUser(String responseBody) {
     return responseBody;
+  }
+
+  Future<String> updateCharacter(String id, int type,int hair,int eye,int skin, int hat) async {
+    final response = await client.put(url + "/auth/character?" +
+        "child_key=" + id +
+        "&hair_type="+ type.toString() +
+        "&hair_color="+ hair.toString() +
+        "&eye_color="+ eye.toString() +
+        "&skin_color="+ skin.toString()+
+        "&hat="+ hat.toString()
+    );
+
+    return response.body;
   }
 }

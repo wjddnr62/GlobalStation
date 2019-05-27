@@ -1,7 +1,10 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:lms_flutter/bloc/member_bloc.dart';
+import 'package:lms_flutter/model/UserInfo.dart';
 import 'package:lms_flutter/theme.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'dart:convert';
 
 class CharacterPage extends StatefulWidget {
   @override
@@ -15,6 +18,36 @@ class Character extends State<CharacterPage> {
   int style = 1;
   int hats = 0;
   String hatUrl = "";
+
+  int hair_style = 1;
+  int hair_color = 1;
+  int eye_color = 1;
+  int skin_color = 1;
+  int hat_shape = 0;
+
+  var hairColors = ["#e04736","#f24970","#ffc247","#d1d426","#855729","#332d2d","#1c2957"];
+  var eyeColors = ["#334666","#5e4327","#241e1e"];
+  var skinColors = ["#d97e57","#ff8585","#ffcba3"];
+  var hatUrls = ["assets/gamebox/img/charactor/hat/hat3.png","assets/gamebox/img/charactor/hat/hat2.png","assets/gamebox/img/charactor/hat/hat1.png"];
+
+  @override
+  void initState() {
+    super.initState();
+    bloc.getMember().then((value){
+      setState(() {
+        hair_style = json.decode(value)['data']['hair_type'];
+        hair_color = json.decode(value)['data']['hair_color'];
+        eye_color = json.decode(value)['data']['eye_color'];
+        skin_color = json.decode(value)['data']['skin_color'];
+        hat_shape = json.decode(value)['data']['hat'];
+        hats = hat_shape;
+        if(hat_shape != 0){
+          hatUrl = hatUrls[hat_shape-1];
+        }
+
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -184,11 +217,21 @@ class Character extends State<CharacterPage> {
           ),
           Expanded(
             child: Center(
-              child: Image.asset(
-                "assets/gamebox/img/next_btn.png",
-                fit: BoxFit.contain,
-                width: 80,
+              child: InkWell(
+                child: Image.asset(
+                  "assets/gamebox/img/next_btn.png",
+                  fit: BoxFit.contain,
+                  width: 80,
+                ),
+                onTap: (){
+                  String id= UserInfo().child_user_id;
+                  bloc.updateCharacter(id, hair_style, hair_color, eye_color, skin_color, hat_shape).then((value){
+                    print(value);
+                    Navigator.of(context).pop();
+                  });
+                },
               ),
+
             ),
           )
         ],
@@ -197,6 +240,11 @@ class Character extends State<CharacterPage> {
   }
 
   Widget character() {
+    hair = hairColors[hair_color-1];
+    eye = eyeColors[eye_color-1];
+    skin = skinColors[skin_color-1];
+    style = hair_style;
+
     return Container(
       decoration: BoxDecoration(
         shape: BoxShape.circle,
@@ -223,6 +271,7 @@ class Character extends State<CharacterPage> {
   Widget getHat(){
     double width;
     double height = 0;
+    print(hats.toString());
     if (hats == 2) {
       width = 50;
     } else if (hats == 1){
@@ -257,11 +306,11 @@ class Character extends State<CharacterPage> {
           child: Container(
             child: Row(
               children: <Widget>[
-               eyeImg("assets/gamebox/img/charactor/eye/eye1.png", "#334666"),
+                eyeImg("assets/gamebox/img/charactor/eye/eye1.png", "#334666",1),
                 defaultSizedBox(),
-                eyeImg("assets/gamebox/img/charactor/eye/eye2.png", "#5e4327"),
+                eyeImg("assets/gamebox/img/charactor/eye/eye2.png", "#5e4327",2),
                 defaultSizedBox(),
-                eyeImg("assets/gamebox/img/charactor/eye/eye3.png", "#241e1e"),
+                eyeImg("assets/gamebox/img/charactor/eye/eye3.png", "#241e1e",3),
               ],
             ),
           ),
@@ -270,7 +319,7 @@ class Character extends State<CharacterPage> {
     );
   }
 
-  Widget eyeImg(String img, String color) {
+  Widget eyeImg(String img, String color, int idx) {
     return InkWell(
       child: Image.asset(
         img,
@@ -279,6 +328,7 @@ class Character extends State<CharacterPage> {
       ),
       onTap: () {
         setState(() {
+          eye_color = idx;
           eye = color;
         });
       },
@@ -300,11 +350,11 @@ class Character extends State<CharacterPage> {
           child: Container(
             child: Row(
               children: <Widget>[
-                skinImg("assets/gamebox/img/charactor/skin/skin1.png", "#d97e57"),
+                skinImg("assets/gamebox/img/charactor/skin/skin1.png", "#d97e57",1),
                 defaultSizedBox(),
-                skinImg("assets/gamebox/img/charactor/skin/skin2.png", "#ff8585"),
+                skinImg("assets/gamebox/img/charactor/skin/skin2.png", "#ff8585",2),
                 defaultSizedBox(),
-                skinImg("assets/gamebox/img/charactor/skin/skin3.png", "#ffcba3"),
+                skinImg("assets/gamebox/img/charactor/skin/skin3.png", "#ffcba3",3),
               ],
             ),
           ),
@@ -313,7 +363,7 @@ class Character extends State<CharacterPage> {
     );
   }
 
-  Widget skinImg(String img, String color) {
+  Widget skinImg(String img, String color,int idx) {
     return InkWell(
       child: Image.asset(
         img,
@@ -322,6 +372,7 @@ class Character extends State<CharacterPage> {
       ),
       onTap: () {
         setState(() {
+          skin_color = idx;
           skin = color;
         });
       },
@@ -346,16 +397,16 @@ class Character extends State<CharacterPage> {
                 Row(
                   children: <Widget>[
                     hairImg("assets/gamebox/img/charactor/hair/hair1.png",
-                        "#e04736"),
+                        "#e04736",1),
                     defaultSizedBox(),
                     hairImg("assets/gamebox/img/charactor/hair/hair2.png",
-                        "#f24970"),
+                        "#f24970",2),
                     defaultSizedBox(),
                     hairImg("assets/gamebox/img/charactor/hair/hair3.png",
-                        "#ffc247"),
+                        "#ffc247",3),
                     defaultSizedBox(),
                     hairImg("assets/gamebox/img/charactor/hair/hair4.png",
-                        "#d1d426"),
+                        "#d1d426",4),
                     defaultSizedBox(),
                   ],
                 ),
@@ -365,13 +416,13 @@ class Character extends State<CharacterPage> {
                 Row(
                   children: <Widget>[
                     hairImg("assets/gamebox/img/charactor/hair/hair5.png",
-                        "#855729"),
+                        "#855729",5),
                     defaultSizedBox(),
                     hairImg("assets/gamebox/img/charactor/hair/hair6.png",
-                        "#332d2d"),
+                        "#332d2d",6),
                     defaultSizedBox(),
                     hairImg("assets/gamebox/img/charactor/hair/hair7.png",
-                        "#1c2957"),
+                        "#1c2957",7),
                   ],
                 ),
               ],
@@ -382,7 +433,7 @@ class Character extends State<CharacterPage> {
     );
   }
 
-  Widget hairImg(String img, String color) {
+  Widget hairImg(String img, String color, int idx) {
     return InkWell(
       child: Image.asset(
         img,
@@ -391,8 +442,8 @@ class Character extends State<CharacterPage> {
       ),
       onTap: () {
         setState(() {
+          hair_color = idx;
           hair = color;
-          print(color);
         });
       },
     );
@@ -434,6 +485,7 @@ class Character extends State<CharacterPage> {
       ),
       onTap: () {
         setState(() {
+          hair_style = idx;
           style = idx;
         });
       },
@@ -477,8 +529,12 @@ class Character extends State<CharacterPage> {
       onTap: () {
         setState(() {
           hatUrl = img;
+          hat_shape = idx;
 
-          if(hats == idx) hats = 0;
+          if(hats == idx) {
+            hats = 0;
+            hat_shape = 0;
+          }
           else hats = idx;
         });
       },
