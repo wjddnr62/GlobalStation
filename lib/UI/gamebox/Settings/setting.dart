@@ -1,12 +1,14 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:lms_flutter/theme.dart';
-
-import 'character.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'character.dart';
 
 class SettingsPage extends StatelessWidget {
+  AudioPlayer audioPlayer;
 
+  SettingsPage({Key key, this.audioPlayer}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -72,21 +74,21 @@ class SettingsPage extends StatelessWidget {
                 },
               ),
               InkWell(
-                onTap: (){
+                onTap: () {
 //                  Navigator.popUntil(context, ModalRoute.withName('/Login'));
-                Navigator.of(context).pop();
-                Navigator.of(context).pop();
-                Navigator.of(context).pop();
+                  audioPlayer.stop();
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
                 },
                 child: boxContainer("메인 선택화면으로 이동"),
               ),
               InkWell(
-                onTap: (){
+                onTap: () {
                   _launchURL();
                 },
                 child: boxContainer("GEC 홈페이지"),
               ),
-
               boxContainer("서비스 이용약관"),
               boxContainer("개인정보 취급 방침"),
               Padding(
@@ -170,5 +172,4 @@ class SettingsPage extends StatelessWidget {
       throw 'Could not launch $url';
     }
   }
-
 }

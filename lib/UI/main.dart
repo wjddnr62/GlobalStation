@@ -84,7 +84,7 @@ class _MainState extends State<Main> {
 //    print(result);
 //    detailUser = json.decode(result).map<DetailUser>((json) => DetailUser.fromJson(json)).toList();
 
-    Api_Call().fetchDetailUser(http.Client(), json.decode(widget.userData)['data'][0]['child_key']).then((result){
+    Api_Call().fetchDetailUser(http.Client(), json.decode(widget.userData)['data'][0]['child_key']).then((result) async{
       setState(() {
         member_coin = json.decode(result)['data']['coin'];
         print(level_list[json.decode(result)['data']['level'] - 1]);

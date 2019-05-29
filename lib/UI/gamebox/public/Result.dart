@@ -100,8 +100,6 @@ class ResultView extends State<Result> {
         setState(() {});
       }
       if (idx <= memberLevel) {
-        var lev = "";
-        var cap = 0;
         if (idx <= 2) {
           lev = "P";
           cap = idx + 1;

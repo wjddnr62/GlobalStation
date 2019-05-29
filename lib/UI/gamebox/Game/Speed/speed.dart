@@ -1,26 +1,23 @@
+import 'dart:async';
+import 'dart:convert';
 import 'dart:core';
 
+import 'package:audioplayers/audio_cache.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:lms_flutter/model/Speed/questionList.dart';
+import 'package:lms_flutter/UI/gamebox/public/Result.dart';
 import 'package:lms_flutter/UI/gamebox/public/Timer.dart';
 import 'package:lms_flutter/UI/gamebox/public/questionStatus.dart';
-import 'package:lms_flutter/UI/gamebox/public/Result.dart';
-import 'package:lms_flutter/model/UserInfo.dart';
-import 'package:audioplayers/audioplayers.dart';
-import 'package:audioplayers/audio_cache.dart';
-
-import 'phonics.dart';
-import 'bronze.dart';
-import 'silver.dart';
-import 'gold.dart';
-import 'diamond.dart';
-
-import 'speed.dart';
-
 import 'package:lms_flutter/bloc/speed_game_bloc.dart';
-import 'dart:convert';
-import 'dart:async';
+import 'package:lms_flutter/model/Speed/questionList.dart';
+import 'package:lms_flutter/model/UserInfo.dart';
+
+import 'bronze.dart';
+import 'diamond.dart';
+import 'gold.dart';
+import 'phonics.dart';
+import 'silver.dart';
 
 int viewidx;
 int question_num = 0;
@@ -140,14 +137,14 @@ class GameListState extends State<GameList> {
     speedBloc.getAnswer(speedBloc.question_num).then((value) {
       Map<String, dynamic> json = jsonDecode(value);
 
-      setState(() {
-        answer = json['data'];
-        speedBloc.answer = 0;
-        speedBloc.question_num = 0;
-        speedBloc.answerA = "";
-        speedBloc.answerType = 0;
-        if(answer == 'N') answer = 'T';
-      });
+      answer = json['data'];
+      speedBloc.answer = 0;
+      speedBloc.question_num = 0;
+      speedBloc.answerA = "";
+      speedBloc.answerType = 0;
+      if (answer == 'N') answer = 'T';
+
+      setState(() {});
 
       if (viewidx == maxLen - 1) {
         print("끝");
@@ -178,16 +175,16 @@ class GameListState extends State<GameList> {
                   ),
                   (viewTimer)
                       ? Positioned(
-                    top: MediaQuery.of(context).size.width / 15,
-                    child: TimerBar(
-                      width: MediaQuery.of(context).size.width,
-                      finishTimer: () => finishTimer(),
-                    ),
-                  )
+                          top: MediaQuery.of(context).size.width / 15,
+                          child: TimerBar(
+                            width: MediaQuery.of(context).size.width,
+                            finishTimer: () => finishTimer(),
+                          ),
+                        )
                       : SizedBox(
-                    width: 0,
-                    height: 0,
-                  ),
+                          width: 0,
+                          height: 0,
+                        ),
                   Positioned(
                     top: MediaQuery.of(context).size.width / 5,
                     child: QuestionStatus(
@@ -217,34 +214,34 @@ class GameListState extends State<GameList> {
           ),
         ),
         checkAnswer(),
-
         (resultView)
             ? Positioned.fill(
-          child: Stack(
-            children: <Widget>[
-              Image.asset(
-                  "assets/gamebox/img/effect/result_background.png"),
-              Center(
-                child: Result(
-                  level: widget.level,
-                  chapter: widget.chapter,
-                  stage: widget.stage,
-                  score: yay,
-                  scoreLength: maxLen,
-                  sizeWidth: double.infinity,
-                  resetGame: () => restart(),
-                  memberLevel: memberLevel,
+                child: Stack(
+                  children: <Widget>[
+                    Image.asset(
+                        "assets/gamebox/img/effect/result_background.png"),
+                    Center(
+                      child: Result(
+                        level: widget.level,
+                        chapter: widget.chapter,
+                        stage: widget.stage,
+                        score: yay,
+                        scoreLength: maxLen,
+                        sizeWidth: double.infinity,
+                        resetGame: () => restart(),
+                        memberLevel: memberLevel,
+                      ),
+                    )
+                  ],
                 ),
               )
-            ],
-          ),
-        ): Positioned(
-          top: 0,
-          child: SizedBox(
-            width: 0,
-            height: 0,
-          ),
-        ),
+            : Positioned(
+                top: 0,
+                child: SizedBox(
+                  width: 0,
+                  height: 0,
+                ),
+              ),
       ],
     );
   }
@@ -254,16 +251,13 @@ class GameListState extends State<GameList> {
       onTap: () {
         speedBloc.getAnswer(speedBloc.question_num).then((value) {
           Map<String, dynamic> json = jsonDecode(value);
-
-          setState(() {
-            viewTimer = false;
-            answer = json['data'];
-            speedBloc.answer = 0;
-            speedBloc.question_num = 0;
-            speedBloc.answerA = "";
-            speedBloc.answerType = 0;
-            ;
-          });
+          viewTimer = false;
+          answer = json['data'];
+          speedBloc.answer = 0;
+          speedBloc.question_num = 0;
+          speedBloc.answerA = "";
+          speedBloc.answerType = 0;
+          setState(() {});
 
           if (viewidx == maxLen - 1) {
             print("끝");
@@ -289,15 +283,16 @@ class GameListState extends State<GameList> {
       ),
     );
   }
-  void restart(){
+
+  void restart() {
+    print("restart");
+    viewidx = 0;
+    answer = "";
+    viewTimer = true;
+    resultView = false;
+    restartGame = false;
+    yay = 0;
     setState(() {
-      print("restart");
-      viewidx = 0;
-      answer = "";
-      viewTimer = true;
-      resultView = false;
-      restartGame = false;
-      yay = 0;
     });
   }
 
@@ -306,14 +301,14 @@ class GameListState extends State<GameList> {
 
   Widget checkAnswer() {
     String img = "";
-    if (answer == 'Y'){
+    if (answer == 'Y') {
       img = "assets/gamebox/img/quiz/yay.png";
       yay++;
       audioCache.play("gamebox/audio/sucess_sound.mp3");
     } else if (answer == 'N') {
       audioCache.play("gamebox/audio/fail_sound.mp3");
       img = "assets/gamebox/img/quiz/nope.png";
-    } else if(answer == 'T') {
+    } else if (answer == 'T') {
       img = "assets/gamebox/img/timeout.png";
       audioCache.play("gamebox/audio/fail_sound.mp3");
     }
@@ -341,11 +336,12 @@ class GameListState extends State<GameList> {
 
   void handleTimeout() {
     _timer = new Timer(timeout, () {
+      print("speedTimeout");
+      answer = "";
+      viewTimer = true;
+      viewidx++;
       setState(() {
-        print("speedTimeout");
-        answer = "";
-        viewTimer = true;
-        viewidx++;
+
       });
     });
   }

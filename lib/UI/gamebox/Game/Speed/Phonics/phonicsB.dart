@@ -39,6 +39,11 @@ class Phonics extends State<PhonicsB> {
         print("phonicsB_play");
         advancedPlayer.play(
             "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
+        advancedPlayer.onPlayerStateChanged.listen((AudioPlayerState s){
+          print("playerState : " + s.toString());
+
+
+        });
 //      });
       playsound = true;
     }

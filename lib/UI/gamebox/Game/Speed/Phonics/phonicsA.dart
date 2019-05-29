@@ -1,12 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:lms_flutter/theme.dart';
-
+import 'package:audioplayers/audio_cache.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:lms_flutter/bloc/speed_game_bloc.dart';
 import 'package:lms_flutter/model/Speed/answerList.dart';
 import 'package:lms_flutter/theme.dart';
-import 'package:audioplayers/audioplayers.dart';
-import 'package:audioplayers/audio_cache.dart';
 
 class PhonicsA extends StatefulWidget {
   final String level;
@@ -34,22 +31,27 @@ class Phonics extends State<PhonicsA> {
   AudioPlayer advancedPlayer = AudioPlayer();
   bool playsound = false;
 
-  playSound(String level, String chapter,String stage, String question_num) {
+  playSound(String level, String chapter, String stage, String question_num) {
     if (playsound == false) {
 //      setState(() {
-        print("phonicsA_play");
-        advancedPlayer
-            .play("http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
-        playsound = true;
+      print("phonicsA_play");
+      advancedPlayer.play(
+          "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
+      advancedPlayer.onPlayerStateChanged.listen((AudioPlayerState s){
+        print("playerState : " + s.toString());
+
+
+      });
+      playsound = true;
 //      });
     }
-
   }
 
   @override
   void initState() {
     super.initState();
-    playSound(widget.level, widget.chapter.toString(), widget.stage.toString(), widget.question_num.toString());
+    playSound(widget.level, widget.chapter.toString(), widget.stage.toString(),
+        widget.question_num.toString());
   }
 
   @override
@@ -138,7 +140,8 @@ class Phonics extends State<PhonicsA> {
           setState(() {
             clickAnswer = idx;
           });
-          print("data, idx : " + clickAnswer.toString() + ", " + idx.toString());
+          print(
+              "data, idx : " + clickAnswer.toString() + ", " + idx.toString());
         },
         child: Stack(
           children: <Widget>[

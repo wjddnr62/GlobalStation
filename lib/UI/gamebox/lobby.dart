@@ -24,7 +24,7 @@ class LobbyHomePage extends State<LobbyPage> {
   GamePublicBloc gamePublicBloc = GamePublicBloc();
 
 
-  AudioCache audioCache = AudioCache();
+  AudioCache audioCache;
   AudioPlayer advancedPlayer = AudioPlayer();
 //  AudioPlayerState state;
 
@@ -306,7 +306,7 @@ class LobbyHomePage extends State<LobbyPage> {
   void settings() {
     Navigator.of(context).push(PageRouteBuilder(
       opaque: false,
-      pageBuilder: (context, _, __) => SettingsPage(),
+      pageBuilder: (context, _, __) => SettingsPage(audioPlayer: advancedPlayer,),
     ));
   }
 
@@ -329,27 +329,22 @@ class LobbyHomePage extends State<LobbyPage> {
     print("lobby dispose");
 //    audioCache.clear('gamebox/audio/backgroundmusic.mp3');
     gamePublicBloc.singStatus = false;
+    advancedPlayer.stop();
     super.dispose();
   }
 
   @override
   void initState() {
     super.initState();
+    audioCache = AudioCache(fixedPlayer: advancedPlayer);
     print("level = ${level}, ${gamePublicBloc.singStatus}");
     if (gamePublicBloc.singStatus != true) {
       gamePublicBloc.singStatus = true;
       setState(() {
-//        advancedPlayer.setUrl('gamebox/audio/backgroundmusic.mp3');
-//        advancedPlayer.play('gamebox/audio/backgroundmusic.mp3');
-//      Uri uri = 'gamebox/audio/backgroundmusic.mp3' as Uri;
-//      advancedPlayer.loadMedia(uri);
-//      advancedPlayer.play();
-//
-//        state = advancedPlayer.state;
-//        print("state : " + state.toString());
+        audioCache.loop('gamebox/audio/backgroundmusic.mp3');
+        AudioPlayer.logEnabled = false;
       });
 
-//      audioCache.loop('gamebox/audio/backgroundmusic.mp3');
     }
 
 //    play();
@@ -359,8 +354,14 @@ class LobbyHomePage extends State<LobbyPage> {
   Widget build(BuildContext context) {
 //    play();
 
-    return Scaffold(
+    return WillPopScope(
+      onWillPop: () {
+        Navigator.of(context).pop();
+        advancedPlayer.stop();
+      },
+      child: Scaffold(
         body: body(MediaQuery.of(context).size),
+      ),
     );
   }
 }
