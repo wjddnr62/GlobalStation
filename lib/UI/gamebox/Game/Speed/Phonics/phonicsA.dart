@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:lms_flutter/bloc/speed_game_bloc.dart';
 import 'package:lms_flutter/model/Speed/answerList.dart';
 import 'package:lms_flutter/theme.dart';
+import 'package:flutter/services.dart';
 
 class PhonicsA extends StatefulWidget {
   final String level;
@@ -21,12 +22,38 @@ class PhonicsA extends StatefulWidget {
       this.title})
       : super(key: key);
 
+
   @override
   Phonics createState() => Phonics();
 }
 
 class Phonics extends State<PhonicsA> {
 //  String title = "Listen and choose the correct word.";
+
+  static const platform = const MethodChannel('flutter.native/helper');
+  String _responseFromNative = 'Wating for Response...';
+
+  Future<void> responseFromNaticeCode(
+      String level, String chapter, String stage, String question_num) async {
+    String response = "";
+    try {
+      final String result = await platform.invokeMethod('helloFromNativeCode', {
+        "level": level,
+        "chapter": chapter,
+        "stage": stage,
+        "question_num": question_num
+      });
+      response = result;
+    } on PlatformException catch (e) {
+      response = "Failed to Invoke: '${e.message}'.";
+    }
+
+    setState(() {
+      _responseFromNative = response;
+      print(_responseFromNative);
+    });
+  }
+
   AudioCache audioCache = AudioCache();
   AudioPlayer advancedPlayer = AudioPlayer();
   bool playsound = false;
@@ -37,10 +64,8 @@ class Phonics extends State<PhonicsA> {
       print("phonicsA_play");
       advancedPlayer.play(
           "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
-      advancedPlayer.onPlayerStateChanged.listen((AudioPlayerState s){
+      advancedPlayer.onPlayerStateChanged.listen((AudioPlayerState s) {
         print("playerState : " + s.toString());
-
-
       });
       playsound = true;
 //      });
@@ -50,6 +75,8 @@ class Phonics extends State<PhonicsA> {
   @override
   void initState() {
     super.initState();
+    print("PhA init");
+    responseFromNaticeCode("", "", "", "");
     playSound(widget.level, widget.chapter.toString(), widget.stage.toString(),
         widget.question_num.toString());
   }
@@ -67,9 +94,11 @@ class Phonics extends State<PhonicsA> {
   }
 
   Widget body(Size size) {
+    final bool iphonex = MediaQuery.of(context).size.height >= 812.0;
+
     return Container(
       width: size.width,
-      height: size.height - 40,
+      height: (iphonex) ? size.height - 97 : size.height - 40,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
       ),
@@ -133,7 +162,7 @@ class Phonics extends State<PhonicsA> {
   Widget questionPicture(String data, int idx) {
     return Container(
       width: 150,
-      height: 250,
+      height: 280,
       child: InkWell(
         onTap: () {
           speedBloc.answer = idx;
@@ -148,7 +177,7 @@ class Phonics extends State<PhonicsA> {
             Image.asset(
               "assets/gamebox/img/speed/balloon.png",
               width: 150,
-              height: 250,
+              height: (idx == clickAnswer) ? 280 : 250,
               fit: BoxFit.contain,
             ),
             Align(
@@ -160,7 +189,7 @@ class Phonics extends State<PhonicsA> {
                   child: Image.network(
                     "http://ga.oig.kr/laon_api/api/asset" + data,
                     fit: BoxFit.contain,
-                    width: (idx == clickAnswer) ? 100 : 80,
+                    width: 80,
                     height: 80,
                   ),
                 ),

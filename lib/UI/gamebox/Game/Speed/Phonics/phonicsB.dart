@@ -69,9 +69,11 @@ class Phonics extends State<PhonicsB> {
   }
 
   Widget body(Size size) {
+    final bool iphonex = MediaQuery.of(context).size.height >= 812.0;
+
     return Container(
       width: size.width,
-      height: size.height - 40,
+      height: (iphonex) ? size.height - 97 : size.height - 40,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
       ),
@@ -139,7 +141,7 @@ class Phonics extends State<PhonicsB> {
   Widget questionText(String data, int idx) {
     return Container(
       width: 160,
-      height: 270,
+      height: 280,
       child: InkWell(
         onTap: () {
           speedBloc.answer = idx;
@@ -152,7 +154,7 @@ class Phonics extends State<PhonicsB> {
             Image.asset(
               "assets/gamebox/img/speed/balloon.png",
               width: 160,
-              height: 270,
+              height: (idx == clickAnswer) ? 280 :250,
               fit: BoxFit.contain,
             ),
             Align(
@@ -163,7 +165,6 @@ class Phonics extends State<PhonicsB> {
                 child: Center(
                   child: Text(
                     data,
-                    textScaleFactor: (clickAnswer == idx) ? 1.5 : 1.0,
                     style: questionTextStyle,
                   ),
                 ),

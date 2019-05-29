@@ -128,6 +128,8 @@ class GameListState extends State<GameList> {
     resultView = false;
     restartGame = false;
     yay = 0;
+    maxLen = widget.item.length;
+    print("gameList init");
   }
 
   void finishTimer() {
@@ -159,14 +161,11 @@ class GameListState extends State<GameList> {
 
   @override
   Widget build(BuildContext context) {
-    maxLen = widget.item.length;
+    print("speed Build");
     return Stack(
       children: <Widget>[
         Positioned.fill(
-          child: ListView.builder(
-            physics: NeverScrollableScrollPhysics(),
-            itemBuilder: (context, idx) {
-              return Stack(
+          child: Stack(
                 children: <Widget>[
                   widget.item[viewidx],
                   Positioned(
@@ -194,11 +193,8 @@ class GameListState extends State<GameList> {
                     ),
                   ),
                 ],
-              );
-            },
-            itemCount: widget.item.length,
+              ),
           ),
-        ),
         Positioned(
           top: 10,
           right: 10,

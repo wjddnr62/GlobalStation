@@ -68,7 +68,7 @@ class SpeedSilver{
           question_num: question.question_num,
           title: question.title,
         ));
-      }else if(question.type == "E"){
+      }else if(question.type == "E-1"){
         views.add(SilverE(
           level: question.level.substring(0, 1),
           stage: question.stage,
