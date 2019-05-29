@@ -49,10 +49,16 @@ class Phonics extends State<PhonicsB> {
     }
   }
 
+  @override
+  void dispose() {
+    advancedPlayer.stop();
+    super.dispose();
+  }
 
   @override
   void initState() {
     super.initState();
+    advancedPlayer.setReleaseMode(ReleaseMode.STOP);
     playSound(widget.level, widget.chapter.toString(), widget.stage.toString(),
         widget.question_num.toString());
   }

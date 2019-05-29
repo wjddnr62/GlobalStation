@@ -30,29 +30,6 @@ class PhonicsA extends StatefulWidget {
 class Phonics extends State<PhonicsA> {
 //  String title = "Listen and choose the correct word.";
 
-  static const platform = const MethodChannel('flutter.native/helper');
-  String _responseFromNative = 'Wating for Response...';
-
-  Future<void> responseFromNaticeCode(
-      String level, String chapter, String stage, String question_num) async {
-    String response = "";
-    try {
-      final String result = await platform.invokeMethod('helloFromNativeCode', {
-        "level": level,
-        "chapter": chapter,
-        "stage": stage,
-        "question_num": question_num
-      });
-      response = result;
-    } on PlatformException catch (e) {
-      response = "Failed to Invoke: '${e.message}'.";
-    }
-
-    setState(() {
-      _responseFromNative = response;
-      print(_responseFromNative);
-    });
-  }
 
   AudioCache audioCache = AudioCache();
   AudioPlayer advancedPlayer = AudioPlayer();
@@ -62,8 +39,10 @@ class Phonics extends State<PhonicsA> {
     if (playsound == false) {
 //      setState(() {
       print("phonicsA_play");
+
       advancedPlayer.play(
-          "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
+          "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}",isLocal: false,volume: 1.0);
+
       advancedPlayer.onPlayerStateChanged.listen((AudioPlayerState s) {
         print("playerState : " + s.toString());
       });
@@ -73,10 +52,15 @@ class Phonics extends State<PhonicsA> {
   }
 
   @override
+  void dispose() {
+    advancedPlayer.stop();
+    super.dispose();
+  }
+
+  @override
   void initState() {
     super.initState();
-    print("PhA init");
-    responseFromNaticeCode("", "", "", "");
+    advancedPlayer.setReleaseMode(ReleaseMode.STOP);
     playSound(widget.level, widget.chapter.toString(), widget.stage.toString(),
         widget.question_num.toString());
   }

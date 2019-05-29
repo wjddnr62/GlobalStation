@@ -19,6 +19,8 @@ class MemberBloc{
     return _repository.updateCharacter(id, type, hair, eye, skin, hat);
   }
 
+  Future<String> addCoin(String id, int coin) => _repository.addCoin(id, coin);
+
   void dispose(){
     _userno.close();
   }

@@ -122,6 +122,7 @@ class GameListState extends State<GameList> {
 
   @override
   void initState() {
+    advancedPlayer.setReleaseMode(ReleaseMode.STOP);
     viewidx = 0;
     answer = "";
     viewTimer = true;
@@ -345,6 +346,7 @@ class GameListState extends State<GameList> {
   @override
   void dispose() {
     if (_timer != null) _timer.cancel();
+    advancedPlayer.stop();
 
     super.dispose();
   }

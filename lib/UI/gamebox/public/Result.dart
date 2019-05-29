@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:lms_flutter/UI/gamebox/gameDialog.dart';
 import 'package:lms_flutter/bloc/game_public_bloc.dart';
 import 'package:lms_flutter/model/UserInfo.dart';
+import 'package:lms_flutter/bloc/member_bloc.dart';
+import 'dart:convert';
 
 import '../../../theme.dart';
 
@@ -43,6 +45,8 @@ class ResultView extends State<Result> {
 
   String lev;
   int cap;
+
+  int coin = 0;
 
   @override
   void initState() {
@@ -97,7 +101,7 @@ class ResultView extends State<Result> {
       print("idx : " + idx.toString());
       if (idx == 15) {
         NotNextGame = true;
-        setState(() {});
+//        setState(() {});
       }
       if (idx <= memberLevel) {
         if (idx <= 2) {
@@ -118,7 +122,7 @@ class ResultView extends State<Result> {
         }
       } else {
         RowLevel = true;
-        setState(() {});
+//        setState(() {});
       }
     } else {
       print("idx null!!!!");
@@ -180,20 +184,37 @@ class ResultView extends State<Result> {
     double parent = widget.score / widget.scoreLength * 100;
     if (parent < 25) {
       resultImgUrl = "assets/gamebox/img/effect/1.png";
+      coin = 0;
     } else if (parent > 25 && parent < 50) {
       resultImgUrl = "assets/gamebox/img/effect/2.png";
+      coin = 1;
     } else if (parent > 50 && parent < 75) {
       resultImgUrl = "assets/gamebox/img/effect/3.png";
+      coin = 2;
     } else if (parent > 75 && parent < 100) {
       resultImgUrl = "assets/gamebox/img/effect/4.png";
+      coin = 3;
     } else if (parent >= 100) {
       resultImgUrl = "assets/gamebox/img/effect/5.png";
+      coin = 5;
     }
+  }
+
+  updateCoin(){
+    String id= UserInfo().child_user_id;
+    print("id = ${id}, coin = ${coin}");
+    bloc.addCoin(id, coin).then((value){
+      print(value);
+      if(json.decode(value)['result'] == 1){
+        UserInfo().member_coin = json.decode(value)['data']['coin'];
+      }
+    });
   }
 
   Widget result() {
     level_set();
     resultImgSet();
+    updateCoin();
     return Align(
       alignment: Alignment.topCenter,
       child: Center(
