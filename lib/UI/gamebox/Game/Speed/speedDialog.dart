@@ -44,6 +44,7 @@ class SpeedGameDialogState extends State<SpeedGameDialog> {
   @override
   Widget build(BuildContext context) {
     speedBloc.getQuestionList2().then((value) {
+      print("Data : " + value);
       String jsonValue = value;
       List<QuestionList> qList = speedBloc.questListToList(jsonValue);
 //      setState(() {

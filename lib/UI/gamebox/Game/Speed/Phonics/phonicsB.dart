@@ -47,12 +47,14 @@ class Phonics extends State<PhonicsB> {
 //      });
       playsound = true;
     }
+    print("soundCheckB : " +playsound.toString());
   }
 
 
   @override
   void initState() {
     super.initState();
+    print("phonicsBstate");
     playSound(widget.level, widget.chapter.toString(), widget.stage.toString(),
         widget.question_num.toString());
   }

@@ -336,14 +336,13 @@ class LobbyHomePage extends State<LobbyPage> {
   @override
   void initState() {
     super.initState();
+    audioCache = AudioCache(fixedPlayer: advancedPlayer);
     print("level = ${level}, ${gamePublicBloc.singStatus}");
     if (gamePublicBloc.singStatus != true) {
       gamePublicBloc.singStatus = true;
       setState(() {
-        setState(() {
           audioCache.loop('gamebox/audio/backgroundmusic.mp3');
           AudioPlayer.logEnabled = false;
-        });
       });
 
     }

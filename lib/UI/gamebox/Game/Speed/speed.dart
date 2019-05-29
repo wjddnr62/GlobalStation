@@ -51,6 +51,7 @@ class SpeedGame extends StatelessWidget {
   }
 
   Widget view(Size size) {
+    print("SpeedList");
     if (level == "P")
       return GameList(
         item: SpeedPhonics(qList: qList).getViews(),
@@ -59,6 +60,7 @@ class SpeedGame extends StatelessWidget {
         chapter: chapter,
         stage: stage,
       );
+
     if (level == "B")
       return GameList(
         item: SpeedBronze(qList: qList).getViews(),
@@ -122,6 +124,7 @@ class GameListState extends State<GameList> {
 
   @override
   void initState() {
+    print("GameList");
     viewidx = 0;
     answer = "";
     viewTimer = true;
@@ -163,10 +166,7 @@ class GameListState extends State<GameList> {
     return Stack(
       children: <Widget>[
         Positioned.fill(
-          child: ListView.builder(
-            physics: NeverScrollableScrollPhysics(),
-            itemBuilder: (context, idx) {
-              return Stack(
+          child: Stack(
                 children: <Widget>[
                   widget.item[viewidx],
                   Positioned(
@@ -194,10 +194,8 @@ class GameListState extends State<GameList> {
                     ),
                   ),
                 ],
-              );
-            },
-            itemCount: widget.item.length,
-          ),
+              )
+
         ),
         Positioned(
           top: 10,
@@ -295,11 +293,12 @@ class GameListState extends State<GameList> {
     setState(() {
     });
   }
-
-  AudioCache audioCache = AudioCache();
   AudioPlayer advancedPlayer = AudioPlayer();
+  AudioCache audioCache;
+
 
   Widget checkAnswer() {
+    audioCache = AudioCache(fixedPlayer: advancedPlayer);
     String img = "";
     if (answer == 'Y') {
       img = "assets/gamebox/img/quiz/yay.png";

@@ -37,19 +37,22 @@ class Phonics extends State<PhonicsA> {
       print("phonicsA_play");
       advancedPlayer.play(
           "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
-      advancedPlayer.onPlayerStateChanged.listen((AudioPlayerState s){
-        print("playerState : " + s.toString());
-
-
-      });
       playsound = true;
 //      });
     }
+    print("soundCheckA : " +playsound.toString());
+  }
+
+
+  @override
+  void dispose() {
+
   }
 
   @override
   void initState() {
     super.initState();
+    print("phonicsAstate");
     playSound(widget.level, widget.chapter.toString(), widget.stage.toString(),
         widget.question_num.toString());
   }

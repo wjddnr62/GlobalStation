@@ -19,7 +19,7 @@ class SpeedPhonics{
         print("AA");
         views.add(PhonicsA(
           level: question.level.substring(0, 1),
-          stage: 1,
+          stage: question.stage,
           chapter: question.chapter,
           question_num: question.question_num,
           title: question.title,
@@ -28,13 +28,14 @@ class SpeedPhonics{
         print("BB");
         views.add(PhonicsB(
           level: question.level.substring(0, 1),
-          stage: 1,
+          stage: question.stage,
           chapter: question.chapter,
           question_num: question.question_num,
           title: question.title,
         ));
       }
     }
+    print("viewslen : "+views.length.toString());
     return views;
   }
 
