@@ -30,15 +30,26 @@ class Phonics extends State<PhonicsB> {
 
   AudioCache audioCache = AudioCache();
   AudioPlayer advancedPlayer = AudioPlayer();
+  bool playsound = false;
 
   playSound(
       String level, String chapter, String stage, String question_num) async {
-    print(
-        "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
-    setState(() {
-      advancedPlayer.play(
-          "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
-    });
+    if (playsound == false){
+//      setState(() {
+        print("phonicsB_play");
+        advancedPlayer.play(
+            "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
+//      });
+      playsound = true;
+    }
+  }
+
+
+  @override
+  void initState() {
+    super.initState();
+    playSound(widget.level, widget.chapter.toString(), widget.stage.toString(),
+        widget.question_num.toString());
   }
 
   @override
@@ -49,8 +60,6 @@ class Phonics extends State<PhonicsB> {
     speedBloc.getStage(widget.stage);
     speedBloc.question_num = widget.question_num;
     clickAnswer = speedBloc.answer;
-    playSound(widget.level, widget.chapter.toString(), widget.stage.toString(),
-        widget.question_num.toString());
     return body(MediaQuery.of(context).size);
   }
 

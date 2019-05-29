@@ -44,7 +44,7 @@ class SpeedGold{
       if (question.type == "D-1") {
         views.add(GoldD1(
           level: question.level.substring(0, 1),
-          stage: 1,
+          stage: question.stage,
           question: question.contents,
           chapter: question.chapter,
           question_num: question.question_num,
@@ -53,7 +53,7 @@ class SpeedGold{
       } else if (question.type == "D-2") {
         views.add(GoldD2(
           level: question.level.substring(0, 1),
-          stage: 1,
+          stage: question.stage,
           question: question.contents,
           chapter: question.chapter,
           question_num: question.question_num,
@@ -62,7 +62,7 @@ class SpeedGold{
       }else if (question.type == "C"){
         views.add(GoldC(
           level: question.level.substring(0, 1),
-          stage: 1,
+          stage: question.stage,
           question: question.contents,
           chapter: question.chapter,
           question_num: question.question_num,
@@ -71,7 +71,7 @@ class SpeedGold{
       }else if(question.type == "E"){
         views.add(GoldE(
           level: question.level.substring(0, 1),
-          stage: 1,
+          stage: question.stage,
           question: question.contents,
           chapter: question.chapter,
           question_num: question.question_num,

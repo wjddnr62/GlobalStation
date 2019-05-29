@@ -1,3 +1,5 @@
+import 'package:audioplayers/audio_cache.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:lms_flutter/bloc/speed_game_bloc.dart';
 import 'package:lms_flutter/theme.dart';
@@ -27,6 +29,22 @@ class Diamond extends State<DiamondD2> {
 //  String question = "Did you use to _____ a gift when you visited someone's house?";
 
   final String diaQue = "assets/gamebox/img/speed/dia_ans.png";
+
+  AudioCache audioCache = AudioCache();
+  AudioPlayer advancedPlayer = AudioPlayer();
+
+  playSound(String level, String chapter,String stage, String question_num) {
+    setState(() {
+      advancedPlayer
+          .play("http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    playSound(widget.level, widget.chapter.toString(), widget.stage.toString(), widget.question_num.toString());
+  }
 
   @override
   Widget build(BuildContext context) {

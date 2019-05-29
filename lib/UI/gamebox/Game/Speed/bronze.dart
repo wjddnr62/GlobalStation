@@ -159,7 +159,7 @@ class SpeedBronze{
       if (question.type == "B") {
         views.add(BronzeB(
           level: question.level.substring(0, 1),
-          stage: 1,
+          stage: question.stage,
           chapter: question.chapter,
           question_num: question.question_num,
           title: question.title,
@@ -167,7 +167,7 @@ class SpeedBronze{
       } else if (question.type == "C") {
         views.add(BronzeC(
           level: question.level.substring(0, 1),
-          stage: 1,
+          stage: question.stage,
           question: question.contents,
           chapter: question.chapter,
           question_num: question.question_num,

@@ -142,7 +142,7 @@ class Bronze extends State<QuizB> {
           quizBloc.answer = num;
         },
         child: Center(
-          child: Text(answer),
+          child: Text(answer, style: quizQuestionTextStyle,),
         ),
       ),
 

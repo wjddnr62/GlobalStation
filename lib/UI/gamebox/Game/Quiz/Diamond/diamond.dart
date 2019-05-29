@@ -168,7 +168,7 @@ class Diamond extends State<QuizD> {
         child: Center(
           child: Text(
             answer,
-            style: TextStyle(color: white),
+            style: TextStyle(color: white, fontFamily: 'Jua', fontWeight: FontWeight.bold),
           ),
         ),
       ),

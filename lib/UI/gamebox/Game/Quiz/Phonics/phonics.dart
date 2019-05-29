@@ -141,7 +141,7 @@ class Phonics extends State<QuizP> {
           quizBloc.answer = num;
         },
         child: Center(
-          child: Text(answer),
+          child: Text(answer, style: quizQuestionTextStyle,),
         ),
       ),
     );

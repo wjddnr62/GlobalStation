@@ -32,12 +32,18 @@ class Phonics extends State<PhonicsA> {
 //  String title = "Listen and choose the correct word.";
   AudioCache audioCache = AudioCache();
   AudioPlayer advancedPlayer = AudioPlayer();
+  bool playsound = false;
 
   playSound(String level, String chapter,String stage, String question_num) {
-    setState(() {
-      advancedPlayer
-          .play("http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
-    });
+    if (playsound == false) {
+//      setState(() {
+        print("phonicsA_play");
+        advancedPlayer
+            .play("http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
+        playsound = true;
+//      });
+    }
+
   }
 
   @override
@@ -132,6 +138,7 @@ class Phonics extends State<PhonicsA> {
           setState(() {
             clickAnswer = idx;
           });
+          print("data, idx : " + clickAnswer.toString() + ", " + idx.toString());
         },
         child: Stack(
           children: <Widget>[

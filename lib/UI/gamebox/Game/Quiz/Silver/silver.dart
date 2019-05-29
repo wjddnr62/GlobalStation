@@ -94,6 +94,7 @@ class Silver extends State<QuizS> {
                                       fontSize: defaultFontSize,
                                       color: black,
                                       fontFamily: 'Jua',
+                                      fontWeight: FontWeight.bold
                                     ),
                                   ),
                                 ),
@@ -169,7 +170,7 @@ class Silver extends State<QuizS> {
         child: Center(
           child: Text(
             answer,
-            style: TextStyle(color: white),
+            style: TextStyle(color: white, fontFamily: 'Jua', fontWeight: FontWeight.bold),
           ),
         ),
       ),
