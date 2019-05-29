@@ -306,7 +306,7 @@ class LobbyHomePage extends State<LobbyPage> {
   void settings() {
     Navigator.of(context).push(PageRouteBuilder(
       opaque: false,
-      pageBuilder: (context, _, __) => SettingsPage(audioPlayer: advancedPlayer,),
+      pageBuilder: (context, _, __) => SettingsPage(),
     ));
   }
 
@@ -336,13 +336,14 @@ class LobbyHomePage extends State<LobbyPage> {
   @override
   void initState() {
     super.initState();
-    audioCache = AudioCache(fixedPlayer: advancedPlayer);
     print("level = ${level}, ${gamePublicBloc.singStatus}");
     if (gamePublicBloc.singStatus != true) {
       gamePublicBloc.singStatus = true;
       setState(() {
-        audioCache.loop('gamebox/audio/backgroundmusic.mp3');
-        AudioPlayer.logEnabled = false;
+        setState(() {
+          audioCache.loop('gamebox/audio/backgroundmusic.mp3');
+          AudioPlayer.logEnabled = false;
+        });
       });
 
     }
