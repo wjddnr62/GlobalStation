@@ -31,7 +31,6 @@ class TimerSet extends State<TimerBar> {
               _defaultSet = 30;
               timerSet = 30;
             });
-
           }
           print("타이머완료");
 //            if(!_timer.isActive) {
@@ -45,8 +44,6 @@ class TimerSet extends State<TimerBar> {
       }
     });
   }
-
-
 
   @override
   void initState() {
@@ -142,6 +139,18 @@ class TimerSet extends State<TimerBar> {
               )
             ],
           ),
+//          Positioned(
+//            top: 13,
+//            child: Align(
+//              alignment: Alignment.center,
+//              child: Container(
+//                width: widget.width - 80,
+//                height: 15,
+//                color: Colors.black,
+//              ),
+//            ),
+//          ),
+
 //          Positioned(
 //            top: 3,
 //            child: Container(

@@ -21,7 +21,7 @@ class QuizBronze {
     for (QuestionList question in qList) {
       views.add(QuizB(
         level: question.level.substring(0, 1),
-        stage: 1,
+        stage: question.stage,
         chapter: question.chapter,
         question_num: question.question_num,
         title: question.title,

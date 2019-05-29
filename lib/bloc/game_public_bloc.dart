@@ -24,6 +24,13 @@ class GamePublicBloc {
 
   String _response;
   int _idx;
+  bool _singStatus;
+
+  bool get singStatus => _singStatus;
+
+  set singStatus(bool value) {
+    _singStatus = value;
+  }
 
   set response(String value) {
     _response = value;

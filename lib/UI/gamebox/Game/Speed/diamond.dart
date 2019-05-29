@@ -21,7 +21,7 @@ class SpeedDiamond{
       if (question.type == "D-1") {
         views.add(DiamondD1(
           level: question.level.substring(0, 1),
-          stage: 1,
+          stage: question.stage,
           question: question.contents,
           chapter: question.chapter,
           question_num: question.question_num,
@@ -30,7 +30,7 @@ class SpeedDiamond{
       } else if (question.type == "D-2") {
         views.add(DiamondD2(
           level: question.level.substring(0, 1),
-          stage: 1,
+          stage: question.stage,
           question: question.contents,
           chapter: question.chapter,
           question_num: question.question_num,
@@ -39,7 +39,7 @@ class SpeedDiamond{
       }else if (question.type == "C"){
         views.add(DiamondC(
           level: question.level.substring(0, 1),
-          stage: 1,
+          stage: question.stage,
           question: question.contents,
           chapter: question.chapter,
           question_num: question.question_num,
@@ -48,7 +48,7 @@ class SpeedDiamond{
       }else if(question.type == "E"){
         views.add(DiamondE(
           level: question.level.substring(0, 1),
-          stage: 1,
+          stage: question.stage,
           question: question.contents,
           chapter: question.chapter,
           question_num: question.question_num,

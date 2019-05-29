@@ -1,3 +1,5 @@
+import 'package:audioplayers/audio_cache.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:lms_flutter/theme.dart';
 import 'package:lms_flutter/model/Speed/answerList.dart';
@@ -23,6 +25,23 @@ class Bronze extends State<BronzeB> {
 
   final String A_POSTIT = "assets/gamebox/img/speed/postitA.png";
   final String B_POSTIT = "assets/gamebox/img/speed/postitB.png";
+
+  AudioCache audioCache = AudioCache();
+  AudioPlayer advancedPlayer = AudioPlayer();
+
+  playSound(String level, String chapter,String stage, String question_num) {
+    setState(() {
+      advancedPlayer
+          .play("http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
+    });
+  }
+
+
+  @override
+  void initState() {
+    super.initState();
+    playSound(widget.level, widget.chapter.toString(), widget.stage.toString(), widget.question_num.toString());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -128,7 +147,7 @@ class Bronze extends State<BronzeB> {
               height: 150,
               fit: BoxFit.cover,
             ),
-            Center(child: Text(text),)
+            Center(child: Text(text, style: speedBronzeQuestionStyle,),)
           ],
         ),
       ),

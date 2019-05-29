@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:lms_flutter/UI/gamebox/Settings/character.dart';
 import 'package:lms_flutter/UI/gamebox/Settings/setting.dart';
@@ -8,7 +11,9 @@ import 'Settings/mypage.dart';
 import 'gameDialog.dart';
 import 'package:lms_flutter/model/UserInfo.dart';
 import 'package:audioplayers/audioplayers.dart';
+//import 'package:audioplayer/audioplayer.dart';
 import 'package:audioplayers/audio_cache.dart';
+//import 'package:fluttery_audio/fluttery_audio.dart';
 
 class LobbyPage extends StatefulWidget {
   @override
@@ -21,6 +26,7 @@ class LobbyHomePage extends State<LobbyPage> {
 
   AudioCache audioCache = AudioCache();
   AudioPlayer advancedPlayer = AudioPlayer();
+//  AudioPlayerState state;
 
 
   int level = UserInfo().member_level;
@@ -320,15 +326,32 @@ class LobbyHomePage extends State<LobbyPage> {
 
   @override
   void dispose() {
-//    advancedPlayer.stop();
+    print("lobby dispose");
+//    audioCache.clear('gamebox/audio/backgroundmusic.mp3');
+    gamePublicBloc.singStatus = false;
     super.dispose();
   }
 
   @override
   void initState() {
     super.initState();
-    print("level = ${level}");
-//    audioCache.loop('gamebox/audio/backgroundmusic.mp3');
+    print("level = ${level}, ${gamePublicBloc.singStatus}");
+    if (gamePublicBloc.singStatus != true) {
+      gamePublicBloc.singStatus = true;
+      setState(() {
+//        advancedPlayer.setUrl('gamebox/audio/backgroundmusic.mp3');
+//        advancedPlayer.play('gamebox/audio/backgroundmusic.mp3');
+//      Uri uri = 'gamebox/audio/backgroundmusic.mp3' as Uri;
+//      advancedPlayer.loadMedia(uri);
+//      advancedPlayer.play();
+//
+//        state = advancedPlayer.state;
+//        print("state : " + state.toString());
+      });
+
+//      audioCache.loop('gamebox/audio/backgroundmusic.mp3');
+    }
+
 //    play();
   }
 
@@ -337,7 +360,7 @@ class LobbyHomePage extends State<LobbyPage> {
 //    play();
 
     return Scaffold(
-      body: body(MediaQuery.of(context).size),
+        body: body(MediaQuery.of(context).size),
     );
   }
 }

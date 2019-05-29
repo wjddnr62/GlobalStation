@@ -27,7 +27,8 @@ final skyBlue = Color.fromARGB(255, 215, 234, 235);
 //------------------------------------
 
 //---textStyle------------------------
-final defaultTextStyle = TextStyle(fontSize: defaultFontSize, color: black);
+final defaultTextStyle = TextStyle(fontSize: defaultFontSize, color: black, fontFamily: 'Jua',
+fontWeight: FontWeight.bold);
 final dialogTextStyle = TextStyle(
     fontSize: defaultFontSize,
     color: black,
@@ -37,7 +38,7 @@ final questionTextStyle = TextStyle(
   fontSize: defaultFontSize,
   color: black,
   fontFamily: 'Jua',
-  fontWeight: FontWeight.w500,
+  fontWeight: FontWeight.bold,
 );
 final titleTextStyle = TextStyle(
   fontSize: defaultFontSize - 2,
@@ -51,6 +52,12 @@ final quizTitleTextStyle = TextStyle(
   color: black,
   fontFamily: 'Jua',
   fontWeight: FontWeight.bold,
+);
+
+final quizQuestionTextStyle = TextStyle(
+  color: black,
+  fontFamily: 'Jua',
+  fontWeight: FontWeight.bold
 );
 
 final levelTextStyle = TextStyle(
@@ -70,82 +77,82 @@ final resultTextStyle = TextStyle(
 final speedPhonicsTitleStyle = TextStyle(
   fontSize: defaultFontSize - 4,
   color: black,
-  fontFamily: 'JUA',
+  fontFamily: 'Jua',
   fontWeight: FontWeight.bold,
 );
 
 final speedBronzeTitleStyle = TextStyle(
   fontSize: defaultFontSize - 2,
   color: white,
-  fontFamily: 'JUA',
+  fontFamily: 'Jua',
   fontWeight: FontWeight.bold,
 );
 
 final speedBronzeTitleStyleB = TextStyle(
   fontSize: defaultFontSize - 2,
   color: Colors.red,
-  fontFamily: 'JUA',
+  fontFamily: 'Jua',
   fontWeight: FontWeight.bold,
 );
 
 final speedBronzeQuestionStyle = TextStyle(
   fontSize: defaultFontSize - 4,
   color: black,
-  fontFamily: 'JUA',
+  fontFamily: 'Jua',
   fontWeight: FontWeight.bold,
 );
 
 final speedSilverTitleText = TextStyle(
   fontSize: defaultFontSize - 2,
   color: Colors.red,
-  fontFamily: 'JUA',
+  fontFamily: 'Jua',
   fontWeight: FontWeight.bold,
 );
 
 final speedSilverQuestionStyle = TextStyle(
   fontSize: defaultFontSize - 4,
   color: black,
-  fontFamily: 'JUA',
+  fontFamily: 'Jua',
   fontWeight: FontWeight.bold,
 );
 
 final speedGoldTitleText = TextStyle(
   fontSize: defaultFontSize - 2,
   color: Colors.red,
-  fontFamily: 'JUA',
+  fontFamily: 'Jua',
   fontWeight: FontWeight.bold,
 );
 final speedGoldTitleTextC = TextStyle(
   fontSize: defaultFontSize - 2,
   color: white,
-  fontFamily: 'JUA',
+  fontFamily: 'Jua',
   fontWeight: FontWeight.bold,
 );
 
 final speedGoldQuestionStyle = TextStyle(
   fontSize: defaultFontSize - 4,
   color: black,
-  fontFamily: 'JUA',
+  fontFamily: 'Jua',
   fontWeight: FontWeight.bold,
 );
 
 final speedDiaTitleText = TextStyle(
   fontSize: defaultFontSize - 2,
   color: Colors.red,
-  fontFamily: 'JUA',
+  fontFamily: 'Jua',
   fontWeight: FontWeight.bold,
 );
 final speedDiaTitleTextC = TextStyle(
   fontSize: defaultFontSize - 2,
   color: white,
-  fontFamily: 'JUA',
+  fontFamily: 'Jua',
   fontWeight: FontWeight.bold,
 );
 
 final speedDiaQuestionStyle = TextStyle(
   fontSize: defaultFontSize - 4,
   color: black,
-  fontFamily: 'JUA',
+  fontFamily: 'Jua',
   fontWeight: FontWeight.bold,
 );
 
