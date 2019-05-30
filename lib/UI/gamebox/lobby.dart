@@ -332,13 +332,14 @@ class LobbyHomePage extends State<LobbyPage> {
               idx: idx,
               lev: lev,
               cap: cap,
+              audioPlayer: advancedPlayer,
             )));
   }
 
   void settings() {
     Navigator.of(context).push(PageRouteBuilder(
       opaque: false,
-      pageBuilder: (context, _, __) => SettingsPage(),
+      pageBuilder: (context, _, __) => SettingsPage(audioPlayer: advancedPlayer,),
     )).then((value){
       bloc.getMember().then((value){
         setState(() {
@@ -388,7 +389,7 @@ class LobbyHomePage extends State<LobbyPage> {
     if (gamePublicBloc.singStatus != true) {
       gamePublicBloc.singStatus = true;
         setState(() {
-//          audioCache.loop('gamebox/audio/backgroundmusic.mp3');
+          audioCache.loop('gamebox/audio/backgroundmusic.mp3');
           AudioPlayer.logEnabled = false;
         });
 

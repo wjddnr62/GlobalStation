@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
@@ -199,7 +200,7 @@ class BronzeM extends State<Bronze> {
           ", " +
           answer_finish_count.toString());
       if (answer_all_length != 5 && answer_count == 4) {
-        audioCache.play("gamebox/audio/sucess_sound.mp3");
+        audioCache.play("gamebox/audio/sucess_sound.wav");
         answer_finish_count += 1;
         answer_all_length += 1;
         if (answer_all_length == 5) {
@@ -311,6 +312,7 @@ class BronzeM extends State<Bronze> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             String jsonValue = snapshot.data;
+            print("bronzeData : " + jsonValue);
             answerList = matchBloc.answerListToList(jsonValue);
             if (next_problem != 2) {
               if (dataSetCheck != 1) {

@@ -31,8 +31,15 @@ class SpeedGame extends StatelessWidget {
   final int chapter;
   final int stage;
   final List<QuestionList> qList;
+  AudioPlayer background;
 
-  SpeedGame({Key key, this.level, this.chapter, this.stage, this.qList})
+  SpeedGame(
+      {Key key,
+      this.level,
+      this.chapter,
+      this.stage,
+      this.qList,
+      this.background})
       : super(key: key);
 
   UserInfo userInfo = UserInfo();
@@ -41,6 +48,7 @@ class SpeedGame extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     memberLevel = userInfo.member_level;
+    audioPlayer.release();
     return Scaffold(
         backgroundColor: Colors.black.withOpacity(0.5),
         body: SafeArea(
@@ -54,44 +62,64 @@ class SpeedGame extends StatelessWidget {
   Widget view(Size size) {
     if (level == "P")
       return GameList(
-        item: SpeedPhonics(qList: qList, audioPlayer: audioPlayer).getViews(),
-        size: size,
-        level: level,
-        chapter: chapter,
-        stage: stage,
-      );
+          item: SpeedPhonics(
+                  qList: qList,
+                  audioPlayer: audioPlayer,
+                  background: background)
+              .getViews(),
+          size: size,
+          level: level,
+          chapter: chapter,
+          stage: stage,
+          background: background);
     if (level == "B")
       return GameList(
-        item: SpeedBronze(qList: qList, audioPlayer: audioPlayer).getViews(),
-        size: size,
-        level: level,
-        chapter: chapter,
-        stage: stage,
-      );
+          item: SpeedBronze(
+                  qList: qList,
+                  audioPlayer: audioPlayer,
+                  background: background)
+              .getViews(),
+          size: size,
+          level: level,
+          chapter: chapter,
+          stage: stage,
+          background: background);
     if (level == "S")
       return GameList(
-        item: SpeedSilver(qList: qList, audioPlayer: audioPlayer).getViews(),
-        size: size,
-        level: level,
-        chapter: chapter,
-        stage: stage,
-      );
+          item: SpeedSilver(
+                  qList: qList,
+                  audioPlayer: audioPlayer,
+                  background: background)
+              .getViews(),
+          size: size,
+          level: level,
+          chapter: chapter,
+          stage: stage,
+          background: background);
     if (level == "G")
       return GameList(
-        item: SpeedGold(qList: qList, audioPlayer: audioPlayer).getViews(),
-        size: size,
-        level: level,
-        chapter: chapter,
-        stage: stage,
-      );
+          item: SpeedGold(
+                  qList: qList,
+                  audioPlayer: audioPlayer,
+                  background: background)
+              .getViews(),
+          size: size,
+          level: level,
+          chapter: chapter,
+          stage: stage,
+          background: background);
     if (level == "D")
       return GameList(
-        item: SpeedDiamond(qList: qList, audioPlayer: audioPlayer).getViews(),
-        size: size,
-        level: level,
-        chapter: chapter,
-        stage: stage,
-      );
+          item: SpeedDiamond(
+                  qList: qList,
+                  audioPlayer: audioPlayer,
+                  background: background)
+              .getViews(),
+          size: size,
+          level: level,
+          chapter: chapter,
+          stage: stage,
+          background: background);
   }
 }
 
@@ -101,15 +129,17 @@ class GameList extends StatefulWidget {
   String level;
   int chapter;
   int stage;
+  AudioPlayer background;
 
-  GameList({
-    Key key,
-    this.item,
-    this.size,
-    this.level,
-    this.chapter,
-    this.stage,
-  }) : super(key: key);
+  GameList(
+      {Key key,
+      this.item,
+      this.size,
+      this.level,
+      this.chapter,
+      this.stage,
+      this.background})
+      : super(key: key);
 
   @override
   GameListState createState() => GameListState();
@@ -120,6 +150,7 @@ class GameListState extends State<GameList> {
   bool viewTimer = true;
   bool resultView = false;
   bool restartGame = false;
+  AudioPlayer background;
 
   @override
   void initState() {
@@ -131,6 +162,7 @@ class GameListState extends State<GameList> {
     yay = 0;
     maxLen = widget.item.length;
     print("gameList init");
+    background = widget.background;
   }
 
   void finishTimer() {
@@ -168,35 +200,35 @@ class GameListState extends State<GameList> {
       children: <Widget>[
         Positioned.fill(
           child: Stack(
-                children: <Widget>[
-                  widget.item[viewidx],
-                  Positioned(
-                    bottom: 10,
-                    child: nextBtn(widget.size),
-                  ),
-                  (viewTimer)
-                      ? Positioned(
-                          top: MediaQuery.of(context).size.width / 15,
-                          child: TimerBar(
-                            width: MediaQuery.of(context).size.width,
-                            finishTimer: () => finishTimer(),
-                          ),
-                        )
-                      : SizedBox(
-                          width: 0,
-                          height: 0,
-                        ),
-                  Positioned(
-                    top: MediaQuery.of(context).size.width / 5,
-                    child: QuestionStatus(
-                      question_all_length: maxLen,
-                      question_count: viewidx,
-                      width: MediaQuery.of(context).size.width,
-                    ),
-                  ),
-                ],
+            children: <Widget>[
+              widget.item[viewidx],
+              Positioned(
+                bottom: 10,
+                child: nextBtn(widget.size),
               ),
+              (viewTimer)
+                  ? Positioned(
+                      top: MediaQuery.of(context).size.width / 15,
+                      child: TimerBar(
+                        width: MediaQuery.of(context).size.width,
+                        finishTimer: () => finishTimer(),
+                      ),
+                    )
+                  : SizedBox(
+                      width: 0,
+                      height: 0,
+                    ),
+              Positioned(
+                top: MediaQuery.of(context).size.width / 5,
+                child: QuestionStatus(
+                  question_all_length: maxLen,
+                  question_count: viewidx,
+                  width: MediaQuery.of(context).size.width,
+                ),
+              ),
+            ],
           ),
+        ),
         Positioned(
           top: 10,
           right: 10,
@@ -248,16 +280,19 @@ class GameListState extends State<GameList> {
   Widget nextBtn(Size size) {
     return InkWell(
       onTap: () {
-        audioPlayer.release();
         speedBloc.getAnswer(speedBloc.question_num).then((value) {
           Map<String, dynamic> json = jsonDecode(value);
           viewTimer = false;
           answer = json['data'];
+          if (json['result'] == 0) answer = 'N';
           speedBloc.answer = 0;
           speedBloc.question_num = 0;
           speedBloc.answerA = "";
           speedBloc.answerType = 0;
-          setState(() {});
+          setState(() {
+            audioPlayer.release();
+            background.setVolume(1.0);
+          });
 
           if (viewidx == maxLen - 1) {
             print("끝");
@@ -292,28 +327,27 @@ class GameListState extends State<GameList> {
     resultView = false;
     restartGame = false;
     yay = 0;
-    setState(() {
-    });
+    setState(() {});
   }
 
   AudioPlayer advancedPlayer = AudioPlayer();
   AudioCache audioCache;
 
-
   Widget checkAnswer() {
     audioPlayer.release();
+    background.setVolume(1.0);
     audioCache = AudioCache(fixedPlayer: advancedPlayer);
     String img = "";
     if (answer == 'Y') {
       img = "assets/gamebox/img/quiz/yay.png";
       yay++;
-      audioCache.play("gamebox/audio/sucess_sound.mp3");
+      audioCache.play("gamebox/audio/sucess_sound.wav");
     } else if (answer == 'N') {
-      audioCache.play("gamebox/audio/fail_sound.mp3");
+      audioCache.play("gamebox/audio/fail_sound.wav");
       img = "assets/gamebox/img/quiz/nope.png";
     } else if (answer == 'T') {
       img = "assets/gamebox/img/timeout.png";
-      audioCache.play("gamebox/audio/fail_sound.mp3");
+      audioCache.play("gamebox/audio/fail_sound.wav");
     }
 
     if (answer == "") {
@@ -338,14 +372,15 @@ class GameListState extends State<GameList> {
   Timer _timer;
 
   void handleTimeout() {
-    audioPlayer.release();
+//    audioPlayer.release();
     _timer = new Timer(timeout, () {
       print("speedTimeout");
       answer = "";
       viewTimer = true;
       viewidx++;
       setState(() {
-
+        audioPlayer.release();
+        background.setVolume(1.0);
       });
     });
   }
@@ -354,6 +389,7 @@ class GameListState extends State<GameList> {
   void dispose() {
     if (_timer != null) _timer.cancel();
     audioPlayer.release();
+    background.setVolume(1.0);
     super.dispose();
   }
 }

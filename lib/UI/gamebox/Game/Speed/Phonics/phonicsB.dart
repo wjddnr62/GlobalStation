@@ -13,7 +13,7 @@ class PhonicsB extends StatefulWidget {
   final int stage;
   final int question_num;
   final String title;
-  final AudioPlayer audioPlayer;
+  final AudioPlayer audioPlayer, background;
 
   PhonicsB(
       {Key key,
@@ -22,7 +22,8 @@ class PhonicsB extends StatefulWidget {
       this.stage,
       this.question_num,
       this.title,
-      this.audioPlayer})
+      this.audioPlayer,
+      this.background})
       : super(key: key);
 
   @override
@@ -33,8 +34,9 @@ class Phonics extends State<PhonicsB> {
 //  String title = "Listen and choose the correct word.";
 
   AudioCache audioCache = AudioCache();
-  AudioPlayer advancedPlayer;
+  AudioPlayer advancedPlayer, background;
   Timer _timer;
+  String soundUrl;
 
   playSound(
       String level, String chapter, String stage, String question_num) async {
@@ -42,14 +44,23 @@ class Phonics extends State<PhonicsB> {
 
     setState(() {
       advancedPlayer.release();
-
-      advancedPlayer.setUrl(
-          "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
-      advancedPlayer.release();
-      advancedPlayer.resume();
+      _timer = Timer(Duration(seconds: 1), () {
+        if (soundUrl !=
+            "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}") {
+          advancedPlayer.setUrl(
+              "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
+          advancedPlayer.resume();
+          soundUrl =
+              "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}";
+        }
+      });
     });
 
-
+    advancedPlayer.onPlayerStateChanged.listen((state) {
+      if (state == AudioPlayerState.COMPLETED) {
+        background.setVolume(1.0);
+      }
+    });
   }
 
   @override
@@ -62,15 +73,13 @@ class Phonics extends State<PhonicsB> {
   void initState() {
     super.initState();
     advancedPlayer = widget.audioPlayer;
-
-    setState(() {
-
-      advancedPlayer.release();
-      _timer = Timer(Duration(seconds: 1), () {
-        playSound(widget.level, widget.chapter.toString(),
-            widget.stage.toString(), widget.question_num.toString());
-      });
-    });
+    background = widget.background;
+//    soundUrl = "http://ga.oig.kr/laon_api/api/asset/sound/${widget.level}/${widget.chapter}/S${widget.stage}/${widget.question_num}";
+//    setState(() {
+//      advancedPlayer.release();
+//        playSound(widget.level, widget.chapter.toString(),
+//            widget.stage.toString(), widget.question_num.toString());
+//    });
   }
 
   @override
@@ -81,6 +90,11 @@ class Phonics extends State<PhonicsB> {
     speedBloc.getStage(widget.stage);
     speedBloc.question_num = widget.question_num;
     clickAnswer = speedBloc.answer;
+    setState(() {
+      background.setVolume(0.5);
+      playSound(widget.level, widget.chapter.toString(),
+          widget.stage.toString(), widget.question_num.toString());
+    });
     return WillPopScope(
       onWillPop: () {
         advancedPlayer.release();
@@ -176,7 +190,7 @@ class Phonics extends State<PhonicsB> {
             Image.asset(
               "assets/gamebox/img/speed/balloon.png",
               width: 160,
-              height: (idx == clickAnswer) ? 280 :250,
+              height: (idx == clickAnswer) ? 280 : 250,
               fit: BoxFit.contain,
             ),
             Align(

@@ -332,13 +332,13 @@ class GameListState extends State<GameList> {
     if (answer == 'Y') {
       yay++;
       img = "assets/gamebox/img/quiz/yay.png";
-      audioCache.play("gamebox/audio/sucess_sound.mp3");
+      audioCache.play("gamebox/audio/sucess_sound.wav");
     } else if (answer == 'N') {
       img = "assets/gamebox/img/quiz/nope.png";
-      audioCache.play("gamebox/audio/fail_sound.mp3");
+      audioCache.play("gamebox/audio/fail_sound.wav");
     } else if(answer == 'T') {
       img = "assets/gamebox/img/timeout.png";
-      audioCache.play("gamebox/audio/fail_sound.mp3");
+      audioCache.play("gamebox/audio/fail_sound.wav");
     }
 
     if (answer == "") {

@@ -15,7 +15,7 @@ class PhonicsA extends StatefulWidget {
   final int stage;
   final int question_num;
   final String title;
-  final AudioPlayer audioPlayer;
+  final AudioPlayer audioPlayer, background;
 
   PhonicsA(
       {Key key,
@@ -24,7 +24,8 @@ class PhonicsA extends StatefulWidget {
       this.stage,
       this.question_num,
       this.title,
-      this.audioPlayer})
+      this.audioPlayer,
+       this.background})
       : super(key: key);
 
 
@@ -60,21 +61,33 @@ class Phonics extends State<PhonicsA> {
   }
 
   AudioCache audioCache = AudioCache();
-  AudioPlayer advancedPlayer;
-  bool playsound = false;
+  AudioPlayer advancedPlayer, background;
   Timer _timer;
+  String soundUrl;
 
   playSound(String level, String chapter, String stage, String question_num) {
     print("phonicsA_play");
 
-    advancedPlayer.release();
-
-      advancedPlayer.setUrl(
-          "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
+    setState(() {
       advancedPlayer.release();
-      advancedPlayer.resume();
+      _timer = Timer(Duration(seconds: 1), ()
+      {
+        if (soundUrl != "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}") {
+          advancedPlayer.setUrl(
+              "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
+          advancedPlayer.resume();
+          soundUrl = "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}";
+        }
+      });
 
-    print("soundCheckA : " + playsound.toString());
+    });
+
+    advancedPlayer.onPlayerStateChanged.listen((state){
+      if(state == AudioPlayerState.COMPLETED) {
+        background.setVolume(1.0);
+      }
+    });
+
   }
 
   @override
@@ -83,21 +96,21 @@ class Phonics extends State<PhonicsA> {
     super.dispose();
   }
 
+
   @override
   void initState() {
     super.initState();
     print("PhA init");
     responseFromNaticeCode("", "", "", "");
     advancedPlayer = widget.audioPlayer;
-    setState(() {
-      advancedPlayer.release();
-      _timer = Timer(Duration(seconds: 1), () {
-        playSound(widget.level, widget.chapter.toString(),
-            widget.stage.toString(), widget.question_num.toString());
-      });
-    });
-    playSound(widget.level, widget.chapter.toString(), widget.stage.toString(),
-        widget.question_num.toString());
+    background = widget.background;
+//    setState(() {
+//      advancedPlayer.release();
+//        playSound(widget.level, widget.chapter.toString(),
+//            widget.stage.toString(), widget.question_num.toString());
+//    });
+//    playSound(widget.level, widget.chapter.toString(), widget.stage.toString(),
+//        widget.question_num.toString());
   }
 
   @override
@@ -108,7 +121,13 @@ class Phonics extends State<PhonicsA> {
     speedBloc.getStage(widget.stage);
     speedBloc.question_num = widget.question_num;
     clickAnswer = speedBloc.answer;
-
+    print("phonicsAbuild");
+    setState(() {
+      background.setVolume(0.5);
+//      advancedPlayer.release();
+      playSound(widget.level, widget.chapter.toString(),
+          widget.stage.toString(), widget.question_num.toString());
+    });
     return WillPopScope(
       child: body(MediaQuery.of(context).size),
       onWillPop: () {

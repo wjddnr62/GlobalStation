@@ -17,10 +17,10 @@ class SilverC extends StatefulWidget {
   final int question_num;
   final String title;
   final String question;
-  final AudioPlayer audioPlayer;
+  final AudioPlayer audioPlayer, background;
 
   SilverC({Key key, this.level, this.chapter, this.stage, this.question_num,this.title,
-    this.question, this.audioPlayer})
+    this.question, this.audioPlayer, this.background})
       : super(key: key);
 
   @override
@@ -34,17 +34,28 @@ class Silver extends State<SilverC> {
   final String silverWood = "assets/gamebox/img/speed/wood.png";
 
   AudioCache audioCache = AudioCache();
-  AudioPlayer advancedPlayer;
+  AudioPlayer advancedPlayer, background;
   Timer _timer;
+  String soundUrl;
 
-  playSound(String level, String chapter,String stage, String question_num) {
+  playSound(String level, String chapter,String stage, String question_num) async {
     setState(() {
       advancedPlayer.release();
+      _timer = Timer(Duration(seconds: 1), ()
+      {
+        if (soundUrl != "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}") {
+          advancedPlayer.setUrl(
+              "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
+          advancedPlayer.resume();
+          soundUrl = "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}";
+        }
+      });
+    });
 
-      advancedPlayer.setUrl(
-          "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
-      advancedPlayer.release();
-      advancedPlayer.resume();
+    advancedPlayer.onPlayerStateChanged.listen((state) {
+      if (state == AudioPlayerState.COMPLETED) {
+        background.setVolume(1.0);
+      }
     });
   }
 
@@ -58,15 +69,15 @@ class Silver extends State<SilverC> {
   void initState() {
     super.initState();
     advancedPlayer = widget.audioPlayer;
-
-    setState(() {
-
-      advancedPlayer.release();
-      _timer = Timer(Duration(seconds: 1), () {
-        playSound(widget.level, widget.chapter.toString(),
-            widget.stage.toString(), widget.question_num.toString());
-      });
-    });
+    background = widget.background;
+//    setState(() {
+//
+//      advancedPlayer.release();
+//      _timer = Timer(Duration(seconds: 1), () {
+//        playSound(widget.level, widget.chapter.toString(),
+//            widget.stage.toString(), widget.question_num.toString());
+//      });
+//    });
   }
 
   @override
@@ -77,6 +88,11 @@ class Silver extends State<SilverC> {
     speedBloc.getStage(widget.stage);
     speedBloc.question_num = widget.question_num;
     clickAnswer = speedBloc.answer;
+    setState(() {
+      background.setVolume(0.5);
+      playSound(widget.level, widget.chapter.toString(),
+          widget.stage.toString(), widget.question_num.toString());
+    });
     return WillPopScope(
       onWillPop: () {
         advancedPlayer.release();

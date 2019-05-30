@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:lms_flutter/bloc/speed_game_bloc.dart';
@@ -157,7 +159,7 @@ class SilverE extends StatelessWidget {
   final int question_num;
   final String title;
   final String question;
-  final AudioPlayer audioPlayer;
+  final AudioPlayer audioPlayer, background;
 
   SilverE(
       {Key key,
@@ -167,14 +169,43 @@ class SilverE extends StatelessWidget {
       this.question_num,
       this.title,
       this.question,
-      this.audioPlayer})
+      this.audioPlayer, this.background})
       : super(key: key);
 
   final String silverWood = "assets/gamebox/img/speed/sliver_ans.png";
 
+  Timer _timer;
+  String soundUrl;
+
+  playSound(
+      String level, String chapter, String stage, String question_num) async {
+    print("phonicsB_play");
+
+    audioPlayer.release();
+    _timer = Timer(Duration(seconds: 1), () {
+      if (soundUrl !=
+          "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}") {
+        audioPlayer.setUrl(
+            "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
+        audioPlayer.resume();
+        soundUrl =
+        "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}";
+      }
+    });
+
+    audioPlayer.onPlayerStateChanged.listen((state) {
+      if (state == AudioPlayerState.COMPLETED) {
+        background.setVolume(1.0);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     speedBloc.answerType = 2;
+    background.setVolume(0.5);
+    playSound(level, chapter.toString(),
+        stage.toString(), question_num.toString());
     return body(MediaQuery.of(context).size,context);
   }
 

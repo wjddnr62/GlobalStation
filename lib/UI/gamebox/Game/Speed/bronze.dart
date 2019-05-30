@@ -1,14 +1,9 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-import 'package:lms_flutter/theme.dart';
+import 'package:lms_flutter/model/Speed/questionList.dart';
 
 import 'Bronze/bronzeB.dart';
 import 'Bronze/bronzeC.dart';
-
-import 'package:lms_flutter/bloc/speed_game_bloc.dart';
-
-import 'package:lms_flutter/model/Speed/questionList.dart';
-import 'package:lms_flutter/model/Speed/answerList.dart';
 
 //List<Widget> bronzeData = [];
 
@@ -146,39 +141,37 @@ import 'package:lms_flutter/model/Speed/answerList.dart';
 ////    );
 //  }
 //}
-class SpeedBronze{
-
+class SpeedBronze {
   final List<QuestionList> qList;
-  AudioPlayer audioPlayer;
+  AudioPlayer audioPlayer, background;
 
-
-  SpeedBronze({this.qList, this.audioPlayer});
+  SpeedBronze({this.qList, this.audioPlayer, this.background});
 
   List<Widget> views = [];
 
-  List<Widget> getViews(){
+  List<Widget> getViews() {
     for (QuestionList question in qList) {
       if (question.type == "B") {
         views.add(BronzeB(
-          level: question.level.substring(0, 1),
-          stage: question.stage,
-          chapter: question.chapter,
-          question_num: question.question_num,
-          title: question.title,
-
-        ));
+            level: question.level.substring(0, 1),
+            stage: question.stage,
+            chapter: question.chapter,
+            question_num: question.question_num,
+            title: question.title,
+            audioPlayer: audioPlayer,
+            background: background));
       } else if (question.type == "C") {
         views.add(BronzeC(
-          level: question.level.substring(0, 1),
-          stage: question.stage,
-          question: question.contents,
-          chapter: question.chapter,
-          question_num: question.question_num,
-          title: question.title,
-        ));
+            level: question.level.substring(0, 1),
+            stage: question.stage,
+            question: question.contents,
+            chapter: question.chapter,
+            question_num: question.question_num,
+            title: question.title,
+            audioPlayer: audioPlayer,
+            background: background));
       }
     }
     return views;
   }
-
 }
