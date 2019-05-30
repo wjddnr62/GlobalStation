@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:lms_flutter/model/Speed/questionList.dart';
 import 'package:lms_flutter/theme.dart';
@@ -33,9 +34,10 @@ import 'Gold/goldE.dart';
 class SpeedGold{
 
   final List<QuestionList> qList;
+  AudioPlayer audioPlayer;
 
 
-  SpeedGold({this.qList});
+  SpeedGold({this.qList, this.audioPlayer});
 
   List<Widget> views = [];
 

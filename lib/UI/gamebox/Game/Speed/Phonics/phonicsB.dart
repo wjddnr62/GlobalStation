@@ -34,21 +34,22 @@ class Phonics extends State<PhonicsB> {
 
   AudioCache audioCache = AudioCache();
   AudioPlayer advancedPlayer;
-  bool playsound = false;
   Timer _timer;
 
   playSound(
       String level, String chapter, String stage, String question_num) async {
     print("phonicsB_play");
 
-    advancedPlayer.release();
+    setState(() {
+      advancedPlayer.release();
 
       advancedPlayer.setUrl(
           "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
       advancedPlayer.release();
       advancedPlayer.resume();
+    });
 
-    print("soundCheckB : " + playsound.toString());
+
   }
 
   @override

@@ -15,9 +15,10 @@ class GoldC extends StatefulWidget {
   final int question_num;
   final String title;
   final String question;
+  final AudioPlayer audioPlayer;
 
   GoldC({Key key, this.level, this.chapter, this.stage, this.question_num,this.title,
-    this.question})
+    this.question, this.audioPlayer})
       : super(key: key);
 
   @override

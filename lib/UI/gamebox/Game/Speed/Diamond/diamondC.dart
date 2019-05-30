@@ -14,6 +14,7 @@ class DiamondC extends StatefulWidget {
   final int question_num;
   final String title;
   final String question;
+  final AudioPlayer audioPlayer;
 
   DiamondC(
       {Key key,
@@ -22,7 +23,8 @@ class DiamondC extends StatefulWidget {
       this.stage,
       this.question_num,
       this.title,
-      this.question})
+      this.question,
+      this.audioPlayer})
       : super(key: key);
 
   @override

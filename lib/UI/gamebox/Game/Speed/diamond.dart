@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:lms_flutter/model/Speed/questionList.dart';
 import 'package:lms_flutter/theme.dart';
@@ -10,9 +11,10 @@ import 'Diamond/diamondE.dart';
 class SpeedDiamond{
 
   final List<QuestionList> qList;
+  AudioPlayer audioPlayer;
 
 
-  SpeedDiamond({this.qList});
+  SpeedDiamond({this.qList, this.audioPlayer});
 
   List<Widget> views = [];
 

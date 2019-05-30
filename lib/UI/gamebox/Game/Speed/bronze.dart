@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:lms_flutter/theme.dart';
 
@@ -148,9 +149,10 @@ import 'package:lms_flutter/model/Speed/answerList.dart';
 class SpeedBronze{
 
   final List<QuestionList> qList;
+  AudioPlayer audioPlayer;
 
 
-  SpeedBronze({this.qList});
+  SpeedBronze({this.qList, this.audioPlayer});
 
   List<Widget> views = [];
 
@@ -163,6 +165,7 @@ class SpeedBronze{
           chapter: question.chapter,
           question_num: question.question_num,
           title: question.title,
+
         ));
       } else if (question.type == "C") {
         views.add(BronzeC(

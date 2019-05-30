@@ -13,6 +13,7 @@ class GoldD2 extends StatefulWidget {
   final int question_num;
   final String title;
   final String question;
+  final AudioPlayer audioPlayer;
 
   GoldD2(
       {Key key,
@@ -21,7 +22,8 @@ class GoldD2 extends StatefulWidget {
       this.stage,
       this.question_num,
       this.title,
-      this.question})
+      this.question,
+      this.audioPlayer})
       : super(key: key);
 
   @override

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
@@ -15,9 +17,10 @@ class SilverD1 extends StatefulWidget {
   final int question_num;
   final String title;
   final String question;
+  final AudioPlayer audioPlayer;
 
   SilverD1({Key key, this.level, this.chapter, this.stage, this.question_num,this.title,
-    this.question})
+    this.question, this.audioPlayer})
       : super(key: key);
 
   @override
@@ -31,19 +34,39 @@ class Silver extends State<SilverD1> {
   final String silverWood = "assets/gamebox/img/speed/wood.png";
 
   AudioCache audioCache = AudioCache();
-  AudioPlayer advancedPlayer = AudioPlayer();
+  AudioPlayer advancedPlayer;
+  Timer _timer;
 
   playSound(String level, String chapter,String stage, String question_num) {
     setState(() {
-      advancedPlayer
-          .play("http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
+      advancedPlayer.release();
+
+      advancedPlayer.setUrl(
+          "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
+      advancedPlayer.release();
+      advancedPlayer.resume();
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    advancedPlayer.release();
   }
 
   @override
   void initState() {
     super.initState();
-    playSound(widget.level, widget.chapter.toString(), widget.stage.toString(), widget.question_num.toString());
+    advancedPlayer = widget.audioPlayer;
+
+    setState(() {
+
+      advancedPlayer.release();
+      _timer = Timer(Duration(seconds: 1), () {
+        playSound(widget.level, widget.chapter.toString(),
+            widget.stage.toString(), widget.question_num.toString());
+      });
+    });
   }
 
   @override
@@ -54,7 +77,13 @@ class Silver extends State<SilverD1> {
     speedBloc.getStage(widget.stage);
     speedBloc.question_num = widget.question_num;
     clickAnswer = speedBloc.answer;
-    return body(MediaQuery.of(context).size);
+    return WillPopScope(
+      onWillPop: () {
+        advancedPlayer.release();
+        Navigator.of(context).pop();
+      },
+      child: body(MediaQuery.of(context).size),
+    );
   }
 
   Widget body(Size size) {

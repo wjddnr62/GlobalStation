@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
@@ -13,8 +15,9 @@ class BronzeB extends StatefulWidget {
   final int stage;
   final int question_num;
   final String title;
+  final AudioPlayer audioPlayer;
 
-  BronzeB({Key key, this.level, this.chapter, this.stage, this.question_num,this.title})
+  BronzeB({Key key, this.level, this.chapter, this.stage, this.question_num,this.title, this.audioPlayer})
       : super(key: key);
 
   @override
@@ -27,20 +30,39 @@ class Bronze extends State<BronzeB> {
   final String B_POSTIT = "assets/gamebox/img/speed/postitB.png";
 
   AudioCache audioCache = AudioCache();
-  AudioPlayer advancedPlayer = AudioPlayer();
+  AudioPlayer advancedPlayer;
+  Timer _timer;
 
   playSound(String level, String chapter,String stage, String question_num) {
     setState(() {
-      advancedPlayer
-          .play("http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
+      advancedPlayer.release();
+
+      advancedPlayer.setUrl(
+          "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
+      advancedPlayer.release();
+      advancedPlayer.resume();
     });
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    advancedPlayer.release();
+  }
 
   @override
   void initState() {
     super.initState();
-    playSound(widget.level, widget.chapter.toString(), widget.stage.toString(), widget.question_num.toString());
+    advancedPlayer = widget.audioPlayer;
+
+    setState(() {
+
+      advancedPlayer.release();
+      _timer = Timer(Duration(seconds: 1), () {
+        playSound(widget.level, widget.chapter.toString(),
+            widget.stage.toString(), widget.question_num.toString());
+      });
+    });
   }
 
   @override
@@ -51,7 +73,13 @@ class Bronze extends State<BronzeB> {
     speedBloc.getStage(widget.stage);
     speedBloc.question_num = widget.question_num;
     clickAnswer = speedBloc.answer;
-    return body(MediaQuery.of(context).size);
+    return WillPopScope(
+      onWillPop: () {
+        advancedPlayer.release();
+        Navigator.of(context).pop();
+      },
+      child: body(MediaQuery.of(context).size),
+    );
   }
 
   Widget body(Size size) {

@@ -62,7 +62,7 @@ class SpeedGame extends StatelessWidget {
       );
     if (level == "B")
       return GameList(
-        item: SpeedBronze(qList: qList).getViews(),
+        item: SpeedBronze(qList: qList, audioPlayer: audioPlayer).getViews(),
         size: size,
         level: level,
         chapter: chapter,
@@ -70,7 +70,7 @@ class SpeedGame extends StatelessWidget {
       );
     if (level == "S")
       return GameList(
-        item: SpeedSilver(qList: qList).getViews(),
+        item: SpeedSilver(qList: qList, audioPlayer: audioPlayer).getViews(),
         size: size,
         level: level,
         chapter: chapter,
@@ -78,7 +78,7 @@ class SpeedGame extends StatelessWidget {
       );
     if (level == "G")
       return GameList(
-        item: SpeedGold(qList: qList).getViews(),
+        item: SpeedGold(qList: qList, audioPlayer: audioPlayer).getViews(),
         size: size,
         level: level,
         chapter: chapter,
@@ -86,7 +86,7 @@ class SpeedGame extends StatelessWidget {
       );
     if (level == "D")
       return GameList(
-        item: SpeedDiamond(qList: qList).getViews(),
+        item: SpeedDiamond(qList: qList, audioPlayer: audioPlayer).getViews(),
         size: size,
         level: level,
         chapter: chapter,

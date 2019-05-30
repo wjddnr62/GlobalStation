@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:lms_flutter/bloc/speed_game_bloc.dart';
 import 'package:lms_flutter/theme.dart';
@@ -156,6 +157,7 @@ class SilverE extends StatelessWidget {
   final int question_num;
   final String title;
   final String question;
+  final AudioPlayer audioPlayer;
 
   SilverE(
       {Key key,
@@ -164,7 +166,8 @@ class SilverE extends StatelessWidget {
       this.stage,
       this.question_num,
       this.title,
-      this.question})
+      this.question,
+      this.audioPlayer})
       : super(key: key);
 
   final String silverWood = "assets/gamebox/img/speed/sliver_ans.png";
