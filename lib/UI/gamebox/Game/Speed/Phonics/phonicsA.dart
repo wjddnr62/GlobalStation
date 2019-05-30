@@ -6,9 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lms_flutter/bloc/speed_game_bloc.dart';
 import 'package:lms_flutter/model/Speed/answerList.dart';
-
-import '../../../../../theme.dart';
-//import 'package:lms_flutter/themeservices.dart';
+import 'package:lms_flutter/theme.dart';
+import 'package:flutter/services.dart';
 
 class PhonicsA extends StatefulWidget {
   final String level;
@@ -27,6 +26,7 @@ class PhonicsA extends StatefulWidget {
       this.title,
       this.audioPlayer})
       : super(key: key);
+
 
   @override
   Phonics createState() => Phonics();
@@ -66,39 +66,21 @@ class Phonics extends State<PhonicsA> {
 
   playSound(String level, String chapter, String stage, String question_num) {
     print("phonicsA_play");
-//      _timer = Timer(Duration(seconds: 1), ()
-//      {
-//      });
 
-//      advancedPlayer.play(
-//          "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
     advancedPlayer.release();
-//    _timer = Timer(Duration(seconds: 1), () {
+
       advancedPlayer.setUrl(
           "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
       advancedPlayer.release();
       advancedPlayer.resume();
-//        advancedPlayer.onPlayerStateChanged.listen((AudioPlayerState s) {
-//          print("playerState : " + s.toString());
-//          if(s == AudioPlayerState.STOPPED) {
-//            advancedPlayer.setUrl(
-//                "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
-//            advancedPlayer.resume();
-//          }
-//
-//        });
-//    });
-
-//      advancedPlayer.play(
-//          "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
 
     print("soundCheckA : " + playsound.toString());
   }
 
   @override
   void dispose() {
+    advancedPlayer.stop();
     super.dispose();
-    advancedPlayer.release();
   }
 
   @override
@@ -107,19 +89,15 @@ class Phonics extends State<PhonicsA> {
     print("PhA init");
     responseFromNaticeCode("", "", "", "");
     advancedPlayer = widget.audioPlayer;
-//          _timer = Timer(Duration(seconds: 1), ()
-//      {
-//      });
     setState(() {
-//      _timer = Timer(Duration(seconds: 1), ()
-//      {
       advancedPlayer.release();
       _timer = Timer(Duration(seconds: 1), () {
         playSound(widget.level, widget.chapter.toString(),
             widget.stage.toString(), widget.question_num.toString());
       });
     });
-//    });
+    playSound(widget.level, widget.chapter.toString(), widget.stage.toString(),
+        widget.question_num.toString());
   }
 
   @override

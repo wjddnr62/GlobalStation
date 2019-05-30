@@ -40,32 +40,13 @@ class Phonics extends State<PhonicsB> {
   playSound(
       String level, String chapter, String stage, String question_num) async {
     print("phonicsB_play");
-//        _timer = Timer(Duration(seconds: 1), ()
-//        {
-//        });
 
-//      advancedPlayer.release();
-//      advancedPlayer.play(
-//          "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
     advancedPlayer.release();
-//    _timer = Timer(Duration(seconds: 1), () {
+
       advancedPlayer.setUrl(
           "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
       advancedPlayer.release();
       advancedPlayer.resume();
-//        advancedPlayer.onPlayerStateChanged.listen((AudioPlayerState s) {
-//          print("playerState : " + s.toString());
-//          if(s == AudioPlayerState.STOPPED) {
-//            advancedPlayer.setUrl(
-//                "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
-//            advancedPlayer.resume();
-//          }
-//
-//        });
-//    });
-
-//      advancedPlayer.play(
-//          "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
 
     print("soundCheckB : " + playsound.toString());
   }
@@ -79,21 +60,16 @@ class Phonics extends State<PhonicsB> {
   @override
   void initState() {
     super.initState();
-    print("phonicsBstate");
     advancedPlayer = widget.audioPlayer;
-//    _timer = Timer(Duration(seconds: 2), ()
-//    {
-//    });
+
     setState(() {
-//      _timer = Timer(Duration(seconds: 1), ()
-//      {
+
       advancedPlayer.release();
       _timer = Timer(Duration(seconds: 1), () {
         playSound(widget.level, widget.chapter.toString(),
             widget.stage.toString(), widget.question_num.toString());
       });
     });
-//    });
   }
 
   @override
@@ -199,7 +175,7 @@ class Phonics extends State<PhonicsB> {
             Image.asset(
               "assets/gamebox/img/speed/balloon.png",
               width: 160,
-              height: (idx == clickAnswer) ? 280 : 250,
+              height: (idx == clickAnswer) ? 280 :250,
               fit: BoxFit.contain,
             ),
             Align(

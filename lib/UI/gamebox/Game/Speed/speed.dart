@@ -38,7 +38,6 @@ class SpeedGame extends StatelessWidget {
   UserInfo userInfo = UserInfo();
   int review = 0;
 
-
   @override
   Widget build(BuildContext context) {
     memberLevel = userInfo.member_level;
@@ -130,6 +129,8 @@ class GameListState extends State<GameList> {
     resultView = false;
     restartGame = false;
     yay = 0;
+    maxLen = widget.item.length;
+    print("gameList init");
   }
 
   void finishTimer() {
