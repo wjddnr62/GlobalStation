@@ -24,6 +24,7 @@ int question_num = 0;
 int maxLen;
 int memberLevel;
 int yay = 0;
+AudioPlayer audioPlayer = AudioPlayer();
 
 class SpeedGame extends StatelessWidget {
   final String level;
@@ -36,6 +37,7 @@ class SpeedGame extends StatelessWidget {
 
   UserInfo userInfo = UserInfo();
   int review = 0;
+
 
   @override
   Widget build(BuildContext context) {
@@ -51,16 +53,14 @@ class SpeedGame extends StatelessWidget {
   }
 
   Widget view(Size size) {
-    print("SpeedList");
     if (level == "P")
       return GameList(
-        item: SpeedPhonics(qList: qList).getViews(),
+        item: SpeedPhonics(qList: qList, audioPlayer: audioPlayer).getViews(),
         size: size,
         level: level,
         chapter: chapter,
         stage: stage,
       );
-
     if (level == "B")
       return GameList(
         item: SpeedBronze(qList: qList).getViews(),
@@ -124,7 +124,6 @@ class GameListState extends State<GameList> {
 
   @override
   void initState() {
-    print("GameList");
     viewidx = 0;
     answer = "";
     viewTimer = true;
@@ -162,6 +161,7 @@ class GameListState extends State<GameList> {
 
   @override
   Widget build(BuildContext context) {
+    print("speed Build");
     maxLen = widget.item.length;
     return Stack(
       children: <Widget>[
@@ -194,9 +194,8 @@ class GameListState extends State<GameList> {
                     ),
                   ),
                 ],
-              )
-
-        ),
+              ),
+          ),
         Positioned(
           top: 10,
           right: 10,
@@ -207,6 +206,7 @@ class GameListState extends State<GameList> {
               width: 25,
             ),
             onTap: () {
+              audioPlayer.stop();
               Navigator.of(context).pop();
             },
           ),
@@ -247,6 +247,7 @@ class GameListState extends State<GameList> {
   Widget nextBtn(Size size) {
     return InkWell(
       onTap: () {
+        audioPlayer.release();
         speedBloc.getAnswer(speedBloc.question_num).then((value) {
           Map<String, dynamic> json = jsonDecode(value);
           viewTimer = false;
@@ -293,11 +294,13 @@ class GameListState extends State<GameList> {
     setState(() {
     });
   }
+
   AudioPlayer advancedPlayer = AudioPlayer();
   AudioCache audioCache;
 
 
   Widget checkAnswer() {
+    audioPlayer.release();
     audioCache = AudioCache(fixedPlayer: advancedPlayer);
     String img = "";
     if (answer == 'Y') {
@@ -334,6 +337,7 @@ class GameListState extends State<GameList> {
   Timer _timer;
 
   void handleTimeout() {
+    audioPlayer.release();
     _timer = new Timer(timeout, () {
       print("speedTimeout");
       answer = "";
@@ -348,7 +352,7 @@ class GameListState extends State<GameList> {
   @override
   void dispose() {
     if (_timer != null) _timer.cancel();
-
+    audioPlayer.release();
     super.dispose();
   }
 }

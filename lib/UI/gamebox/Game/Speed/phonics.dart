@@ -4,12 +4,15 @@ import 'package:flutter/material.dart';
 import 'Phonics/phonicsA.dart';
 import 'Phonics/phonicsB.dart';
 
+import 'package:audioplayers/audioplayers.dart';
+
 class SpeedPhonics{
 
   final List<QuestionList> qList;
+  AudioPlayer audioPlayer;
 
 
-  SpeedPhonics({this.qList});
+  SpeedPhonics({this.qList, this.audioPlayer});
 
   List<Widget> views = [];
 
@@ -23,6 +26,7 @@ class SpeedPhonics{
           chapter: question.chapter,
           question_num: question.question_num,
           title: question.title,
+          audioPlayer: audioPlayer,
         ));
       } else if (question.type == "B") {
         print("BB");
@@ -32,6 +36,7 @@ class SpeedPhonics{
           chapter: question.chapter,
           question_num: question.question_num,
           title: question.title,
+          audioPlayer: audioPlayer,
         ));
       }
     }

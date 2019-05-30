@@ -15,6 +15,38 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:audioplayers/audio_cache.dart';
 //import 'package:fluttery_audio/fluttery_audio.dart';
 
+String hair = "#e04736";
+String eye = "#334666";
+String skin = "#d97e57";
+int style = 1;
+
+int hats = 0;
+String hatUrl = "";
+
+int hair_style = 1;
+int hair_color = 1;
+int eye_color = 1;
+int skin_color = 1;
+int hat_shape = 0;
+
+var hairColors = [
+  "#e04736",
+  "#f24970",
+  "#ffc247",
+  "#d1d426",
+  "#855729",
+  "#332d2d",
+  "#1c2957"
+];
+var eyeColors = ["#334666", "#5e4327", "#241e1e"];
+var skinColors = ["#d97e57", "#ff8585", "#ffcba3"];
+var hatUrls = [
+  "assets/gamebox/img/charactor/hat/hat3.png",
+  "assets/gamebox/img/charactor/hat/hat2.png",
+  "assets/gamebox/img/charactor/hat/hat1.png"
+];
+
+
 class LobbyPage extends StatefulWidget {
   @override
   LobbyHomePage createState() => LobbyHomePage();
@@ -307,7 +339,22 @@ class LobbyHomePage extends State<LobbyPage> {
     Navigator.of(context).push(PageRouteBuilder(
       opaque: false,
       pageBuilder: (context, _, __) => SettingsPage(),
-    ));
+    )).then((value){
+      bloc.getMember().then((value){
+        setState(() {
+          hair_style = json.decode(value)['data']['hair_type'];
+          hair_color = json.decode(value)['data']['hair_color'];
+          eye_color = json.decode(value)['data']['eye_color'];
+          skin_color = json.decode(value)['data']['skin_color'];
+          hat_shape = json.decode(value)['data']['hat'];
+          style = hair_style;
+          hats = hat_shape;
+          if(hat_shape != 0){
+            hatUrl = hatUrls[hat_shape-1];
+          }
+        });
+      });
+    });
   }
 
   void setCharacter() {
@@ -340,10 +387,10 @@ class LobbyHomePage extends State<LobbyPage> {
     print("level = ${level}, ${gamePublicBloc.singStatus}");
     if (gamePublicBloc.singStatus != true) {
       gamePublicBloc.singStatus = true;
-      setState(() {
+        setState(() {
           audioCache.loop('gamebox/audio/backgroundmusic.mp3');
           AudioPlayer.logEnabled = false;
-      });
+        });
 
     }
 

@@ -155,7 +155,7 @@ class SettingsPage extends StatelessWidget {
                 height: 30,
               ),
               onTap: () {
-                Navigator.of(context).pop();
+                Navigator.of(context).pop("pop");
               },
             ),
           ),

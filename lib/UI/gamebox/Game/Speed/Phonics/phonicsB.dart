@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +13,7 @@ class PhonicsB extends StatefulWidget {
   final int stage;
   final int question_num;
   final String title;
+  final AudioPlayer audioPlayer;
 
   PhonicsB(
       {Key key,
@@ -18,7 +21,8 @@ class PhonicsB extends StatefulWidget {
       this.chapter,
       this.stage,
       this.question_num,
-      this.title})
+      this.title,
+      this.audioPlayer})
       : super(key: key);
 
   @override
@@ -29,34 +33,67 @@ class Phonics extends State<PhonicsB> {
 //  String title = "Listen and choose the correct word.";
 
   AudioCache audioCache = AudioCache();
-  AudioPlayer advancedPlayer = AudioPlayer();
+  AudioPlayer advancedPlayer;
   bool playsound = false;
+  Timer _timer;
 
   playSound(
       String level, String chapter, String stage, String question_num) async {
-    if (playsound == false){
-//      setState(() {
-        print("phonicsB_play");
-        advancedPlayer.play(
-            "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
-        advancedPlayer.onPlayerStateChanged.listen((AudioPlayerState s){
-          print("playerState : " + s.toString());
+    print("phonicsB_play");
+//        _timer = Timer(Duration(seconds: 1), ()
+//        {
+//        });
 
+//      advancedPlayer.release();
+//      advancedPlayer.play(
+//          "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
+    advancedPlayer.release();
+//    _timer = Timer(Duration(seconds: 1), () {
+      advancedPlayer.setUrl(
+          "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
+      advancedPlayer.release();
+      advancedPlayer.resume();
+//        advancedPlayer.onPlayerStateChanged.listen((AudioPlayerState s) {
+//          print("playerState : " + s.toString());
+//          if(s == AudioPlayerState.STOPPED) {
+//            advancedPlayer.setUrl(
+//                "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
+//            advancedPlayer.resume();
+//          }
+//
+//        });
+//    });
 
-        });
-//      });
-      playsound = true;
-    }
-    print("soundCheckB : " +playsound.toString());
+//      advancedPlayer.play(
+//          "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
+
+    print("soundCheckB : " + playsound.toString());
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    advancedPlayer.release();
+  }
 
   @override
   void initState() {
     super.initState();
     print("phonicsBstate");
-    playSound(widget.level, widget.chapter.toString(), widget.stage.toString(),
-        widget.question_num.toString());
+    advancedPlayer = widget.audioPlayer;
+//    _timer = Timer(Duration(seconds: 2), ()
+//    {
+//    });
+    setState(() {
+//      _timer = Timer(Duration(seconds: 1), ()
+//      {
+      advancedPlayer.release();
+      _timer = Timer(Duration(seconds: 1), () {
+        playSound(widget.level, widget.chapter.toString(),
+            widget.stage.toString(), widget.question_num.toString());
+      });
+    });
+//    });
   }
 
   @override
@@ -67,13 +104,21 @@ class Phonics extends State<PhonicsB> {
     speedBloc.getStage(widget.stage);
     speedBloc.question_num = widget.question_num;
     clickAnswer = speedBloc.answer;
-    return body(MediaQuery.of(context).size);
+    return WillPopScope(
+      onWillPop: () {
+        advancedPlayer.release();
+        Navigator.of(context).pop();
+      },
+      child: body(MediaQuery.of(context).size),
+    );
   }
 
   Widget body(Size size) {
+    final bool iphonex = MediaQuery.of(context).size.height >= 812.0;
+
     return Container(
       width: size.width,
-      height: size.height - 40,
+      height: (iphonex) ? size.height - 97 : size.height - 40,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
       ),
@@ -141,7 +186,7 @@ class Phonics extends State<PhonicsB> {
   Widget questionText(String data, int idx) {
     return Container(
       width: 160,
-      height: 270,
+      height: 280,
       child: InkWell(
         onTap: () {
           speedBloc.answer = idx;
@@ -154,7 +199,7 @@ class Phonics extends State<PhonicsB> {
             Image.asset(
               "assets/gamebox/img/speed/balloon.png",
               width: 160,
-              height: 270,
+              height: (idx == clickAnswer) ? 280 : 250,
               fit: BoxFit.contain,
             ),
             Align(
@@ -165,7 +210,6 @@ class Phonics extends State<PhonicsB> {
                 child: Center(
                   child: Text(
                     data,
-                    textScaleFactor: (clickAnswer == idx) ? 1.5 : 1.0,
                     style: questionTextStyle,
                   ),
                 ),

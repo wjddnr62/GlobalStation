@@ -33,9 +33,11 @@ class Bronze extends State<QuizB> {
 
   Widget body(Size size) {
 
+    final bool iphonex = MediaQuery.of(context).size.height >= 812.0;
+
     return Container(
       width: size.width,
-      height: size.height - 40,
+      height: (iphonex) ? size.height - 97 : size.height - 40,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
       ),

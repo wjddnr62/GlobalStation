@@ -196,10 +196,7 @@ class GameListState extends State<GameList> {
     return Stack(
       children: <Widget>[
         Positioned.fill(
-          child: ListView.builder(
-            physics: NeverScrollableScrollPhysics(),
-            itemBuilder: (context, idx) {
-              return Stack(
+              child: Stack(
                 children: <Widget>[
                   widget.item[viewidx],
                   Positioned(
@@ -227,11 +224,8 @@ class GameListState extends State<GameList> {
                     ),
                   ),
                 ],
-              );
-            },
-            itemCount: widget.item.length,
+              ),
           ),
-        ),
         Positioned(
           top: 10,
           right: 10,

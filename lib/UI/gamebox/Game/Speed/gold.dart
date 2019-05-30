@@ -68,7 +68,7 @@ class SpeedGold{
           question_num: question.question_num,
           title: question.title,
         ));
-      }else if(question.type == "E"){
+      }else if(question.type == "E-1" || question.type == "E-2"){
         views.add(GoldE(
           level: question.level.substring(0, 1),
           stage: question.stage,
