@@ -358,7 +358,7 @@ class PhonicsM extends State<Phonics> {
               children: <Widget>[
                 Container(
                     width: size.width,
-//                    height: size.height,
+                    height: size.height,
                     child: answer_finish
                         ? Stack(
                             children: <Widget>[
@@ -382,32 +382,22 @@ class PhonicsM extends State<Phonics> {
                         : next_question
                             ? Stack(
                                 children: <Widget>[
-                                  Positioned.fill(
-                                      child: Column(
-                                    children: <Widget>[
-                                      Image.asset(
-                                        "assets/gamebox/img/match/18.png",
-                                        fit: BoxFit.fill,
-                                        width: size.width,
-//                                    height: size.height,
-                                      ),
-                                    ],
-                                  ))
+                                  Image.asset(
+                                    "assets/gamebox/img/match/18.png",
+                                    fit: BoxFit.fill,
+                                    width: size.width,
+                                    height: size.height,
+                                  ),
                                 ],
                               )
                             : Stack(
                                 children: <Widget>[
-                                  Positioned.fill(
-                                      child: Column(
-                                    children: <Widget>[
-                                      Image.asset(
-                                        "assets/gamebox/img/match/18.png",
-                                        fit: BoxFit.fill,
-                                        width: size.width,
-//                                    height: size.height,
-                                      ),
-                                    ],
-                                  ))
+                                  Image.asset(
+                                    "assets/gamebox/img/match/18.png",
+                                    fit: BoxFit.fill,
+                                    width: size.width,
+                                    height: size.height,
+                                  ),
                                 ],
                               )),
                 Positioned(

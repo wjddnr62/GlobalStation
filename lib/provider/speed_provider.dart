@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 import 'dart:async';
 
@@ -44,7 +46,7 @@ class SpeedProvider {
         "&question_num=" +
         question_num.toString());
 
-    return response.body;
+    return utf8.decode(response.bodyBytes);
   }
 
   Future<String> getAnswerO(String level, int chapter, int stage,
