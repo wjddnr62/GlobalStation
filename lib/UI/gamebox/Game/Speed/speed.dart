@@ -175,6 +175,7 @@ class GameListState extends State<GameList> {
       Map<String, dynamic> json = jsonDecode(value);
 
       answer = json['data'];
+      if (json['result'] == 0) answer = 'N';
       speedBloc.answer = 0;
       speedBloc.question_num = 0;
       speedBloc.answerA = "";
