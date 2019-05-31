@@ -46,7 +46,7 @@ dev_dependencies:
 
 
 flutter_icons:
-  image_path: "assets/splash/icon_splash.png"
+  image_path: "assets/etc/icon_img.png"
   android: true
   ios: true
 
@@ -68,6 +68,7 @@ flutter:
     - assets/logo/
     - assets/splash/
     - assets/etc/
+    - assets/etc/icon_img.png
     - assets/splash/icon_splash.png
     - assets/gamebox/img/
     - assets/gamebox/img/main/

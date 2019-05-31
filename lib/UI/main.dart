@@ -96,8 +96,8 @@ class _MainState extends State<Main> {
 //      member_level = level_list[json.decode(result)['data']['level']];
     print(member_level);
 
-    bloc.changeuserno(userInfo.child_key);
-    bloc.getMember().then((value) {
+    mbloc.changeuserno(userInfo.child_key);
+    mbloc.getMember().then((value) {
       print("memberValue : " + value);
       userInfo.member_coin = json.decode(value)['data']['coin'];
       userInfo.member_level = json.decode(value)['data']['level'] - 1;

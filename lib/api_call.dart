@@ -19,6 +19,7 @@ class Api_Call {
   }
 
   Future<String> fetchDetailUser(http.Client client, String user_no) async {
+    print("apiCall : " + user_no);
     final response =
         await client.get(url + '/auth/userData?user_no=' + user_no);
 

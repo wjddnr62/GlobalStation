@@ -8,6 +8,7 @@ import 'package:lms_flutter/UI/main.dart';
 import 'package:lms_flutter/api_call.dart';
 import 'package:lms_flutter/model/UserInfo.dart';
 import 'package:lms_flutter/model/user.dart';
+import 'package:lms_flutter/bloc/member_bloc.dart';
 
 import '../bloc/login_bloc.dart';
 
@@ -18,8 +19,16 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   UserInfo userInfo = UserInfo();
 
-  void login() {
-    bloc.submit().then((value) {
+  var member_name = "";
+  var member_id = "";
+  var member_coin = 0;
+  var member_level = 0;
+  List<User> users;
+  List<DetailUser> detailUser;
+  List<String> level_list = new List();
+
+  void login() async {
+    bloc.submit().then((value) async {
       print("value : " + value);
       List<User> userData = json
           .decode(value)['data']
@@ -30,12 +39,14 @@ class _LoginState extends State<Login> {
         userInfo.child_name = userData[0].child_name;
         userInfo.child_user_id = userData[0].child_user_id;
         userInfo.user_id = userData[0].user_id;
+        print("1");
       } else if (userData.length == 2) {
         userInfo.userData = userData.cast<User>();
         userInfo.child_key = userData[0].child_key;
         userInfo.child_name = userData[0].child_name;
         userInfo.child_user_id = userData[0].child_user_id;
         userInfo.user_id = userData[0].user_id;
+        print("2");
       }
     }).catchError((error) {
       Scaffold.of(context).showSnackBar(new SnackBar(
@@ -64,6 +75,44 @@ class _LoginState extends State<Login> {
   void _passwordtoggle() {
     setState(() {
       _obscureText = !_obscureText;
+    });
+  }
+
+  void setUserData(String data) async {
+    level_list.add("Phonics 1");
+    level_list.add("Phonics 2");
+    level_list.add("Phonics 3");
+    level_list.add("Bronze 1");
+    level_list.add("Bronze 2");
+    level_list.add("Bronze 3");
+    level_list.add("Silver 1");
+    level_list.add("Silver 2");
+    level_list.add("Silver 3");
+    level_list.add("Gold 1");
+    level_list.add("Gold 2");
+    level_list.add("Gold 3");
+    level_list.add("Diamond 1");
+    level_list.add("Diamond 2");
+    level_list.add("Diamond 3");
+
+    userInfo.levelList = level_list;
+
+    users = json.decode(data)['data'].map<User>((json) => User.fromJson(json)).toList();
+
+    member_id = users[0].user_id;
+    member_name = users[0].child_name;
+
+    Api_Call().fetchDetailUser(http.Client(), userInfo.child_key).then((result) async{
+      setState(() {
+        member_coin = json.decode(result)['data']['coin'];
+        member_level = json.decode(result)['data']['level'] - 1;
+      });
+    });
+
+    mbloc.changeuserno(userInfo.child_key);
+    mbloc.getMember().then((value) {
+      userInfo.member_coin = json.decode(value)['data']['coin'];
+      userInfo.member_level = json.decode(value)['data']['level'] - 1;
     });
   }
 
@@ -208,11 +257,13 @@ class _LoginState extends State<Login> {
                                           1 && _isLogin == true) {
                                         _idController.text = "";
                                         _passController.text = "";
-                                        Navigator.push(
-                                            mainContext,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    Main(result)));
+                                        setUserData(result);
+                                        Navigator.of(context).pushNamed('/GameBox');
+//                                        Navigator.push(
+//                                            mainContext,
+//                                            MaterialPageRoute(
+//                                                builder: (context) =>
+//                                                    Main(result)));
                                       } else if (_isLogin == false) {
                                         Fluttertoast.showToast(
                                             msg: "잠시 후 다시시도해주세요.",

@@ -345,7 +345,7 @@ class CharacterState extends State<Character>{
   @override
   void initState() {
     super.initState();
-    bloc.getMember().then((value){
+    mbloc.getMember().then((value){
       setState(() {
         hair_style = json.decode(value)['data']['hair_type'];
         hair_color = json.decode(value)['data']['hair_color'];

@@ -33,7 +33,7 @@ class Character extends State<CharacterPage> {
   @override
   void initState() {
     super.initState();
-    bloc.getMember().then((value){
+    mbloc.getMember().then((value){
       setState(() {
         hair_style = json.decode(value)['data']['hair_type'];
         hair_color = json.decode(value)['data']['hair_color'];
@@ -225,7 +225,7 @@ class Character extends State<CharacterPage> {
                 ),
                 onTap: (){
                   String id= UserInfo().child_user_id;
-                  bloc.updateCharacter(id, hair_style, hair_color, eye_color, skin_color, hat_shape).then((value){
+                  mbloc.updateCharacter(id, hair_style, hair_color, eye_color, skin_color, hat_shape).then((value){
                     print(value);
                     Navigator.of(context).pop();
                   });

@@ -27,4 +27,4 @@ class MemberBloc {
   }
 }
 
-final bloc = MemberBloc();
+final mbloc = MemberBloc();

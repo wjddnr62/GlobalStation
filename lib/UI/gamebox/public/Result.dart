@@ -205,7 +205,7 @@ class ResultView extends State<Result> {
   updateCoin(){
     String id= UserInfo().child_user_id;
     print("id = ${id}, coin = ${coin}");
-    bloc.addCoin(id, coin).then((value){
+    mbloc.addCoin(id, coin).then((value){
       print("Coin : " + value);
       if(json.decode(value)['result'] == 1){
         UserInfo().member_coin = json.decode(value)['data']['coin'];

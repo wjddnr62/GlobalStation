@@ -341,7 +341,7 @@ class LobbyHomePage extends State<LobbyPage> {
       opaque: false,
       pageBuilder: (context, _, __) => SettingsPage(audioPlayer: advancedPlayer,),
     )).then((value){
-      bloc.getMember().then((value){
+      mbloc.getMember().then((value){
         setState(() {
           hair_style = json.decode(value)['data']['hair_type'];
           hair_color = json.decode(value)['data']['hair_color'];
@@ -389,7 +389,7 @@ class LobbyHomePage extends State<LobbyPage> {
     if (gamePublicBloc.singStatus != true) {
       gamePublicBloc.singStatus = true;
         setState(() {
-          audioCache.loop('gamebox/audio/backgroundmusic.mp3');
+//          audioCache.loop('gamebox/audio/backgroundmusic.mp3');
           AudioPlayer.logEnabled = false;
         });
 
@@ -455,7 +455,7 @@ class CharacterState extends State<Character>{
   @override
   void initState() {
     super.initState();
-    bloc.getMember().then((value){
+    mbloc.getMember().then((value){
       setState(() {
         hair_style = json.decode(value)['data']['hair_type'];
         hair_color = json.decode(value)['data']['hair_color'];

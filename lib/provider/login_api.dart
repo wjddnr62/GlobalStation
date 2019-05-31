@@ -19,6 +19,7 @@ class LoginProvider {
   }
 
   Future<String> fetchDetailUser(http.Client client, String userNo) async {
+    print("userNo : " + userNo);
     final response = await client
         .get(url + '/auth/userData?user_no=' + userNo)
         .catchError((error) {
