@@ -97,8 +97,8 @@ class Gold extends State<GoldE> {
         advancedPlayer.release();
         Navigator.of(context).pop();
       },
-      child: body(MediaQuery.of(context).size),
-    );
+      child:  body(MediaQuery.of(context).size),
+          );
   }
 
   Widget body(Size size) {
@@ -110,31 +110,33 @@ class Gold extends State<GoldE> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
       ),
-      child: Stack(
-        children: <Widget>[
-          Image.asset(
-            "assets/gamebox/img/speed/speed_gold_4.png",
-            width: size.width,
-            height: size.height,
-            fit: BoxFit.fill,
-          ),
-          Positioned(
-            top: size.height / 3.8,
-            child: Container(
+      child: SingleChildScrollView(
+        child: Stack(
+          children: <Widget>[
+            Image.asset(
+              "assets/gamebox/img/speed/speed_gold_4.png",
               width: size.width,
-              child: Center(
-                child: Text(
-                  widget.title,
-                  style: speedGoldTitleText,
+              height: size.height,
+              fit: BoxFit.fill,
+            ),
+            Positioned(
+              top: size.height / 3.5,
+              child: Container(
+                width: size.width,
+                child: Center(
+                  child: Text(
+                    widget.title,
+                    style: speedGoldTitleText,
+                  ),
                 ),
               ),
             ),
-          ),
-          Positioned(
-            top: size.height / 2.25,
-            child: answer(size),
-          ),
-        ],
+            Positioned(
+              top: size.height / 2,
+              child: answer(size),
+            ),
+          ],
+        ),
       ),
     );
   }

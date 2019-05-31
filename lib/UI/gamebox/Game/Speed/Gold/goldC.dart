@@ -124,7 +124,7 @@ class Gold extends State<GoldC> {
                   fit: BoxFit.fill,
                 ),
                 Positioned(
-                  top: size.height / 7.5,
+                  top: size.height / 6.5,
                   width: size.width - 20,
                   child: Container(
                     child: Stack(

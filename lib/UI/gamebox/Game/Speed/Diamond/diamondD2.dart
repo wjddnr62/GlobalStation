@@ -106,58 +106,61 @@ class Diamond extends State<DiamondD2> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
       ),
-      child: Stack(
-        children: <Widget>[
-          Image.asset(
-            "assets/gamebox/img/speed/speed_dia_2.png",
-            width: size.width,
-            height: size.height,
-            fit: BoxFit.fill,
-          ),
-          Positioned(
-            top: size.height / 2.85,
-            width: size.width - 20,
-            child: Container(
-              child: Stack(
-                children: <Widget>[
-                  Image.asset(
-                    "assets/gamebox/img/speed/dia_que2.png",
-                    fit: BoxFit.contain,
-                  ),
-                  Positioned(
-                    top: 30,
-                    left: 55,
-                    child: Container(
-                      width: size.width - 100,
-                      child:Center(
-                        child: Text(
-                          widget.question,
-                          style: speedDiaQuestionStyle,
+      child: SingleChildScrollView(
+        child: Stack(
+          children: <Widget>[
+            Image.asset(
+              "assets/gamebox/img/speed/speed_dia_2.png",
+              width: size.width,
+              height: size.height,
+              fit: BoxFit.fill,
+            ),
+            Positioned(
+              top: size.height / 2.85,
+              width: size.width - 20,
+              child: Container(
+                padding: EdgeInsets.only(right: 10.0),
+                child: Stack(
+                  children: <Widget>[
+                    Image.asset(
+                      "assets/gamebox/img/speed/dia_que2.png",
+                      fit: BoxFit.contain,
+                    ),
+                    Positioned(
+                      top: 30,
+                      left: 55,
+                      child: Container(
+                        width: size.width - 100,
+                        child:Center(
+                          child: Text(
+                            widget.question,
+                            style: speedDiaQuestionStyle,
+                          ),
                         ),
                       ),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
-          Positioned(
-            top: size.height / 3.8,
-            child: Container(
-              width: size.width,
-              child: Center(
-                child: Text(
-                  widget.title,
-                  style: speedDiaTitleText,
+                    )
+                  ],
                 ),
               ),
             ),
-          ),
-          Positioned(
-            top: size.height / 1.9,
-            child: message(size),
-          ),
-        ],
+            Positioned(
+              top: size.height / 3.8,
+              child: Container(
+                width: size.width,
+                child: Center(
+                  child: Text(
+                    widget.title,
+                    style: speedDiaTitleText,
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              top: size.height / 2,
+              child: message(size),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -166,7 +169,7 @@ class Diamond extends State<DiamondD2> {
     return Container(
       width: size.width - 20,
       height: 50,
-      padding: const EdgeInsets.only(left:20),
+      padding: const EdgeInsets.only(left:20,right: 10.0),
       child: Stack(
         children: <Widget>[
           Image.asset(

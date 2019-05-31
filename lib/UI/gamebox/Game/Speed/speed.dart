@@ -50,6 +50,7 @@ class SpeedGame extends StatelessWidget {
     memberLevel = userInfo.member_level;
     audioPlayer.release();
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: Colors.black.withOpacity(0.5),
         body: SafeArea(
           child: Padding(
