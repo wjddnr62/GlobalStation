@@ -217,7 +217,7 @@ class Gold extends State<GoldC> {
             ),
             Align(
               alignment: AlignmentDirectional.center,
-              child: Text(text, style: speedGoldQuestionStyle,),
+              child: Text(text, style: (clickAnswer == idx) ? speedGoldQuestionStyleSelect :speedGoldQuestionStyle,),
             ),
           ],
         ),

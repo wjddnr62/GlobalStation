@@ -136,6 +136,13 @@ final speedGoldQuestionStyle = TextStyle(
   fontWeight: FontWeight.bold,
 );
 
+final speedGoldQuestionStyleSelect = TextStyle(
+  fontSize: defaultFontSize - 2,
+  color: Colors.red,
+  fontFamily: 'Jua',
+  fontWeight: FontWeight.bold,
+);
+
 final speedDiaTitleText = TextStyle(
   fontSize: defaultFontSize - 2,
   color: Colors.red,
