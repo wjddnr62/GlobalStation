@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
@@ -417,8 +416,9 @@ class BronzeM extends State<Bronze> {
                     child: answer_finish
                         ? Stack(
                             children: <Widget>[
-                              Image.asset(
-                                  "assets/gamebox/img/effect/result_background.png"),
+                              Positioned.fill(
+                                  child: Image.asset(
+                                      "assets/gamebox/img/effect/result_background.png")),
                               Center(
                                 child: Result(
                                   level: widget.level,
@@ -434,7 +434,7 @@ class BronzeM extends State<Bronze> {
                             ],
                           )
                         : next_question
-                            ? Column(
+                            ? Stack(
                                 children: <Widget>[
                                   Image.asset(
                                     "assets/gamebox/img/match/18.png",
@@ -444,7 +444,7 @@ class BronzeM extends State<Bronze> {
                                   ),
                                 ],
                               )
-                            : Column(
+                            : Stack(
                                 children: <Widget>[
                                   Image.asset(
                                     "assets/gamebox/img/match/18.png",

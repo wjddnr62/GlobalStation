@@ -249,12 +249,13 @@ class GameListState extends State<GameList> {
         ),
         checkAnswer(),
         (resultView)
-            ? Positioned.fill(
-                child: Stack(
+            ? Stack(
                   children: <Widget>[
-                    Image.asset(
-                        "assets/gamebox/img/effect/result_background.png"),
-                    Center(
+                    Positioned.fill(
+                        child: Image.asset(
+                            "assets/gamebox/img/effect/result_background.png")),
+                    Positioned.fill(
+                        child: Center(
                       child: Result(
                         level: widget.level,
                         chapter: widget.chapter,
@@ -265,10 +266,30 @@ class GameListState extends State<GameList> {
                         resetGame: () => restart(),
                         memberLevel: memberLevel,
                       ),
-                    )
+                    )),
+                    Positioned(
+                      top: MediaQuery.of(context).size.width / 30,
+                      child: Container(
+                        width: MediaQuery.of(context).size.width - 20,
+                        height: 20,
+                        padding: EdgeInsets.only(right: 15),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            GestureDetector(
+                              child: Image.asset(
+                                  "assets/gamebox/img/close_button.png"),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                              },
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
                   ],
-                ),
-              )
+                )
             : Positioned(
                 top: 0,
                 child: SizedBox(

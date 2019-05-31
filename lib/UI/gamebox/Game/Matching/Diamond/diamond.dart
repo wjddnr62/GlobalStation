@@ -436,7 +436,7 @@ class DiamondM extends State<Diamond> {
                             ],
                           )
                         : next_question
-                            ? Column(
+                            ? Stack(
                                 children: <Widget>[
                                   Image.asset(
                                     "assets/gamebox/img/match/18.png",
@@ -446,7 +446,7 @@ class DiamondM extends State<Diamond> {
                                   ),
                                 ],
                               )
-                            : Column(
+                            : Stack(
                                 children: <Widget>[
                                   Image.asset(
                                     "assets/gamebox/img/match/18.png",

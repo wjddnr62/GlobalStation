@@ -1,24 +1,22 @@
 import 'dart:async';
+import 'dart:convert';
 
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:lms_flutter/UI/gamebox/public/progressBar.dart';
-import 'package:lms_flutter/bloc/quiz_game_bloc.dart';
-import 'package:lms_flutter/model/Quiz/questionList.dart';
-import 'package:lms_flutter/UI/gamebox/public/Timer.dart';
-import 'package:lms_flutter/UI/gamebox/public/questionStatus.dart';
-import 'package:lms_flutter/UI/gamebox/public/Result.dart';
-import 'package:lms_flutter/model/UserInfo.dart';
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:lms_flutter/UI/gamebox/public/Result.dart';
+import 'package:lms_flutter/UI/gamebox/public/Timer.dart';
+import 'package:lms_flutter/UI/gamebox/public/questionStatus.dart';
+import 'package:lms_flutter/bloc/quiz_game_bloc.dart';
+import 'package:lms_flutter/model/Quiz/questionList.dart';
+import 'package:lms_flutter/model/UserInfo.dart';
 
-import 'phonics.dart';
 import 'bronze.dart';
-import 'silver.dart';
-import 'gold.dart';
 import 'diamond.dart';
-
-import 'dart:convert';
+import 'gold.dart';
+import 'phonics.dart';
+import 'silver.dart';
 
 int viewidx;
 int question_num = 0;
@@ -170,7 +168,7 @@ class GameListState extends State<GameList> {
         answer = json['data'];
         quizBloc.answer = 0;
         quizBloc.question_num = 0;
-        if(answer == 'N') answer = 'T';
+        if (answer == 'N') answer = 'T';
       });
 
       if (viewidx == maxLen - 1) {
@@ -188,44 +186,43 @@ class GameListState extends State<GameList> {
   Widget build(BuildContext context) {
     maxLen = widget.item.length;
     return mainGame();
-
   }
 
-  Widget mainGame(){
+  Widget mainGame() {
     print("mainGameRebuild");
     return Stack(
       children: <Widget>[
         Positioned.fill(
-              child: Stack(
-                children: <Widget>[
-                  widget.item[viewidx],
-                  Positioned(
-                    bottom: 20,
-                    child: nextBtn(widget.size),
-                  ),
-                  (viewTimer)
-                      ? Positioned(
-                    top: MediaQuery.of(context).size.width / 15,
-                    child: TimerBar(
-                      width: MediaQuery.of(context).size.width,
-                      finishTimer: () => finishTimer(),
-                    ),
-                  )
-                      : SizedBox(
-                    width: 0,
-                    height: 0,
-                  ),
-                  Positioned(
-                    top: MediaQuery.of(context).size.width / 5,
-                    child: QuestionStatus(
-                      question_all_length: maxLen,
-                      question_count: viewidx,
-                      width: MediaQuery.of(context).size.width,
-                    ),
-                  ),
-                ],
+          child: Stack(
+            children: <Widget>[
+              widget.item[viewidx],
+              Positioned(
+                bottom: 20,
+                child: nextBtn(widget.size),
               ),
+              (viewTimer)
+                  ? Positioned(
+                      top: MediaQuery.of(context).size.width / 15,
+                      child: TimerBar(
+                        width: MediaQuery.of(context).size.width,
+                        finishTimer: () => finishTimer(),
+                      ),
+                    )
+                  : SizedBox(
+                      width: 0,
+                      height: 0,
+                    ),
+              Positioned(
+                top: MediaQuery.of(context).size.width / 5,
+                child: QuestionStatus(
+                  question_all_length: maxLen,
+                  question_count: viewidx,
+                  width: MediaQuery.of(context).size.width,
+                ),
+              ),
+            ],
           ),
+        ),
         Positioned(
           top: 10,
           right: 10,
@@ -241,40 +238,62 @@ class GameListState extends State<GameList> {
           ),
         ),
         checkAnswer(),
-
         (resultView)
             ? Positioned.fill(
-          child: Stack(
-            children: <Widget>[
-              Image.asset(
-                  "assets/gamebox/img/effect/result_background.png"),
-              Center(
-                child: Result(
-                  level: widget.level,
-                  chapter: widget.chapter,
-                  stage: widget.stage,
-                  score: yay,
-                  scoreLength: maxLen,
-                  sizeWidth: double.infinity,
-                  resetGame: () => restart(),
-                  memberLevel: memberLevel,
+                child: Stack(
+                  children: <Widget>[
+                    Positioned.fill(
+                      child: Image.asset(
+                          "assets/gamebox/img/effect/result_background.png"),
+                    ),
+                    Center(
+                      child: Result(
+                        level: widget.level,
+                        chapter: widget.chapter,
+                        stage: widget.stage,
+                        score: yay,
+                        scoreLength: maxLen,
+                        sizeWidth: double.infinity,
+                        resetGame: () => restart(),
+                        memberLevel: memberLevel,
+                      ),
+                    ),
+                    Positioned(
+                      top: MediaQuery.of(context).size.width / 30,
+                      child: Container(
+                        width: MediaQuery.of(context).size.width - 20,
+                        height: 20,
+                        padding: EdgeInsets.only(right: 15),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            GestureDetector(
+                              child: Image.asset(
+                                  "assets/gamebox/img/close_button.png"),
+                              onTap: () {
+                                Navigator.of(context).pop();
+                              },
+                            )
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
                 ),
               )
-            ],
-          ),
-        ): Positioned(
-          top: 0,
-          child: SizedBox(
-            width: 0,
-            height: 0,
-          ),
-        ),
-
+            : Positioned(
+                top: 0,
+                child: SizedBox(
+                  width: 0,
+                  height: 0,
+                ),
+              ),
       ],
     );
   }
 
-  void restart(){
+  void restart() {
     setState(() {
       print("restart");
       viewidx = 0;
@@ -324,6 +343,7 @@ class GameListState extends State<GameList> {
       ),
     );
   }
+
   AudioCache audioCache = AudioCache();
   AudioPlayer advancedPlayer = AudioPlayer();
 
@@ -336,7 +356,7 @@ class GameListState extends State<GameList> {
     } else if (answer == 'N') {
       img = "assets/gamebox/img/quiz/nope.png";
       audioCache.play("gamebox/audio/fail_sound.wav");
-    } else if(answer == 'T') {
+    } else if (answer == 'T') {
       img = "assets/gamebox/img/timeout.png";
       audioCache.play("gamebox/audio/fail_sound.wav");
     }

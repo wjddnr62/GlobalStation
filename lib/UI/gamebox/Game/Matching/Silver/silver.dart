@@ -420,7 +420,7 @@ class SilverM extends State<Silver> {
                             ],
                           )
                         : next_question
-                            ? Column(
+                            ? Stack(
                                 children: <Widget>[
                                   Image.asset(
                                     "assets/gamebox/img/match/18.png",
@@ -430,7 +430,7 @@ class SilverM extends State<Silver> {
                                   ),
                                 ],
                               )
-                            : Column(
+                            : Stack(
                                 children: <Widget>[
                                   Image.asset(
                                     "assets/gamebox/img/match/18.png",
