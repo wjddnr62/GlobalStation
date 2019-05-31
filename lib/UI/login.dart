@@ -102,14 +102,14 @@ class _LoginState extends State<Login> {
     member_id = users[0].user_id;
     member_name = users[0].child_name;
 
-    Api_Call().fetchDetailUser(http.Client(), userInfo.child_key).then((result) async{
+    Api_Call().fetchDetailUser(http.Client(), json.decode(data)['data'][0]['child_key']).then((result) async{
       setState(() {
         member_coin = json.decode(result)['data']['coin'];
         member_level = json.decode(result)['data']['level'] - 1;
       });
     });
 
-    mbloc.changeuserno(userInfo.child_key);
+    mbloc.changeuserno(json.decode(data)['data'][0]['child_key']);
     mbloc.getMember().then((value) {
       userInfo.member_coin = json.decode(value)['data']['coin'];
       userInfo.member_level = json.decode(value)['data']['level'] - 1;

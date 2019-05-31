@@ -389,7 +389,7 @@ class LobbyHomePage extends State<LobbyPage> {
     if (gamePublicBloc.singStatus != true) {
       gamePublicBloc.singStatus = true;
         setState(() {
-//          audioCache.loop('gamebox/audio/backgroundmusic.mp3');
+          audioCache.loop('gamebox/audio/backgroundmusic.mp3');
           AudioPlayer.logEnabled = false;
         });
 
