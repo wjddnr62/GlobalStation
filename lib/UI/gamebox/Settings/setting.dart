@@ -85,6 +85,7 @@ class SettingsPage extends StatelessWidget {
               ),
               InkWell(
                 onTap: () {
+                  audioPlayer.stop();
                   _launchURL();
                 },
                 child: boxContainer("GEC 홈페이지"),

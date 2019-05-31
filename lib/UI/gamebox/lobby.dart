@@ -332,13 +332,14 @@ class LobbyHomePage extends State<LobbyPage> {
               idx: idx,
               lev: lev,
               cap: cap,
+              audioPlayer: advancedPlayer,
             )));
   }
 
   void settings() {
     Navigator.of(context).push(PageRouteBuilder(
       opaque: false,
-      pageBuilder: (context, _, __) => SettingsPage(),
+      pageBuilder: (context, _, __) => SettingsPage(audioPlayer: advancedPlayer,),
     )).then((value){
       bloc.getMember().then((value){
         setState(() {
@@ -388,7 +389,7 @@ class LobbyHomePage extends State<LobbyPage> {
     if (gamePublicBloc.singStatus != true) {
       gamePublicBloc.singStatus = true;
         setState(() {
-//          audioCache.loop('gamebox/audio/backgroundmusic.mp3');
+          audioCache.loop('gamebox/audio/backgroundmusic.mp3');
           AudioPlayer.logEnabled = false;
         });
 
@@ -420,6 +421,36 @@ class Character extends StatefulWidget{
 }
 
 class CharacterState extends State<Character>{
+  String hair = "#e04736";
+  String eye = "#334666";
+  String skin = "#d97e57";
+  int style = 1;
+
+  int hats = 0;
+  String hatUrl = "";
+
+  int hair_style = 1;
+  int hair_color = 1;
+  int eye_color = 1;
+  int skin_color = 1;
+  int hat_shape = 0;
+
+  var hairColors = [
+    "#e04736",
+    "#f24970",
+    "#ffc247",
+    "#d1d426",
+    "#855729",
+    "#332d2d",
+    "#1c2957"
+  ];
+  var eyeColors = ["#334666", "#5e4327", "#241e1e"];
+  var skinColors = ["#d97e57", "#ff8585", "#ffcba3"];
+  var hatUrls = [
+    "assets/gamebox/img/charactor/hat/hat3.png",
+    "assets/gamebox/img/charactor/hat/hat2.png",
+    "assets/gamebox/img/charactor/hat/hat1.png"
+  ];
 
   @override
   void initState() {

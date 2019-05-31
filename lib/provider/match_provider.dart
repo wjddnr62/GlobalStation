@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
@@ -41,8 +42,8 @@ class MatchProvider {
         stage.toString() +
         "&question_num=" +
         question_num.toString());
-
-    return response.body;
+      String body = utf8.decode(response.bodyBytes);
+    return body;
   }
 
 

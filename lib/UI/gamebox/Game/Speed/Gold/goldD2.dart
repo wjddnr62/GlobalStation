@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +15,7 @@ class GoldD2 extends StatefulWidget {
   final int question_num;
   final String title;
   final String question;
+  final AudioPlayer audioPlayer, background;
 
   GoldD2(
       {Key key,
@@ -21,7 +24,8 @@ class GoldD2 extends StatefulWidget {
       this.stage,
       this.question_num,
       this.title,
-      this.question})
+      this.question,
+      this.audioPlayer, this.background})
       : super(key: key);
 
   @override
@@ -35,25 +39,67 @@ class Gold extends State<GoldD2> {
   final String goldQue = "assets/gamebox/img/speed/gold_ans.png";
 
   AudioCache audioCache = AudioCache();
-  AudioPlayer advancedPlayer = AudioPlayer();
+  AudioPlayer advancedPlayer, background;
+  Timer _timer;
+  String soundUrl;
 
-  playSound(String level, String chapter,String stage, String question_num) {
+  playSound(String level, String chapter,String stage, String question_num) async {
     setState(() {
-      advancedPlayer
-          .play("http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
+      advancedPlayer.release();
+      _timer = Timer(Duration(seconds: 1), ()
+      {
+        if (soundUrl != "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}") {
+          advancedPlayer.setUrl(
+              "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
+          advancedPlayer.resume();
+          soundUrl = "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}";
+        }
+      });
     });
+
+    advancedPlayer.onPlayerStateChanged.listen((state) {
+      if (state == AudioPlayerState.COMPLETED) {
+        background.setVolume(1.0);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    advancedPlayer.release();
   }
 
   @override
   void initState() {
     super.initState();
-    playSound(widget.level, widget.chapter.toString(), widget.stage.toString(), widget.question_num.toString());
+    advancedPlayer = widget.audioPlayer;
+    background = widget.background;
+//    setState(() {
+//
+//      advancedPlayer.release();
+//      _timer = Timer(Duration(seconds: 1), () {
+//        playSound(widget.level, widget.chapter.toString(),
+//            widget.stage.toString(), widget.question_num.toString());
+//      });
+//    });
   }
 
   @override
   Widget build(BuildContext context) {
     speedBloc.answerType = 2;
-    return body(MediaQuery.of(context).size);
+    setState(() {
+      background.setVolume(0.5);
+      playSound(widget.level, widget.chapter.toString(),
+          widget.stage.toString(), widget.question_num.toString());
+    });
+    return WillPopScope(
+      onWillPop: () {
+        advancedPlayer.release();
+        Navigator.of(context).pop();
+      },
+      child: body(MediaQuery.of(context).size),
+    );
   }
 
   Widget body(Size size) {
@@ -65,58 +111,60 @@ class Gold extends State<GoldD2> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
       ),
-      child: Stack(
-        children: <Widget>[
-          Image.asset(
-            "assets/gamebox/img/speed/speed_gold_3.png",
-            width: size.width,
-            height: size.height,
-            fit: BoxFit.fill,
-          ),
-          Positioned(
-            top: size.height / 3.3,
-            width: size.width - 20,
-            child: Container(
-              child: Stack(
-                children: <Widget>[
-                  Image.asset(
-                    "assets/gamebox/img/speed/gold_que2.png",
-                    fit: BoxFit.contain,
-                  ),
-                  Positioned(
-                    top: 32,
-                    left: 55,
-                    child: Container(
-                      width: size.width - 100,
-                      child: Center(
-                        child: Text(
-                          widget.question,
-                          style: speedGoldQuestionStyle,
+      child: SingleChildScrollView(
+        child: Stack(
+          children: <Widget>[
+            Image.asset(
+              "assets/gamebox/img/speed/speed_gold_3.png",
+              width: size.width,
+              height: size.height,
+              fit: BoxFit.fill,
+            ),
+            Positioned(
+              top: size.height / 3.3,
+              width: size.width - 20,
+              child: Container(
+                child: Stack(
+                  children: <Widget>[
+                    Image.asset(
+                      "assets/gamebox/img/speed/gold_que2.png",
+                      fit: BoxFit.contain,
+                    ),
+                    Positioned(
+                      top: 32,
+                      left: 55,
+                      child: Container(
+                        width: size.width - 100,
+                        child: Center(
+                          child: Text(
+                            widget.question,
+                            style: speedGoldQuestionStyle,
+                          ),
                         ),
                       ),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
-          Positioned(
-            top: size.height / 3.8,
-            child: Container(
-              width: size.width,
-              child: Center(
-                child: Text(
-                  widget.title,
-                  style: speedGoldTitleText,
+                    )
+                  ],
                 ),
               ),
             ),
-          ),
-          Positioned(
-            top: size.height / 2.22,
-            child: wood(size),
-          ),
-        ],
+            Positioned(
+              top: size.height / 3.8,
+              child: Container(
+                width: size.width,
+                child: Center(
+                  child: Text(
+                    widget.title,
+                    style: speedGoldTitleText,
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              top: size.height / 2.07,
+              child: wood(size),
+            ),
+          ],
+        ),
       ),
     );
   }

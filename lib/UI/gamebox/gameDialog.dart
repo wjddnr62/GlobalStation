@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lms_flutter/UI/gamebox/Game/Quiz/quizDialog.dart';
@@ -30,8 +31,9 @@ class GameDialog extends StatefulWidget {
   int idx;
   String lev;
   int cap;
+  AudioPlayer audioPlayer;
 
-  GameDialog({Key key, this.idx, this.lev, this.cap}) : super(key: key);
+  GameDialog({Key key, this.idx, this.lev, this.cap, this.audioPlayer}) : super(key: key);
 
   @override
   GameDialogState createState() => GameDialogState();
@@ -266,6 +268,7 @@ class GameDialogState extends State<GameDialog> {
                                                 level: widget.lev,
                                                 chapter: widget.cap,
                                                 stage: stages[idx].stage,
+                                                audioPlayer: widget.audioPlayer,
                                               )));
                                 } else if (selectGame == "Q") {
                                   Navigator.of(context).pop();

@@ -41,12 +41,13 @@ class _LoginState extends State<Login> {
       Scaffold.of(context).showSnackBar(new SnackBar(
         content: new Text(error),
       ));
+      _isLogin = false;
       print("error : " + error);
     });
   }
 
   bool _obscureText = true;
-  bool _isLogin = false;
+  bool _isLogin = true;
 
   bool _nextPage = false;
 
@@ -204,7 +205,7 @@ class _LoginState extends State<Login> {
                                               gravity: ToastGravity.BOTTOM);
                                         }
                                       } else if (json.decode(result)['result'] ==
-                                          1) {
+                                          1 && _isLogin == true) {
                                         _idController.text = "";
                                         _passController.text = "";
                                         Navigator.push(
@@ -212,6 +213,11 @@ class _LoginState extends State<Login> {
                                             MaterialPageRoute(
                                                 builder: (context) =>
                                                     Main(result)));
+                                      } else if (_isLogin == false) {
+                                        Fluttertoast.showToast(
+                                            msg: "잠시 후 다시시도해주세요.",
+                                            toastLength: Toast.LENGTH_SHORT,
+                                            gravity: ToastGravity.BOTTOM);
                                       }
                                     }
                                   },

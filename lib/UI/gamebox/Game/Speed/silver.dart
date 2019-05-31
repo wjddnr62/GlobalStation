@@ -1,13 +1,11 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-import 'package:lms_flutter/theme.dart';
+import 'package:lms_flutter/model/Speed/questionList.dart';
 
 import 'Silver/silverC.dart';
 import 'Silver/silverD1.dart';
 import 'Silver/silverD2.dart';
 import 'Silver/silverE.dart';
-
-import 'package:lms_flutter/model/Speed/questionList.dart';
-
 
 //class SpeedSilver extends StatefulWidget{
 //
@@ -30,53 +28,56 @@ import 'package:lms_flutter/model/Speed/questionList.dart';
 //     return SilverE();
 //  }
 //}
-class SpeedSilver{
-
+class SpeedSilver {
   final List<QuestionList> qList;
+  AudioPlayer audioPlayer, background;
 
-
-  SpeedSilver({this.qList});
+  SpeedSilver({this.qList, this.audioPlayer, this.background});
 
   List<Widget> views = [];
 
-  List<Widget> getViews(){
+  List<Widget> getViews() {
     for (QuestionList question in qList) {
       if (question.type == "D-1") {
         views.add(SilverD1(
-          level: question.level.substring(0, 1),
-          stage: question.stage,
-          question: question.contents,
-          chapter: question.chapter,
-          question_num: question.question_num,
-          title: question.title,
-        ));
+            level: question.level.substring(0, 1),
+            stage: question.stage,
+            question: question.contents,
+            chapter: question.chapter,
+            question_num: question.question_num,
+            title: question.title,
+            audioPlayer: audioPlayer,
+            background: background));
       } else if (question.type == "D-2") {
         views.add(SilverD2(
-          level: question.level.substring(0, 1),
-          stage: question.stage,
-          question: question.contents,
-          chapter: question.chapter,
-          question_num: question.question_num,
-          title: question.title,
-        ));
-      }else if (question.type == "C"){
+            level: question.level.substring(0, 1),
+            stage: question.stage,
+            question: question.contents,
+            chapter: question.chapter,
+            question_num: question.question_num,
+            title: question.title,
+            audioPlayer: audioPlayer,
+            background: background));
+      } else if (question.type == "C") {
         views.add(SilverC(
-          level: question.level.substring(0, 1),
-          stage: question.stage,
-          question: question.contents,
-          chapter: question.chapter,
-          question_num: question.question_num,
-          title: question.title,
-        ));
-      }else if(question.type == "E-1"){
+            level: question.level.substring(0, 1),
+            stage: question.stage,
+            question: question.contents,
+            chapter: question.chapter,
+            question_num: question.question_num,
+            title: question.title,
+            audioPlayer: audioPlayer,
+            background: background));
+      } else if (question.type == "E-1") {
         views.add(SilverE(
-          level: question.level.substring(0, 1),
-          stage: question.stage,
-          question: question.contents,
-          chapter: question.chapter,
-          question_num: question.question_num,
-          title: question.title,
-        ));
+            level: question.level.substring(0, 1),
+            stage: question.stage,
+            question: question.contents,
+            chapter: question.chapter,
+            question_num: question.question_num,
+            title: question.title,
+            audioPlayer: audioPlayer,
+            background: background));
       }
     }
     return views;

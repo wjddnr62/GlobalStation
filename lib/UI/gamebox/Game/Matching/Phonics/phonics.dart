@@ -184,7 +184,7 @@ class PhonicsM extends State<Phonics> {
           ", " +
           answer_finish_count.toString());
       if (answer_all_length != 5 && answer_count == 3) {
-        audioCache.play("gamebox/audio/sucess_sound.mp3");
+        audioCache.play("gamebox/audio/sucess_sound.wav");
         answer_finish_count += 1;
         answer_all_length += 1;
         if (answer_all_length == 5) {
@@ -235,7 +235,7 @@ class PhonicsM extends State<Phonics> {
           next_question = true;
           resultView();
         } else {
-//          audioCache.play("gamebox/audio/fail_sound.mp3");
+          audioCache.play("gamebox/audio/fail_sound.wav");
           timeFinish = true;
           answer_one = "";
           answer_two = "";
@@ -362,8 +362,9 @@ class PhonicsM extends State<Phonics> {
                     child: answer_finish
                         ? Stack(
                             children: <Widget>[
-                              Image.asset(
-                                  "assets/gamebox/img/effect/result_background.png"),
+                              Positioned.fill(
+                                  child: Image.asset(
+                                      "assets/gamebox/img/effect/result_background.png")),
                               Center(
                                 child: Result(
                                   level: widget.level,
@@ -379,7 +380,7 @@ class PhonicsM extends State<Phonics> {
                             ],
                           )
                         : next_question
-                            ? Column(
+                            ? Stack(
                                 children: <Widget>[
                                   Image.asset(
                                     "assets/gamebox/img/match/18.png",
@@ -389,7 +390,7 @@ class PhonicsM extends State<Phonics> {
                                   ),
                                 ],
                               )
-                            : Column(
+                            : Stack(
                                 children: <Widget>[
                                   Image.asset(
                                     "assets/gamebox/img/match/18.png",

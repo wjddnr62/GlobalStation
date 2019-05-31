@@ -78,7 +78,7 @@ class MatchGameDialogState extends State<MatchGameDialog> {
                   height: 100.0,
                 );
               }),
-            padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
         ),
       ),
     );
@@ -105,20 +105,20 @@ class GameListState extends State<GameList> {
   Widget build(BuildContext context) {
     maxLen = widget.item.length;
     print(maxLen);
-    return ListView.builder(
-      physics: NeverScrollableScrollPhysics(),
-      itemBuilder: (context, idx) {
-        return Stack(
+    return Stack(
+      children: <Widget>[
+        Positioned.fill(
+            child: Stack(
           children: <Widget>[
             widget.item[viewidx],
+          ],
+        ))
+
 //            Positioned(
 //              bottom: 50,
 //              child: nextBtn(widget.size),
 //            )
-          ],
-        );
-      },
-      itemCount: widget.item.length,
+      ],
     );
   }
 

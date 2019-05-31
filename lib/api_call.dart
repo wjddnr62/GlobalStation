@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:lms_flutter/model/user.dart';
@@ -10,7 +11,7 @@ class Api_Call {
     final response =
         await client.post(url + '/auth/login', body: {"id": id, "pass": pass});
 
-    return userList(response.body);
+    return userList(utf8.decode(response.bodyBytes));
   }
 
   String userList(String responseBody) {
@@ -21,7 +22,7 @@ class Api_Call {
     final response =
         await client.get(url + '/auth/userData?user_no=' + user_no);
 
-    return DetailUser(response.body);
+    return DetailUser(utf8.decode(response.bodyBytes));
   }
 
   String DetailUser(String responseBody) {

@@ -1,5 +1,6 @@
 import 'dart:core';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lms_flutter/model/Speed/questionList.dart';
@@ -23,8 +24,9 @@ class SpeedGameDialog extends StatefulWidget {
   String level;
   int chapter;
   int stage;
+  AudioPlayer audioPlayer;
 
-  SpeedGameDialog({Key key, this.level, this.chapter, this.stage})
+  SpeedGameDialog({Key key, this.level, this.chapter, this.stage, this.audioPlayer})
       : super(key: key);
 
   @override
@@ -44,6 +46,7 @@ class SpeedGameDialogState extends State<SpeedGameDialog> {
   @override
   Widget build(BuildContext context) {
     speedBloc.getQuestionList2().then((value) {
+      print("Data : " + value);
       String jsonValue = value;
       List<QuestionList> qList = speedBloc.questListToList(jsonValue);
 //      setState(() {
@@ -55,6 +58,7 @@ class SpeedGameDialogState extends State<SpeedGameDialog> {
               chapter: widget.chapter,
               stage: widget.stage,
               qList: qList,
+              background: widget.audioPlayer,
             )));
 //      });
     });

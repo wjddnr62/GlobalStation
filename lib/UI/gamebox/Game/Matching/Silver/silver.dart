@@ -195,7 +195,7 @@ class SilverM extends State<Silver> {
           ", " +
           answer_finish_count.toString());
       if (answer_all_length != 8 && answer_count == 4) {
-        audioCache.play("gamebox/audio/sucess_sound.mp3");
+        audioCache.play("gamebox/audio/sucess_sound.wav");
         answer_finish_count += 1;
         answer_all_length += 1;
         if (answer_all_length == 8) {

@@ -48,6 +48,8 @@ class ResultView extends State<Result> {
 
   int coin = 0;
 
+  bool coinInsert = false;
+
   @override
   void initState() {
     memberLevel = widget.memberLevel;
@@ -204,17 +206,20 @@ class ResultView extends State<Result> {
     String id= UserInfo().child_user_id;
     print("id = ${id}, coin = ${coin}");
     bloc.addCoin(id, coin).then((value){
-      print(value);
+      print("Coin : " + value);
       if(json.decode(value)['result'] == 1){
         UserInfo().member_coin = json.decode(value)['data']['coin'];
       }
     });
+    coinInsert = true;
   }
 
   Widget result() {
     level_set();
     resultImgSet();
-    updateCoin();
+    if (!coinInsert) {
+      updateCoin();
+    }
     return Align(
       alignment: Alignment.topCenter,
       child: Center(
