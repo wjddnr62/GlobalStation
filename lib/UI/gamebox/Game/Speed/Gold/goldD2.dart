@@ -42,6 +42,7 @@ class Gold extends State<GoldD2> {
   AudioPlayer advancedPlayer, background;
   Timer _timer;
   String soundUrl;
+  bool iphonex = false;
 
   playSound(String level, String chapter,String stage, String question_num) async {
     setState(() {
@@ -104,7 +105,7 @@ class Gold extends State<GoldD2> {
   }
 
   Widget body(Size size) {
-    final bool iphonex = MediaQuery.of(context).size.height >= 812.0;
+    iphonex = MediaQuery.of(context).size.height >= 812.0;
 
     return Container(
       width: size.width,
@@ -173,14 +174,14 @@ class Gold extends State<GoldD2> {
   Widget wood(Size size) {
     return Container(
       width: size.width - 20,
-      height: 60,
+      height:  (iphonex) ? 70 :60,
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Stack(
         children: <Widget>[
           Image.asset(
             goldQue,
             width: size.width - 20,
-            height: 60,
+            height: (iphonex) ? 70 :60,
             fit: BoxFit.fill,
           ),
           Align(

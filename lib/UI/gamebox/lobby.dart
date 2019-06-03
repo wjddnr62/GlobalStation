@@ -111,7 +111,6 @@ class LobbyHomePage extends State<LobbyPage> {
               alignment: AlignmentDirectional.topStart,
               child: InkWell(
                 onTap: () {
-//                  setCharacter();
                   myPage();
                 },
                 child: Image.asset(
@@ -341,13 +340,16 @@ class LobbyHomePage extends State<LobbyPage> {
       opaque: false,
       pageBuilder: (context, _, __) => SettingsPage(audioPlayer: advancedPlayer,),
     )).then((value){
-      mbloc.getMember().then((value){
+      print("settings bAck");
+      mbloc.getMember().then((jsonValue){
+        print(jsonValue);
         setState(() {
-          hair_style = json.decode(value)['data']['hair_type'];
-          hair_color = json.decode(value)['data']['hair_color'];
-          eye_color = json.decode(value)['data']['eye_color'];
-          skin_color = json.decode(value)['data']['skin_color'];
-          hat_shape = json.decode(value)['data']['hat'];
+          print("settings Set State");
+          hair_style = json.decode(jsonValue)['data']['hair_type'];
+          hair_color = json.decode(jsonValue)['data']['hair_color'];
+          eye_color = json.decode(jsonValue)['data']['eye_color'];
+          skin_color = json.decode(jsonValue)['data']['skin_color'];
+          hat_shape = json.decode(jsonValue)['data']['hat'];
           style = hair_style;
           hats = hat_shape;
           if(hat_shape != 0){
@@ -421,36 +423,36 @@ class Character extends StatefulWidget{
 }
 
 class CharacterState extends State<Character>{
-  String hair = "#e04736";
-  String eye = "#334666";
-  String skin = "#d97e57";
-  int style = 1;
-
-  int hats = 0;
-  String hatUrl = "";
-
-  int hair_style = 1;
-  int hair_color = 1;
-  int eye_color = 1;
-  int skin_color = 1;
-  int hat_shape = 0;
-
-  var hairColors = [
-    "#e04736",
-    "#f24970",
-    "#ffc247",
-    "#d1d426",
-    "#855729",
-    "#332d2d",
-    "#1c2957"
-  ];
-  var eyeColors = ["#334666", "#5e4327", "#241e1e"];
-  var skinColors = ["#d97e57", "#ff8585", "#ffcba3"];
-  var hatUrls = [
-    "assets/gamebox/img/charactor/hat/hat3.png",
-    "assets/gamebox/img/charactor/hat/hat2.png",
-    "assets/gamebox/img/charactor/hat/hat1.png"
-  ];
+//  String hair = "#e04736";
+//  String eye = "#334666";
+//  String skin = "#d97e57";
+//  int style = 1;
+//
+//  int hats = 0;
+//  String hatUrl = "";
+//
+//  int hair_style = 1;
+//  int hair_color = 1;
+//  int eye_color = 1;
+//  int skin_color = 1;
+//  int hat_shape = 0;
+//
+//  var hairColors = [
+//    "#e04736",
+//    "#f24970",
+//    "#ffc247",
+//    "#d1d426",
+//    "#855729",
+//    "#332d2d",
+//    "#1c2957"
+//  ];
+//  var eyeColors = ["#334666", "#5e4327", "#241e1e"];
+//  var skinColors = ["#d97e57", "#ff8585", "#ffcba3"];
+//  var hatUrls = [
+//    "assets/gamebox/img/charactor/hat/hat3.png",
+//    "assets/gamebox/img/charactor/hat/hat2.png",
+//    "assets/gamebox/img/charactor/hat/hat1.png"
+//  ];
 
   @override
   void initState() {

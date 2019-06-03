@@ -37,7 +37,7 @@ class Gold extends State<GoldD1> {
   AudioPlayer advancedPlayer, background;
   Timer _timer;
   String soundUrl;
-
+  bool iphonex = false;
   playSound(String level, String chapter,String stage, String question_num) {
     setState(() {
       advancedPlayer.release();
@@ -103,7 +103,7 @@ class Gold extends State<GoldD1> {
   }
 
   Widget body(Size size) {
-    final bool iphonex = MediaQuery.of(context).size.height >= 812.0;
+    iphonex = MediaQuery.of(context).size.height >= 812.0;
 
     return Container(
       width: size.width,
@@ -171,19 +171,19 @@ class Gold extends State<GoldD1> {
                   ),
                 ),
                 Positioned(
-                  top: size.height / 2.22,
+                  top: (iphonex) ? size.height / 2.37 : size.height / 2.22,
                   child: brick("A", answerList[0].contents, size,1),
                 ),
                 Positioned(
-                  top: size.height / 1.8,
+                  top:  (iphonex) ? size.height / 1.93 :size.height / 1.8,
                   child: brick("B", answerList[1].contents, size,2),
                 ),
                 Positioned(
-                  top: size.height / 1.52,
+                  top:  (iphonex) ? size.height / 1.635 :size.height / 1.52,
                   child: brick("C", answerList[2].contents, size,3),
                 ),
                 Positioned(
-                  top: size.height / 1.315,
+                  top: (iphonex) ? size.height / 1.41 : size.height / 1.315,
                   child: brick("D", answerList[3].contents, size,4),
                 ),
               ],
@@ -201,7 +201,7 @@ class Gold extends State<GoldD1> {
   Widget brick(String type, String text, Size size,int idx) {
     return Container(
       width: size.width - 20,
-      height: 60,
+      height: (iphonex) ? 70 : 60,
       padding: const EdgeInsets.symmetric(horizontal: 15),
       child:InkWell(
         onTap: (){

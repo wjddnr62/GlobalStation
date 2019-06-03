@@ -209,14 +209,18 @@ class GameListState extends State<GameList> {
                 bottom: 10,
                 child: nextBtn(widget.size),
               ),
-              (viewTimer)
-                  ? Positioned(
-                      top: MediaQuery.of(context).size.width / 15,
-                      child: TimerBar(
-                        width: MediaQuery.of(context).size.width,
-                        finishTimer: () => finishTimer(),
-                      ),
-                    )
+              (viewTimer) ?
+//                  ? Positioned(
+//                      top: MediaQuery.of(context).size.width / 15,
+//                      child: TimerBar(
+//                        width: MediaQuery.of(context).size.width,
+//                        finishTimer: () => finishTimer(),
+//                      ),
+//                    )
+            SizedBox(
+            width: 0,
+            height: 0,
+          )
                   : SizedBox(
                       width: 0,
                       height: 0,
@@ -388,6 +392,7 @@ class GameListState extends State<GameList> {
     answer = "";
     return Positioned.fill(
       child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 40),
         child: Image.asset(img),
       ),
     );

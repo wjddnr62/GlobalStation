@@ -87,10 +87,10 @@ flutter:
     - assets/level/
     - assets/gamebox/audio/
 
-fonts:
-  - family: Jua
-    fonts:
-      - asset: fonts/BM-JUA.otf
+  fonts:
+    - family: Jua
+      fonts:
+        - asset: fonts/BM-JUA.otf
   #  - images/a_dot_burr.jpeg
   #  - images/a_dot_ham.jpeg
 

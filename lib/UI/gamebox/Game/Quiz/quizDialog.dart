@@ -374,6 +374,7 @@ class GameListState extends State<GameList> {
     answer = "";
     return Positioned.fill(
       child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 40),
         child: Image.asset(img),
       ),
     );
