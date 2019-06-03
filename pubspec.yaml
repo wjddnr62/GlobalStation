@@ -84,13 +84,14 @@ flutter:
     - assets/gamebox/img/charactor/hat/
     - assets/gamebox/img/effect/
     - assets/gamebox/img/mypage/
-    - assets/level/
+#    - assets/level/f
     - assets/gamebox/audio/
 
-fonts:
-  - family: Jua
-    fonts:
-      - asset: fonts/BM-JUA.otf
+  fonts:
+    - family: Jua
+      fonts:
+        - asset: fonts/BMJUA_ttf.ttf
+#        - asset: fonts/BM-JUA.oft
   #  - images/a_dot_burr.jpeg
   #  - images/a_dot_ham.jpeg
 
