@@ -38,15 +38,15 @@ class Gold extends State<GoldC> {
   playSound(String level, String chapter,String stage, String question_num) async {
     setState(() {
       advancedPlayer.release();
-      _timer = Timer(Duration(seconds: 1), ()
-      {
+//      _timer = Timer(Duration(seconds: 1), ()
+//      {
         if (soundUrl != "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}") {
           advancedPlayer.setUrl(
               "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
           advancedPlayer.resume();
           soundUrl = "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}";
         }
-      });
+//      });
     });
 
     advancedPlayer.onPlayerStateChanged.listen((state) {

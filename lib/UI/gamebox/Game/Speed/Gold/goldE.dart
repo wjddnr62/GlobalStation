@@ -25,7 +25,8 @@ class GoldE extends StatefulWidget {
       this.question_num,
       this.title,
       this.question,
-      this.audioPlayer, this.background})
+      this.audioPlayer,
+      this.background})
       : super(key: key);
 
   @override
@@ -42,18 +43,21 @@ class Gold extends State<GoldE> {
   Timer _timer;
   String soundUrl;
 
-  playSound(String level, String chapter,String stage, String question_num) async {
+  playSound(
+      String level, String chapter, String stage, String question_num) async {
     setState(() {
       advancedPlayer.release();
-      _timer = Timer(Duration(seconds: 1), ()
-      {
-        if (soundUrl != "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}") {
-          advancedPlayer.setUrl(
-              "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
-          advancedPlayer.resume();
-          soundUrl = "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}";
-        }
-      });
+//      _timer = Timer(Duration(seconds: 1), ()
+//      {
+      if (soundUrl !=
+          "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}") {
+        advancedPlayer.setUrl(
+            "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
+        advancedPlayer.resume();
+        soundUrl =
+            "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}";
+      }
+//      });
     });
 
     advancedPlayer.onPlayerStateChanged.listen((state) {
@@ -87,6 +91,7 @@ class Gold extends State<GoldE> {
   @override
   Widget build(BuildContext context) {
     speedBloc.answerType = 2;
+    speedBloc.answerA = "";
     setState(() {
       background.setVolume(0.5);
       playSound(widget.level, widget.chapter.toString(),
@@ -97,8 +102,8 @@ class Gold extends State<GoldE> {
         advancedPlayer.release();
         Navigator.of(context).pop();
       },
-      child:  body(MediaQuery.of(context).size),
-          );
+      child: body(MediaQuery.of(context).size),
+    );
   }
 
   Widget body(Size size) {

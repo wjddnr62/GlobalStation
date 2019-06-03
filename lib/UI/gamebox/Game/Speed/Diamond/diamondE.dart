@@ -39,15 +39,15 @@ class Diamond extends State<DiamondE> {
   playSound(String level, String chapter,String stage, String question_num) async {
     setState(() {
       advancedPlayer.release();
-      _timer = Timer(Duration(seconds: 1), ()
-      {
+//      _timer = Timer(Duration(seconds: 1), ()
+//      {
         if (soundUrl != "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}") {
           advancedPlayer.setUrl(
               "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
           advancedPlayer.resume();
           soundUrl = "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}";
         }
-      });
+//      });
     });
 
     advancedPlayer.onPlayerStateChanged.listen((state) {
@@ -81,6 +81,7 @@ class Diamond extends State<DiamondE> {
   @override
   Widget build(BuildContext context) {
     speedBloc.answerType = 2;
+    speedBloc.answerA = "";
     setState(() {
       background.setVolume(0.5);
       playSound(widget.level, widget.chapter.toString(),
