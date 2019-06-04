@@ -429,6 +429,7 @@ class BronzeM extends State<Bronze> {
                                   sizeWidth: MediaQuery.of(context).size.width,
                                   resetGame: () => resetGame(),
                                   memberLevel: memberLevel,
+                                  type: "MATCH",
                                 ),
                               )
                             ],
@@ -819,7 +820,6 @@ class BronzeM extends State<Bronze> {
                       ? Text(
                           param,
                           style: TextStyle(
-                            fontWeight: FontWeight.bold,
                             fontSize: 12,
                             color: Colors.black,
                             fontFamily: 'Jua',
@@ -831,7 +831,6 @@ class BronzeM extends State<Bronze> {
                       ? Text(
                           param,
                           style: TextStyle(
-                            fontWeight: FontWeight.bold,
                             fontSize: 12,
                             color: Colors.black,
                             fontFamily: 'Jua',

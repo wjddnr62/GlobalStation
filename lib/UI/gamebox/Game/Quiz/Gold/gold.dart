@@ -170,7 +170,7 @@ class Gold extends State<QuizG> {
         child: Center(
           child: Text(
             answer,
-            style: TextStyle(color: white, fontFamily: 'Jua', fontWeight: FontWeight.bold),
+            style: TextStyle(color: white, fontFamily: 'Jua', ),
           ),
         ),
       ),

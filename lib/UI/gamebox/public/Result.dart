@@ -16,6 +16,7 @@ class Result extends StatefulWidget {
   double sizeWidth;
   VoidCallback resetGame;
   int memberLevel;
+  String type;
 
   Result(
       {Key key,
@@ -26,7 +27,8 @@ class Result extends StatefulWidget {
       this.scoreLength,
       this.sizeWidth,
       this.resetGame,
-      this.memberLevel})
+      this.memberLevel,
+      this.type})
       : super(key: key);
 
   @override
@@ -243,7 +245,6 @@ class ResultView extends State<Result> {
                     style: TextStyle(
                         color: black,
                         fontSize: defaultFontSize + 8,
-                        fontWeight: FontWeight.bold,
                         fontFamily: "Jua"),
                     children: <TextSpan>[
                       TextSpan(
@@ -251,7 +252,6 @@ class ResultView extends State<Result> {
                         style: TextStyle(
                             color: resultStageColor,
                             fontSize: defaultFontSize + 8,
-                            fontWeight: FontWeight.bold,
                             fontFamily: "Jua"),
                       )
                     ]),
@@ -274,7 +274,6 @@ class ResultView extends State<Result> {
                       style: TextStyle(
                           fontSize: defaultFontSize,
                           fontFamily: 'Jua',
-                          fontWeight: FontWeight.bold,
                           color: resultStageColor),
                       children: <TextSpan>[
                         TextSpan(
@@ -282,7 +281,6 @@ class ResultView extends State<Result> {
                             style: TextStyle(
                                 fontSize: defaultFontSize,
                                 fontFamily: 'Jua',
-                                fontWeight: FontWeight.bold,
                                 color: black))
                       ])),
             ),

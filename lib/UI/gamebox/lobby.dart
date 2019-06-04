@@ -1,19 +1,20 @@
 import 'dart:convert';
 
+import 'package:audioplayers/audio_cache.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:lms_flutter/UI/gamebox/Settings/character.dart';
 import 'package:lms_flutter/UI/gamebox/Settings/setting.dart';
+import 'package:lms_flutter/UI/gamebox/public/Tutorial.dart';
 import 'package:lms_flutter/bloc/game_public_bloc.dart';
 import 'package:lms_flutter/bloc/member_bloc.dart';
+import 'package:lms_flutter/model/UserInfo.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'Settings/mypage.dart';
 import 'gameDialog.dart';
-import 'package:lms_flutter/model/UserInfo.dart';
-import 'package:audioplayers/audioplayers.dart';
-//import 'package:audioplayer/audioplayer.dart';
-import 'package:audioplayers/audio_cache.dart';
-//import 'package:fluttery_audio/fluttery_audio.dart';
 
 String hair = "#e04736";
 String eye = "#334666";
@@ -46,7 +47,6 @@ var hatUrls = [
   "assets/gamebox/img/charactor/hat/hat1.png"
 ];
 
-
 class LobbyPage extends StatefulWidget {
   @override
   LobbyHomePage createState() => LobbyHomePage();
@@ -55,13 +55,15 @@ class LobbyPage extends StatefulWidget {
 class LobbyHomePage extends State<LobbyPage> {
   GamePublicBloc gamePublicBloc = GamePublicBloc();
 
-
   AudioCache audioCache;
   AudioPlayer advancedPlayer = AudioPlayer();
+
 //  AudioPlayerState state;
 
-
   int level = UserInfo().member_level;
+
+  SharedPreferences sharedPreferences;
+  bool tutoCheck = false;
 
   List<String> lobbyImg = [
     "assets/gamebox/img/lobby/english_basic.png",
@@ -103,7 +105,6 @@ class LobbyHomePage extends State<LobbyPage> {
             ),
           ),
         ),
-
         SafeArea(
           child: Padding(
             padding: const EdgeInsets.only(left: 10),
@@ -111,7 +112,6 @@ class LobbyHomePage extends State<LobbyPage> {
               alignment: AlignmentDirectional.topStart,
               child: InkWell(
                 onTap: () {
-//                  setCharacter();
                   myPage();
                 },
                 child: Image.asset(
@@ -156,30 +156,27 @@ class LobbyHomePage extends State<LobbyPage> {
                     fit: BoxFit.contain,
                   ),
                 ),
-
                 Positioned(
                   left: 10,
                   child: Container(
                     width: 70,
                     height: 80,
                     child: InkWell(
-                      onTap: (){
-                          setState(() {
-                            controller.previous();
-                          });
-
+                      onTap: () {
+                        setState(() {
+                          controller.previous();
+                        });
                       },
                     ),
                   ),
                 ),
-
                 Positioned(
                   right: 10,
                   child: Container(
                     width: 70,
                     height: 80,
                     child: InkWell(
-                      onTap: (){
+                      onTap: () {
                         setState(() {
                           controller.next();
                         });
@@ -187,49 +184,48 @@ class LobbyHomePage extends State<LobbyPage> {
                     ),
                   ),
                 ),
-
                 Align(
                   alignment: AlignmentDirectional.center,
                   child: Container(
                     width: 80,
                     height: 80,
                     child: InkWell(
-                      onTap: (){
+                      onTap: () {
                         gameStart(viewIdx, viewlev, viewCap);
                       },
                     ),
                   ),
                 ),
-
               ],
             ),
           ),
         ),
-
         Positioned(
           bottom: 90,
           left: 20,
           child: Container(
             width: 100,
             height: 100,
-            child: Center(child: Character(),),
+            child: Center(
+              child: Character(),
+            ),
           ),
         ),
       ],
     );
   }
+
   int viewIdx;
   int viewCap;
   String viewlev;
   int currentIdx = 0;
   SwiperController controller = new SwiperController();
 
-
   Widget swipe(Size size) {
     return Swiper(
       index: currentIdx,
       controller: controller,
-      onIndexChanged: (index){
+      onIndexChanged: (index) {
         setState(() {
           currentIdx = index;
           print(currentIdx.toString());
@@ -258,7 +254,6 @@ class LobbyHomePage extends State<LobbyPage> {
           viewIdx = idx;
           viewCap = cap;
           viewlev = lev;
-
         }
 
         return InkWell(
@@ -337,21 +332,28 @@ class LobbyHomePage extends State<LobbyPage> {
   }
 
   void settings() {
-    Navigator.of(context).push(PageRouteBuilder(
+    Navigator.of(context)
+        .push(PageRouteBuilder(
       opaque: false,
-      pageBuilder: (context, _, __) => SettingsPage(audioPlayer: advancedPlayer,),
-    )).then((value){
-      mbloc.getMember().then((value){
+      pageBuilder: (context, _, __) => SettingsPage(
+            audioPlayer: advancedPlayer,
+          ),
+    ))
+        .then((value) {
+      print("settings bAck");
+      mbloc.getMember().then((jsonValue) {
+        print(jsonValue);
         setState(() {
-          hair_style = json.decode(value)['data']['hair_type'];
-          hair_color = json.decode(value)['data']['hair_color'];
-          eye_color = json.decode(value)['data']['eye_color'];
-          skin_color = json.decode(value)['data']['skin_color'];
-          hat_shape = json.decode(value)['data']['hat'];
+          print("settings Set State");
+          hair_style = json.decode(jsonValue)['data']['hair_type'];
+          hair_color = json.decode(jsonValue)['data']['hair_color'];
+          eye_color = json.decode(jsonValue)['data']['eye_color'];
+          skin_color = json.decode(jsonValue)['data']['skin_color'];
+          hat_shape = json.decode(jsonValue)['data']['hat'];
           style = hair_style;
           hats = hat_shape;
-          if(hat_shape != 0){
-            hatUrl = hatUrls[hat_shape-1];
+          if (hat_shape != 0) {
+            hatUrl = hatUrls[hat_shape - 1];
           }
         });
       });
@@ -381,81 +383,104 @@ class LobbyHomePage extends State<LobbyPage> {
     super.dispose();
   }
 
+  tutoUpdate() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    int tutoStatus = await sharedPreferences.getInt("tuto_status");
+    if (tutoStatus == 1) {
+      setState(() {
+        tutoCheck = true;
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+    tutoUpdate();
     audioCache = AudioCache(fixedPlayer: advancedPlayer);
     print("level = ${level}, ${gamePublicBloc.singStatus}");
     if (gamePublicBloc.singStatus != true) {
       gamePublicBloc.singStatus = true;
-        setState(() {
-          audioCache.loop('gamebox/audio/backgroundmusic.mp3');
-          AudioPlayer.logEnabled = false;
-        });
-
+      setState(() {
+        audioCache.loop('gamebox/audio/backgroundmusic.mp3');
+        AudioPlayer.logEnabled = false;
+      });
     }
 
 //    play();
   }
 
+  Widget tuTo() {
+    return Scaffold(
+      body: Stack(
+        children: <Widget>[
+          body(MediaQuery.of(context).size),
+          Tutorial(size: MediaQuery.of(context).size),
+        ],
+      ),
+    );
+  }
+
+  Widget notTuTo() {
+    return Scaffold(
+      body: body(MediaQuery.of(context).size),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
 //    play();
-
     return WillPopScope(
       onWillPop: () {
         Navigator.of(context).pop();
         advancedPlayer.stop();
       },
-      child: Scaffold(
-        body: body(MediaQuery.of(context).size),
-      ),
+      child: tutoCheck ? notTuTo() : tuTo(),
     );
   }
 }
 
-
-class Character extends StatefulWidget{
+class Character extends StatefulWidget {
   @override
   CharacterState createState() => CharacterState();
 }
 
-class CharacterState extends State<Character>{
-  String hair = "#e04736";
-  String eye = "#334666";
-  String skin = "#d97e57";
-  int style = 1;
-
-  int hats = 0;
-  String hatUrl = "";
-
-  int hair_style = 1;
-  int hair_color = 1;
-  int eye_color = 1;
-  int skin_color = 1;
-  int hat_shape = 0;
-
-  var hairColors = [
-    "#e04736",
-    "#f24970",
-    "#ffc247",
-    "#d1d426",
-    "#855729",
-    "#332d2d",
-    "#1c2957"
-  ];
-  var eyeColors = ["#334666", "#5e4327", "#241e1e"];
-  var skinColors = ["#d97e57", "#ff8585", "#ffcba3"];
-  var hatUrls = [
-    "assets/gamebox/img/charactor/hat/hat3.png",
-    "assets/gamebox/img/charactor/hat/hat2.png",
-    "assets/gamebox/img/charactor/hat/hat1.png"
-  ];
+class CharacterState extends State<Character> {
+//  String hair = "#e04736";
+//  String eye = "#334666";
+//  String skin = "#d97e57";
+//  int style = 1;
+//
+//  int hats = 0;
+//  String hatUrl = "";
+//
+//  int hair_style = 1;
+//  int hair_color = 1;
+//  int eye_color = 1;
+//  int skin_color = 1;
+//  int hat_shape = 0;
+//
+//  var hairColors = [
+//    "#e04736",
+//    "#f24970",
+//    "#ffc247",
+//    "#d1d426",
+//    "#855729",
+//    "#332d2d",
+//    "#1c2957"
+//  ];
+//  var eyeColors = ["#334666", "#5e4327", "#241e1e"];
+//  var skinColors = ["#d97e57", "#ff8585", "#ffcba3"];
+//  var hatUrls = [
+//    "assets/gamebox/img/charactor/hat/hat3.png",
+//    "assets/gamebox/img/charactor/hat/hat2.png",
+//    "assets/gamebox/img/charactor/hat/hat1.png"
+//  ];
 
   @override
   void initState() {
     super.initState();
-    mbloc.getMember().then((value){
+    mbloc.getMember().then((value) {
       setState(() {
         hair_style = json.decode(value)['data']['hair_type'];
         hair_color = json.decode(value)['data']['hair_color'];
@@ -464,8 +489,8 @@ class CharacterState extends State<Character>{
         hat_shape = json.decode(value)['data']['hat'];
         style = hair_style;
         hats = hat_shape;
-        if(hat_shape != 0){
-          hatUrl = hatUrls[hat_shape-1];
+        if (hat_shape != 0) {
+          hatUrl = hatUrls[hat_shape - 1];
         }
       });
     });
@@ -517,7 +542,7 @@ class CharacterState extends State<Character>{
 
   String makeCharacter(int style, String hair, String eye, String skin) {
     String svg1 =
-    '''<svg version="1.1" baseProfile="tiny" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+        '''<svg version="1.1" baseProfile="tiny" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
 	 x="0px" y="0px" width="500px" height="600px" viewBox="0 0 500 600" xml:space="preserve">
 <g>
 	<g>
@@ -684,7 +709,7 @@ class CharacterState extends State<Character>{
 ''';
 
     String svg2 =
-    '''<svg version="1.1" baseProfile="tiny" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+        '''<svg version="1.1" baseProfile="tiny" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
 	 x="0px" y="0px" width="500px" height="600px" viewBox="0 0 500 600" xml:space="preserve">
 <g>
 	<g>
@@ -875,7 +900,7 @@ class CharacterState extends State<Character>{
 ''';
 
     String svg3 =
-    '''<svg version="1.1" baseProfile="tiny" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+        '''<svg version="1.1" baseProfile="tiny" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
 	 x="0px" y="0px" width="500px" height="600px" viewBox="0 0 500 600" xml:space="preserve">
 <g>
 	<g>
@@ -1200,5 +1225,4 @@ class CharacterState extends State<Character>{
   Widget build(BuildContext context) {
     return getCharacter();
   }
-
 }

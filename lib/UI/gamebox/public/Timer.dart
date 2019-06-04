@@ -89,7 +89,7 @@ class TimerSet extends State<TimerBar> {
                               child: Text(
                             _defaultSet.toString(),
                             style: TextStyle(
-                                color: white, fontWeight: FontWeight.bold),
+                                color: white, ),
                           )),
                         ),
                       ),

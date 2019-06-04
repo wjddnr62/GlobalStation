@@ -375,6 +375,7 @@ class PhonicsM extends State<Phonics> {
                                   sizeWidth: MediaQuery.of(context).size.width,
                                   resetGame: () => resetGame(),
                                   memberLevel: memberLevel,
+                                  type: "MATCH",
                                 ),
                               )
                             ],
@@ -741,7 +742,6 @@ class PhonicsM extends State<Phonics> {
                           child: Text(
                             param,
                             style: TextStyle(
-                              fontWeight: FontWeight.bold,
                               fontSize: 16,
                               color: Colors.black,
                               fontFamily: 'Jua',

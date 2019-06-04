@@ -34,6 +34,7 @@ class Gold extends State<GoldC> {
   AudioPlayer advancedPlayer, background;
   Timer _timer;
   String soundUrl;
+  bool iphonex = false;
 
   playSound(String level, String chapter,String stage, String question_num) async {
     setState(() {
@@ -67,6 +68,7 @@ class Gold extends State<GoldC> {
     super.initState();
     advancedPlayer = widget.audioPlayer;
     background = widget.background;
+    iphonex = MediaQuery.of(context).size.height >= 812.0;
 //    setState(() {
 //
 //      advancedPlayer.release();
@@ -100,8 +102,6 @@ class Gold extends State<GoldC> {
   }
 
   Widget body(Size size) {
-    final bool iphonex = MediaQuery.of(context).size.height >= 812.0;
-
     return Container(
       width: size.width,
       height: (iphonex) ? size.height - 97 : size.height - 40,

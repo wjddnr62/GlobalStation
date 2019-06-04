@@ -431,6 +431,7 @@ class DiamondM extends State<Diamond> {
                                   sizeWidth: MediaQuery.of(context).size.width,
                                   resetGame: () => resetGame(),
                                   memberLevel: memberLevel,
+                                  type: "MATCH",
                                 ),
                               )
                             ],
@@ -883,7 +884,6 @@ class DiamondM extends State<Diamond> {
                           child: Text(
                             param,
                             style: TextStyle(
-                              fontWeight: FontWeight.bold,
                               fontSize: 16,
                               color: Colors.black,
                               fontFamily: 'Jua',
@@ -898,7 +898,6 @@ class DiamondM extends State<Diamond> {
                           child: Text(
                             param,
                             style: TextStyle(
-                              fontWeight: FontWeight.bold,
                               fontSize: 16,
                               color: Colors.black,
                               fontFamily: 'Jua',

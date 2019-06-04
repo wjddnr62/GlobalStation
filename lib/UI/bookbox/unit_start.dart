@@ -35,7 +35,7 @@ Widget unitStart(String unit_level, String unit_name, String unit_sub_name,
                   style: TextStyle(
                       color: Colors.black,
                       fontSize: 16,
-                      fontWeight: FontWeight.bold),
+                      ),
                 ),
               ),
             ),
@@ -47,7 +47,7 @@ Widget unitStart(String unit_level, String unit_name, String unit_sub_name,
               style: TextStyle(
                   fontSize: unitFontSize + 4,
                   color: Colors.black,
-                  fontWeight: FontWeight.bold),
+                  ),
             ),
           ),
           Padding(
@@ -64,7 +64,7 @@ Widget unitStart(String unit_level, String unit_name, String unit_sub_name,
                 child: Text(
                   unit_sub_name,
                   style: TextStyle(
-                      fontWeight: FontWeight.bold,
+
                       color: Colors.black,
                       fontSize: unitFontSize + 4),
                   textAlign: TextAlign.center,

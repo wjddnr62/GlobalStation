@@ -227,7 +227,7 @@ class Character extends State<CharacterPage> {
                   String id= UserInfo().child_user_id;
                   mbloc.updateCharacter(id, hair_style, hair_color, eye_color, skin_color, hat_shape).then((value){
                     print(value);
-                    Navigator.of(context).pop();
+                    Navigator.of(context).pop(".");
                   });
                 },
               ),
@@ -562,7 +562,7 @@ class Character extends State<CharacterPage> {
                 height: 30,
               ),
               onTap: () {
-                Navigator.of(context).pop();
+                Navigator.of(context).pop(".");
               },
             ),
           ),

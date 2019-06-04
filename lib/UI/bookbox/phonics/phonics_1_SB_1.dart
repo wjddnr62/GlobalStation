@@ -778,7 +778,7 @@ class _phonics_1_SB_1 extends State<phonics_1_SB_1> {
                 style: TextStyle(
                     color: Colors.black,
                     fontSize: 16,
-                    fontWeight: FontWeight.bold),
+                    ),
               ),
             ),
           ),

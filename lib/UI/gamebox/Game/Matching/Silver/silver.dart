@@ -415,6 +415,7 @@ class SilverM extends State<Silver> {
                                   sizeWidth: MediaQuery.of(context).size.width,
                                   resetGame: () => resetGame(),
                                   memberLevel: memberLevel,
+                                  type: "MATCH",
                                 ),
                               )
                             ],
@@ -786,7 +787,6 @@ class SilverM extends State<Silver> {
                           child: Text(
                             param,
                             style: TextStyle(
-                              fontWeight: FontWeight.bold,
                               fontSize: 16,
                               color: Colors.black,
                               fontFamily: 'Jua',
@@ -801,7 +801,6 @@ class SilverM extends State<Silver> {
                           child: Text(
                             param,
                             style: TextStyle(
-                              fontWeight: FontWeight.bold,
                               fontSize: 16,
                               color: Colors.black,
                               fontFamily: 'Jua',

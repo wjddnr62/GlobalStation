@@ -72,8 +72,8 @@ class MyPage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
-        Text("현재 학습"),
-        Text(level[userInfo.member_level]),
+        Text("현재 학습", style: TextStyle(fontFamily: 'Jua'),),
+        Text(level[userInfo.member_level], style: TextStyle(fontFamily: 'Jua'),),
       ],
     );
   }
@@ -84,7 +84,9 @@ class MyPage extends StatelessWidget {
         Container(
           width: 100,
           height: 100,
-          child: Center(child: Character(),),
+          child: Center(
+            child: Character(),
+          ),
         ),
         SizedBox(
           width: 30,
@@ -92,8 +94,8 @@ class MyPage extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Text("코인"),
-            Text(userInfo.member_coin.toString()),
+            Text("코인", style: TextStyle(fontFamily: 'Jua'),),
+            Text(userInfo.member_coin.toString(), style: TextStyle(fontFamily: 'Jua'),),
           ],
         ),
       ],
@@ -281,7 +283,7 @@ class MyPage extends StatelessWidget {
         children: <Widget>[
           Align(
             alignment: AlignmentDirectional.center,
-            child: Text("MY PAGE"),
+            child: Text("MY PAGE", style: TextStyle(fontFamily: 'Jua'),),
           ),
           Positioned(
             top: 10,
@@ -304,13 +306,12 @@ class MyPage extends StatelessWidget {
   }
 }
 
-
-class Character extends StatefulWidget{
+class Character extends StatefulWidget {
   @override
   CharacterState createState() => CharacterState();
 }
 
-class CharacterState extends State<Character>{
+class CharacterState extends State<Character> {
   String hair = "#e04736";
   String eye = "#334666";
   String skin = "#d97e57";
@@ -345,7 +346,7 @@ class CharacterState extends State<Character>{
   @override
   void initState() {
     super.initState();
-    mbloc.getMember().then((value){
+    mbloc.getMember().then((value) {
       setState(() {
         hair_style = json.decode(value)['data']['hair_type'];
         hair_color = json.decode(value)['data']['hair_color'];
@@ -354,8 +355,8 @@ class CharacterState extends State<Character>{
         hat_shape = json.decode(value)['data']['hat'];
         style = hair_style;
         hats = hat_shape;
-        if(hat_shape != 0){
-          hatUrl = hatUrls[hat_shape-1];
+        if (hat_shape != 0) {
+          hatUrl = hatUrls[hat_shape - 1];
         }
       });
     });
@@ -407,7 +408,7 @@ class CharacterState extends State<Character>{
 
   String makeCharacter(int style, String hair, String eye, String skin) {
     String svg1 =
-    '''<svg version="1.1" baseProfile="tiny" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+        '''<svg version="1.1" baseProfile="tiny" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
 	 x="0px" y="0px" width="500px" height="600px" viewBox="0 0 500 600" xml:space="preserve">
 <g>
 	<g>
@@ -574,7 +575,7 @@ class CharacterState extends State<Character>{
 ''';
 
     String svg2 =
-    '''<svg version="1.1" baseProfile="tiny" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+        '''<svg version="1.1" baseProfile="tiny" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
 	 x="0px" y="0px" width="500px" height="600px" viewBox="0 0 500 600" xml:space="preserve">
 <g>
 	<g>
@@ -765,7 +766,7 @@ class CharacterState extends State<Character>{
 ''';
 
     String svg3 =
-    '''<svg version="1.1" baseProfile="tiny" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+        '''<svg version="1.1" baseProfile="tiny" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
 	 x="0px" y="0px" width="500px" height="600px" viewBox="0 0 500 600" xml:space="preserve">
 <g>
 	<g>
@@ -1090,5 +1091,4 @@ class CharacterState extends State<Character>{
   Widget build(BuildContext context) {
     return getCharacter();
   }
-
 }
