@@ -105,7 +105,7 @@ class Gold extends State<GoldD2> {
   }
 
   Widget body(Size size) {
-    iphonex = MediaQuery.of(context).size.height >= 812.0;
+    final bool iphonex = MediaQuery.of(context).size.height >= 812.0;
 
     return Container(
       width: size.width,

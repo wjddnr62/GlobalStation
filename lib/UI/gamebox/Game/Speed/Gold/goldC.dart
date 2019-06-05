@@ -68,7 +68,7 @@ class Gold extends State<GoldC> {
     super.initState();
     advancedPlayer = widget.audioPlayer;
     background = widget.background;
-    iphonex = MediaQuery.of(context).size.height >= 812.0;
+//    iphonex = MediaQuery.of(context).size.height >= 812.0;
 //    setState(() {
 //
 //      advancedPlayer.release();
@@ -81,6 +81,7 @@ class Gold extends State<GoldC> {
 
   @override
   Widget build(BuildContext context) {
+//    iphonex = MediaQuery.of(context).size.height >= 812.0;
     speedBloc.answerType = 1;
     speedBloc.getLevel(widget.level);
     speedBloc.getChapter(widget.chapter);
@@ -102,6 +103,7 @@ class Gold extends State<GoldC> {
   }
 
   Widget body(Size size) {
+    final bool iphonex = MediaQuery.of(context).size.height >= 812.0;
     return Container(
       width: size.width,
       height: (iphonex) ? size.height - 97 : size.height - 40,
