@@ -38,23 +38,28 @@ class Gold extends State<GoldD1> {
   Timer _timer;
   String soundUrl;
   bool iphonex = false;
+  bool soundFinish = false;
+
   playSound(String level, String chapter,String stage, String question_num) {
     setState(() {
       advancedPlayer.release();
-//      _timer = Timer(Duration(seconds: 1), ()
-//      {
+      _timer = Timer(Duration(milliseconds: 500), ()
+      {
         if (soundUrl != "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}") {
           advancedPlayer.setUrl(
               "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
           advancedPlayer.resume();
           soundUrl = "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}";
         }
-//      });
+      });
     });
 
     advancedPlayer.onPlayerStateChanged.listen((state) {
       if (state == AudioPlayerState.COMPLETED) {
         background.setVolume(1.0);
+        setState(() {
+          soundFinish = true;
+        });
       }
     });
   }
@@ -186,6 +191,38 @@ class Gold extends State<GoldD1> {
                   top: (iphonex) ? size.height / 1.41 : size.height / 1.315,
                   child: brick("D", answerList[3].contents, size,4),
                 ),
+                soundFinish ? Container(width: 0, height: 0,) : Positioned(
+                  top: (iphonex) ? size.height / 2.37 : size.height / 2.22,
+                  child: Container(
+                    width: size.width - 20,
+                    height: (iphonex) ? 70 : 60,
+                    color: Colors.transparent,
+                  ),
+                ),
+                soundFinish ? Container(width: 0, height: 0,) : Positioned(
+                  top:  (iphonex) ? size.height / 1.93 :size.height / 1.8,
+                  child: Container(
+                    width: size.width - 20,
+                    height: (iphonex) ? 70 : 60,
+                    color: Colors.transparent,
+                  ),
+                ),
+                soundFinish ? Container(width: 0, height: 0,) : Positioned(
+                  top:  (iphonex) ? size.height / 1.635 :size.height / 1.52,
+                  child: Container(
+                    width: size.width - 20,
+                    height: (iphonex) ? 70 : 60,
+                    color: Colors.transparent,
+                  ),
+                ),
+                soundFinish ? Container(width: 0, height: 0,) : Positioned(
+                  top: (iphonex) ? size.height / 1.41 : size.height / 1.315,
+                  child: Container(
+                    width: size.width - 20,
+                    height: (iphonex) ? 70 : 60,
+                    color: Colors.transparent,
+                  ),
+                )
               ],
             );
           }

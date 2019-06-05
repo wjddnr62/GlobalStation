@@ -314,11 +314,13 @@ class GameListState extends State<GameList> {
         quizBloc.getAnswer(quizBloc.question_num).then((value) {
           Map<String, dynamic> json = jsonDecode(value);
 
-          setState(() {
+//          setState(() {
             viewTimer = false;
             answer = json['data'];
             quizBloc.answer = 0;
             quizBloc.question_num = 0;
+//          });
+          setState(() {
           });
 
           if (viewidx == maxLen - 1) {

@@ -38,24 +38,28 @@ class Diamond extends State<DiamondD1> {
   AudioPlayer advancedPlayer, background;
   Timer _timer;
   String soundUrl;
+  bool soundFinish = false;
 
   playSound(String level, String chapter,String stage, String question_num) async {
     setState(() {
       advancedPlayer.release();
-//      _timer = Timer(Duration(seconds: 1), ()
-//      {
+      _timer = Timer(Duration(milliseconds: 500), ()
+      {
         if (soundUrl != "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}") {
           advancedPlayer.setUrl(
               "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
           advancedPlayer.resume();
           soundUrl = "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}";
         }
-//      });
+      });
     });
 
     advancedPlayer.onPlayerStateChanged.listen((state) {
       if (state == AudioPlayerState.COMPLETED) {
         background.setVolume(1.0);
+        setState(() {
+          soundFinish = true;
+        });
       }
     });
   }
@@ -185,6 +189,58 @@ class Diamond extends State<DiamondD1> {
                 Positioned(
                   top: size.height / 1.31,
                   child: message("D", answerList[3].contents, size,4),
+                ),
+                soundFinish
+                    ? Container(
+                  width: 0,
+                  height: 0,
+                )
+                    : Positioned(
+                  top: size.height / 2,
+                  child: Container(
+                    width: size.width - 20,
+                    height: 50,
+                    color: Colors.transparent,
+                  ),
+                ),
+                soundFinish
+                    ? Container(
+                  width: 0,
+                  height: 0,
+                )
+                    : Positioned(
+                  top: size.height / 1.7,
+                  child: Container(
+                    width: size.width - 20,
+                    height: 50,
+                    color: Colors.transparent,
+                  ),
+                ),
+                soundFinish
+                    ? Container(
+                  width: 0,
+                  height: 0,
+                )
+                    : Positioned(
+                  top: size.height / 1.48,
+                  child: Container(
+                    width: size.width - 20,
+                    height: 50,
+                    color: Colors.transparent,
+                  ),
+                ),
+                soundFinish
+                    ? Container(
+                  width: 0,
+                  height: 0,
+                )
+                    : Positioned(
+                  top: size.height / 1.31,
+                  child: Container(
+                    width: size.width - 20,
+                    height: 50,
+                    color: Colors.transparent,
+                  ),
                 ),
               ],
             );
