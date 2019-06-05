@@ -485,6 +485,7 @@ class BronzeM extends State<Bronze> {
                             child: TimerBar(
                               width: size.width,
                               finishTimer: () => finishTimer(),
+                              level: widget.level,
                             ),
                           ),
                 answer_finish

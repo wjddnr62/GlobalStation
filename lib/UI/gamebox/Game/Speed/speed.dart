@@ -210,21 +210,18 @@ class GameListState extends State<GameList> {
                 child: nextBtn(widget.size),
               ),
               (viewTimer) ?
-//                  ? Positioned(
-//                      top: MediaQuery.of(context).size.width / 15,
-//                      child: TimerBar(
-//                        width: MediaQuery.of(context).size.width,
-//                        finishTimer: () => finishTimer(),
-//                      ),
-//                    )
+                  Positioned(
+                      top: MediaQuery.of(context).size.width / 15,
+                      child: TimerBar(
+                        width: MediaQuery.of(context).size.width,
+                        finishTimer: () => finishTimer(),
+                        level: widget.level,
+                      ),
+                    ) :
             SizedBox(
             width: 0,
             height: 0,
-          )
-                  : SizedBox(
-                      width: 0,
-                      height: 0,
-                    ),
+          ),
               Positioned(
                 top: MediaQuery.of(context).size.width / 5,
                 child: QuestionStatus(

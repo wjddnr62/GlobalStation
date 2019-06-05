@@ -471,6 +471,7 @@ class SilverM extends State<Silver> {
                             child: TimerBar(
                               width: size.width,
                               finishTimer: () => finishTimer(),
+                              level: widget.level,
                             ),
                           ),
                 answer_finish

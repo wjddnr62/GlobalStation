@@ -32,8 +32,8 @@ class Repository {
           String id, int type, int hair, int eye, int skin, int hat) =>
       _loginProvider.updateCharacter(id, type, hair, eye, skin, hat);
 
-  Future<String> addCoin(String id, int coin) =>
-      _loginProvider.addCoin(id, coin);
+  Future<String> addCoin(String id, int coin, String type, String level, int chapter) =>
+      _loginProvider.addCoin(id, coin, type, level, chapter);
 
   Future<String> fetchDetailUser(http.Client client, String userNo) =>
       _loginProvider.fetchDetailUser(client, userNo);

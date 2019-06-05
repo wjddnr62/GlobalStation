@@ -487,6 +487,7 @@ class DiamondM extends State<Diamond> {
                             child: TimerBar(
                               width: size.width,
                               finishTimer: () => finishTimer(),
+                              level: widget.level,
                             ),
                           ),
                 answer_finish

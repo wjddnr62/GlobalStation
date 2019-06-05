@@ -7,8 +7,10 @@ import '../../../theme.dart';
 class TimerBar extends StatefulWidget {
   double width;
   VoidCallback finishTimer;
+  String level;
 
-  TimerBar({Key key, this.width, this.finishTimer}) : super(key: key);
+  TimerBar({Key key, this.width, this.finishTimer, this.level})
+      : super(key: key);
 
   @override
   TimerSet createState() => TimerSet();
@@ -18,6 +20,8 @@ class TimerSet extends State<TimerBar> {
   Timer _timer;
   int _defaultSet = 30;
   int timerSet = 30;
+  double width, indicatorWidth;
+  bool notZombie = true;
 
   setTimer() {
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
@@ -39,6 +43,8 @@ class TimerSet extends State<TimerBar> {
         } else {
           setState(() {
             _defaultSet -= 1;
+            indicatorWidth =
+                ((width / 2) * (_defaultSet / timerSet * 100)) / 100;
           });
         }
       }
@@ -48,8 +54,14 @@ class TimerSet extends State<TimerBar> {
   @override
   void initState() {
     super.initState();
+    width = widget.width - 20;
+    print("timer_width : " + widget.width.toString());
     if (_timer != null) {
       _timer.cancel();
+    }
+
+    if (widget.level == "G" || widget.level == "D") {
+      notZombie = false;
     }
 
     setTimer();
@@ -88,8 +100,7 @@ class TimerSet extends State<TimerBar> {
                           child: Center(
                               child: Text(
                             _defaultSet.toString(),
-                            style: TextStyle(
-                                color: white, ),
+                            style: TextStyle(color: white, fontFamily: 'Jua'),
                           )),
                         ),
                       ),
@@ -103,33 +114,49 @@ class TimerSet extends State<TimerBar> {
                   padding: EdgeInsets.only(right: 20),
                   child: Container(
                     width: widget.width - 20,
-                    height: 25,
+                    height: 50,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
-                      color: BackTimerColor,
+                      color: Colors.transparent,
                     ),
                     child: Center(
-                      child: Padding(
-                        padding: EdgeInsets.only(
-                          left: 5.0,
-                          right: 5.0,
+                      child: Container(
+                        height: 30,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20.0),
+//                              border: Border.all(color: BackTimerColor)),
+                          color: BackTimerColor,
                         ),
-                        child: Container(
-                          height: 15,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20.0),
-                              border: Border.all(color: Colors.transparent)),
-                          child: PhysicalModel(
-                            color: Colors.transparent,
-                            borderRadius: BorderRadius.circular(20.0),
-                            clipBehavior: Clip.antiAlias,
-                            child: LinearProgressIndicator(
-                              backgroundColor: Colors.transparent,
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                animationTimerColor,
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                            left: 5.0,
+                            right: 5.0,
+                          ),
+                          child: Row(
+                            children: <Widget>[
+                              Flexible(
+                                child: Container(
+                                    width: indicatorWidth,
+                                    height: 15,
+                                    decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(20.0),
+                                        color: animationTimerColor)),
                               ),
-                              value: _defaultSet / timerSet,
-                            ),
+                              Image.asset(
+                                "assets/gamebox/img/rabbit.gif",
+                                height: 25,
+                              ),
+                              notZombie
+                                  ? Image.asset(
+                                      "assets/gamebox/img/dino.gif",
+                                      height: 50,
+                                    )
+                                  : Image.asset(
+                                      "assets/gamebox/img/zombie.gif",
+                                      height: 50,
+                                    )
+                            ],
                           ),
                         ),
                       ),
@@ -139,23 +166,17 @@ class TimerSet extends State<TimerBar> {
               )
             ],
           ),
-//          Positioned(
-//            top: 13,
-//            child: Align(
-//              alignment: Alignment.center,
-//              child: Container(
-//                width: widget.width - 80,
-//                height: 15,
-//                color: Colors.black,
+//예전 타이머 소스바로 위 컨테이너 child에 넣으면됨
+//          PhysicalModel(
+//            color: Colors.transparent,
+//            borderRadius: BorderRadius.circular(20.0),
+//            clipBehavior: Clip.antiAlias,
+//            child: LinearProgressIndicator(
+//              backgroundColor: Colors.transparent,
+//              valueColor: AlwaysStoppedAnimation<Color>(
+//                animationTimerColor,
 //              ),
-//            ),
-//          ),
-
-//          Positioned(
-//            top: 3,
-//            child: Container(
-//              height: 15,
-//              color: Colors.black,
+//              value: _defaultSet / timerSet,
 //            ),
 //          )
         ],

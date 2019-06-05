@@ -206,6 +206,7 @@ class GameListState extends State<GameList> {
                       child: TimerBar(
                         width: MediaQuery.of(context).size.width,
                         finishTimer: () => finishTimer(),
+                        level: widget.level,
                       ),
                     )
                   : SizedBox(

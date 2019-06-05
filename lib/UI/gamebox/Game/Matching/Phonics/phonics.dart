@@ -431,6 +431,7 @@ class PhonicsM extends State<Phonics> {
                             child: TimerBar(
                               width: size.width,
                               finishTimer: () => finishTimer(),
+                              level: widget.level,
                             ),
                           ),
                 answer_finish
