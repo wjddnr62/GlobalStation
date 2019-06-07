@@ -68,7 +68,8 @@ class SpeedGame extends StatelessWidget {
           item: SpeedPhonics(
                   qList: qList,
                   audioPlayer: audioPlayer,
-                  background: background)
+                  background: background,
+                  controller: controller)
               .getViews(),
           size: size,
           level: level,
@@ -80,7 +81,8 @@ class SpeedGame extends StatelessWidget {
           item: SpeedBronze(
                   qList: qList,
                   audioPlayer: audioPlayer,
-                  background: background)
+                  background: background,
+                  controller: controller)
               .getViews(),
           size: size,
           level: level,
@@ -92,7 +94,8 @@ class SpeedGame extends StatelessWidget {
           item: SpeedSilver(
                   qList: qList,
                   audioPlayer: audioPlayer,
-                  background: background)
+                  background: background,
+                  controller: controller)
               .getViews(),
           size: size,
           level: level,
@@ -327,7 +330,10 @@ class GameListState extends State<GameList> {
           speedBloc.question_num = 0;
           speedBloc.answerA = "";
           speedBloc.answerType = 0;
-          controller.clear();
+          if (controller != null) {
+            controller.clear();
+          }
+
           setState(() {
             audioPlayer.release();
             background.setVolume(1.0);
@@ -362,7 +368,9 @@ class GameListState extends State<GameList> {
     print("restart");
     viewidx = 0;
     answer = "";
-    controller.clear();
+    if (controller != null) {
+      controller.clear();
+    }
     viewTimer = true;
     resultView = false;
     restartGame = false;
@@ -402,7 +410,9 @@ class GameListState extends State<GameList> {
       );
     }
     answer = "";
-    controller.clear();
+    if (controller != null) {
+      controller.clear();
+    }
     return Positioned.fill(
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 40),
@@ -419,7 +429,9 @@ class GameListState extends State<GameList> {
     _timer = new Timer(timeout, () {
       print("speedTimeout");
       answer = "";
-      controller.clear();
+      if (controller != null) {
+        controller.clear();
+      }
       viewTimer = true;
       viewidx++;
       setState(() {

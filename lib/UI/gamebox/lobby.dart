@@ -58,8 +58,6 @@ class LobbyHomePage extends State<LobbyPage> {
   AudioCache audioCache;
   AudioPlayer advancedPlayer = AudioPlayer();
 
-//  AudioPlayerState state;
-
   int level = UserInfo().member_level;
 
   SharedPreferences sharedPreferences;

@@ -31,8 +31,9 @@ import 'Silver/silverE.dart';
 class SpeedSilver {
   final List<QuestionList> qList;
   AudioPlayer audioPlayer, background;
+  TextEditingController controller;
 
-  SpeedSilver({this.qList, this.audioPlayer, this.background});
+  SpeedSilver({this.qList, this.audioPlayer, this.background, this.controller});
 
   List<Widget> views = [];
 
@@ -47,7 +48,8 @@ class SpeedSilver {
             question_num: question.question_num,
             title: question.title,
             audioPlayer: audioPlayer,
-            background: background));
+            background: background,
+        ));
       } else if (question.type == "D-2") {
         views.add(SilverD2(
             level: question.level.substring(0, 1),
@@ -57,7 +59,8 @@ class SpeedSilver {
             question_num: question.question_num,
             title: question.title,
             audioPlayer: audioPlayer,
-            background: background));
+            background: background,
+        controller: controller,));
       } else if (question.type == "C") {
         views.add(SilverC(
             level: question.level.substring(0, 1),

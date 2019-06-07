@@ -144,8 +144,10 @@ import 'Bronze/bronzeC.dart';
 class SpeedBronze {
   final List<QuestionList> qList;
   AudioPlayer audioPlayer, background;
+  TextEditingController controller;
 
-  SpeedBronze({this.qList, this.audioPlayer, this.background});
+
+  SpeedBronze({this.qList, this.audioPlayer, this.background, this.controller});
 
   List<Widget> views = [];
 

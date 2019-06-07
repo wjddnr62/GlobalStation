@@ -8,8 +8,9 @@ import 'Phonics/phonicsB.dart';
 class SpeedPhonics {
   final List<QuestionList> qList;
   AudioPlayer audioPlayer, background;
+  TextEditingController controller;
 
-  SpeedPhonics({this.qList, this.audioPlayer, this.background});
+  SpeedPhonics({this.qList, this.audioPlayer, this.background, this.controller});
 
   List<Widget> views = [];
 
