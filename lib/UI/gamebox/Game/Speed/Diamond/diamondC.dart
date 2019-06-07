@@ -77,14 +77,6 @@ class Diamond extends State<DiamondC> {
     super.initState();
     advancedPlayer = widget.audioPlayer;
     background = widget.background;
-//    setState(() {
-//
-//      advancedPlayer.release();
-//      _timer = Timer(Duration(seconds: 1), () {
-//        playSound(widget.level, widget.chapter.toString(),
-//            widget.stage.toString(), widget.question_num.toString());
-//      });
-//    });
   }
 
   @override

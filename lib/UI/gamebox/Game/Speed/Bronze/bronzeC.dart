@@ -37,6 +37,7 @@ class Bronze extends State<BronzeC> {
   AudioPlayer advancedPlayer, background;
   Timer _timer;
   String soundUrl;
+  bool soundFinish = false;
 
   playSound(String level, String chapter,String stage, String question_num) async {
     setState(() {
@@ -55,6 +56,9 @@ class Bronze extends State<BronzeC> {
     advancedPlayer.onPlayerStateChanged.listen((state) {
       if (state == AudioPlayerState.COMPLETED) {
         background.setVolume(1.0);
+        setState(() {
+          soundFinish = true;
+        });
       }
     });
   }
@@ -171,6 +175,50 @@ class Bronze extends State<BronzeC> {
             top: size.height / 1.33,
             child: postIt("C", "D", size,4),
           ),
+          soundFinish ? Container(
+            width: 0,
+            height: 0,
+          ) : Positioned(
+            top: size.height / 2.15,
+            child: Container(
+              width: size.width - 10,
+              height: 50,
+              color: Colors.transparent,
+            ),
+          ),
+          soundFinish ? Container(
+            width: 0,
+            height: 0,
+          ) : Positioned(
+            top: size.height / 1.78,
+            child: Container(
+              width: size.width - 10,
+              height: 50,
+              color: Colors.transparent,
+            ),
+          ),
+          soundFinish ? Container(
+            width: 0,
+            height: 0,
+          ) : Positioned(
+            top: size.height / 1.52,
+            child: Container(
+              width: size.width - 10,
+              height: 50,
+              color: Colors.transparent,
+            ),
+          ),
+          soundFinish ? Container(
+            width: 0,
+            height: 0,
+          ) : Positioned(
+            top: size.height / 1.33,
+            child: Container(
+              width: size.width - 10,
+              height: 50,
+              color: Colors.transparent,
+            ),
+          )
 
 //          Positioned(
 //            bottom: 10,

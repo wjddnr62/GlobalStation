@@ -30,30 +30,42 @@ class Silver extends State<SilverD2> {
 
   final String silverWood = "assets/gamebox/img/speed/sliver_ans.png";
 
+  AudioPlayer advancedPlayer, background;
   Timer _timer;
   String soundUrl;
   bool soundFinish = false;
+  TextEditingController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    advancedPlayer = widget.audioPlayer;
+    background = widget.background;
+    controller = widget.controller;
+  }
 
   playSound(
       String level, String chapter, String stage, String question_num) async {
     print("phonicsB_play");
 
-    audioPlayer.release();
+    advancedPlayer.release();
 //        _timer = Timer(Duration(seconds: 1), () {
     if (soundUrl !=
         "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}") {
-      audioPlayer.setUrl(
+      advancedPlayer.setUrl(
           "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
-      audioPlayer.resume();
+      advancedPlayer.resume();
       soundUrl =
       "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}";
     }
 //        });
 
-    audioPlayer.onPlayerStateChanged.listen((state) {
+    advancedPlayer.onPlayerStateChanged.listen((state) {
       if (state == AudioPlayerState.COMPLETED) {
         background.setVolume(1.0);
-        soundFinish = true;
+        setState(() {
+          soundFinish = true;
+        });
       }
     });
   }
@@ -64,8 +76,8 @@ class Silver extends State<SilverD2> {
   Widget build(BuildContext context) {
     speedBloc.answerType = 2;
     background.setVolume(0.5);
-    playSound(level, chapter.toString(),
-        stage.toString(), question_num.toString());
+    playSound(widget.level, widget.chapter.toString(),
+        widget.stage.toString(), widget.question_num.toString());
     return body(MediaQuery.of(context).size,context);
   }
 
@@ -103,7 +115,7 @@ class Silver extends State<SilverD2> {
                       width: size.width - 100,
                       child:Center(
                         child: Text(
-                          question,
+                          widget.question,
                           style: speedSilverQuestionStyle,
                         ),
                       ),
@@ -119,7 +131,7 @@ class Silver extends State<SilverD2> {
               width: size.width,
               child: Center(
                 child: Text(
-                  title,
+                  widget.title,
                   style: speedSilverTitleText,
                 ),
               ),
@@ -129,7 +141,17 @@ class Silver extends State<SilverD2> {
             top: size.height / 2.2,
             child: wood("A", "___", size),
           ),
-          soundFinish ?
+          soundFinish ? Container(
+            width: 0,
+            height: 0,
+          ) : Positioned(
+            top: size.height / 2.2,
+            child: Container(
+              width: size.width - 20,
+              height: 50,
+              color: Colors.transparent,
+            ),
+          )
 
         ],
       ),
@@ -169,7 +191,6 @@ class Silver extends State<SilverD2> {
             child: Padding(
               padding: const EdgeInsets.only(left: 40),
               child: new TextField(
-                focusNode: focus,
                 controller: controller,
                 decoration: InputDecoration(
                   focusedBorder: InputBorder.none,

@@ -25,9 +25,8 @@ class PhonicsA extends StatefulWidget {
       this.question_num,
       this.title,
       this.audioPlayer,
-       this.background})
+      this.background})
       : super(key: key);
-
 
   @override
   Phonics createState() => Phonics();
@@ -64,6 +63,7 @@ class Phonics extends State<PhonicsA> {
   AudioPlayer advancedPlayer, background;
   Timer _timer;
   String soundUrl;
+  bool soundFinish = false;
 
   playSound(String level, String chapter, String stage, String question_num) {
     print("phonicsA_play");
@@ -72,22 +72,25 @@ class Phonics extends State<PhonicsA> {
       advancedPlayer.release();
 //      _timer = Timer(Duration(seconds: 1), ()
 //      {
-        if (soundUrl != "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}") {
-          advancedPlayer.setUrl(
-              "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
-          advancedPlayer.resume();
-          soundUrl = "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}";
-        }
+      if (soundUrl !=
+          "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}") {
+        advancedPlayer.setUrl(
+            "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
+        advancedPlayer.resume();
+        soundUrl =
+            "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}";
+      }
 //      });
-
     });
 
-    advancedPlayer.onPlayerStateChanged.listen((state){
-      if(state == AudioPlayerState.COMPLETED) {
+    advancedPlayer.onPlayerStateChanged.listen((state) {
+      if (state == AudioPlayerState.COMPLETED) {
         background.setVolume(1.0);
+        setState(() {
+          soundFinish = true;
+        });
       }
     });
-
   }
 
   @override
@@ -95,7 +98,6 @@ class Phonics extends State<PhonicsA> {
     advancedPlayer.stop();
     super.dispose();
   }
-
 
   @override
   void initState() {
@@ -193,6 +195,62 @@ class Phonics extends State<PhonicsA> {
                       top: size.height / 1.8,
                       left: 30,
                       child: questionPicture(answerList[3].img, 4)),
+                  soundFinish
+                      ? Container(
+                          width: 0,
+                          height: 0,
+                        )
+                      : Positioned(
+                          top: size.height / 2.5,
+                          right: 30,
+                          child: Container(
+                            width: 150,
+                            height: 280,
+                            color: Colors.transparent,
+                          ),
+                        ),
+                  soundFinish
+                      ? Container(
+                          width: 0,
+                          height: 0,
+                        )
+                      : Positioned(
+                          top: size.height / 2.5,
+                          left: 30,
+                          child: Container(
+                            width: 150,
+                            height: 280,
+                            color: Colors.transparent,
+                          ),
+                        ),
+                  soundFinish
+                      ? Container(
+                          width: 0,
+                          height: 0,
+                        )
+                      : Positioned(
+                          top: size.height / 1.8,
+                          right: 30,
+                          child: Container(
+                            width: 150,
+                            height: 280,
+                            color: Colors.transparent,
+                          ),
+                        ),
+                  soundFinish
+                      ? Container(
+                          width: 0,
+                          height: 0,
+                        )
+                      : Positioned(
+                          top: size.height / 1.8,
+                          left: 30,
+                          child: Container(
+                            width: 150,
+                            height: 280,
+                            color: Colors.transparent,
+                          ),
+                        )
                 ],
               );
             }

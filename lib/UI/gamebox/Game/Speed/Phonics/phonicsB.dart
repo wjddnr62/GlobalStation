@@ -37,6 +37,7 @@ class Phonics extends State<PhonicsB> {
   AudioPlayer advancedPlayer, background;
   Timer _timer;
   String soundUrl;
+  bool soundFinish = false;
 
   playSound(
       String level, String chapter, String stage, String question_num) async {
@@ -59,6 +60,9 @@ class Phonics extends State<PhonicsB> {
     advancedPlayer.onPlayerStateChanged.listen((state) {
       if (state == AudioPlayerState.COMPLETED) {
         background.setVolume(1.0);
+        setState(() {
+          soundFinish = true;
+        });
       }
     });
   }
@@ -164,6 +168,54 @@ class Phonics extends State<PhonicsB> {
                     left: 30,
                     child: questionText(answerList[3].contents, 4),
                   ),
+                  soundFinish ? Container(
+                    width: 0,
+                    height: 0,
+                  ) : Positioned(
+                    top: size.height / 2.5,
+                    right: 30,
+                    child: Container(
+                      width: 160,
+                      height: 280,
+                      color: Colors.transparent,
+                    ),
+                  ),
+                  soundFinish ? Container(
+                    width: 0,
+                    height: 0,
+                  ) : Positioned(
+                    top: size.height / 2.5,
+                    left: 30,
+                    child: Container(
+                      width: 160,
+                      height: 280,
+                      color: Colors.transparent,
+                    ),
+                  ),
+                  soundFinish ? Container(
+                    width: 0,
+                    height: 0,
+                  ) : Positioned(
+                    top: size.height / 1.8,
+                    right: 30,
+                    child: Container(
+                      width: 160,
+                      height: 280,
+                      color: Colors.transparent,
+                    ),
+                  ),
+                  soundFinish ? Container(
+                    width: 0,
+                    height: 0,
+                  ) : Positioned(
+                    top: size.height / 1.8,
+                    left: 30,
+                    child: Container(
+                      width: 160,
+                      height: 280,
+                      color: Colors.transparent,
+                    ),
+                  )
                 ],
               );
             }

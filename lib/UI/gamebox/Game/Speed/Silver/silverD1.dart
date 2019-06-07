@@ -37,6 +37,7 @@ class Silver extends State<SilverD1> {
   AudioPlayer advancedPlayer, background;
   Timer _timer;
   String soundUrl;
+  bool soundFinish = false;
 
   playSound(String level, String chapter,String stage, String question_num) async {
     setState(() {
@@ -55,6 +56,9 @@ class Silver extends State<SilverD1> {
     advancedPlayer.onPlayerStateChanged.listen((state) {
       if (state == AudioPlayerState.COMPLETED) {
         background.setVolume(1.0);
+        setState(() {
+          soundFinish = true;
+        });
       }
     });
   }
@@ -181,6 +185,50 @@ class Silver extends State<SilverD1> {
                   top: size.height / 1.36,
                   child: wood("D", answerList[3].contents, size,4),
                 ),
+                soundFinish ? Container(
+                  width: 0,
+                  height: 0,
+                ) : Positioned(
+                  top : size.height / 2.2,
+                  child: Container(
+                    width: size.width - 20,
+                    height: 50,
+                    color: Colors.transparent,
+                  ),
+                ),
+                soundFinish ? Container(
+                  width: 0,
+                  height: 0,
+                ) : Positioned(
+                  top : size.height / 1.83,
+                  child: Container(
+                    width: size.width - 20,
+                    height: 50,
+                    color: Colors.transparent,
+                  ),
+                ),
+                soundFinish ? Container(
+                  width: 0,
+                  height: 0,
+                ) : Positioned(
+                  top : size.height / 1.56,
+                  child: Container(
+                    width: size.width - 20,
+                    height: 50,
+                    color: Colors.transparent,
+                  ),
+                ),
+                soundFinish ? Container(
+                  width: 0,
+                  height: 0,
+                ) : Positioned(
+                  top : size.height / 1.36,
+                  child: Container(
+                    width: size.width - 20,
+                    height: 50,
+                    color: Colors.transparent,
+                  ),
+                )
 //          Positioned(
 //            bottom: 10,
 //            child: nextBtn(size),

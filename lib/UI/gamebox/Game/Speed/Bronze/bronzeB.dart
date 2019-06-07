@@ -17,7 +17,15 @@ class BronzeB extends StatefulWidget {
   final String title;
   final AudioPlayer audioPlayer, background;
 
-  BronzeB({Key key, this.level, this.chapter, this.stage, this.question_num,this.title, this.audioPlayer, this.background})
+  BronzeB(
+      {Key key,
+      this.level,
+      this.chapter,
+      this.stage,
+      this.question_num,
+      this.title,
+      this.audioPlayer,
+      this.background})
       : super(key: key);
 
   @override
@@ -25,7 +33,6 @@ class BronzeB extends StatefulWidget {
 }
 
 class Bronze extends State<BronzeB> {
-
   final String A_POSTIT = "assets/gamebox/img/speed/postitA.png";
   final String B_POSTIT = "assets/gamebox/img/speed/postitB.png";
 
@@ -33,24 +40,31 @@ class Bronze extends State<BronzeB> {
   AudioPlayer advancedPlayer, background;
   Timer _timer;
   String soundUrl;
+  bool soundFinish = false;
 
-  playSound(String level, String chapter,String stage, String question_num) async {
+  playSound(
+      String level, String chapter, String stage, String question_num) async {
     setState(() {
       advancedPlayer.release();
 //      _timer = Timer(Duration(seconds: 1), ()
 //      {
-        if (soundUrl != "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}") {
-          advancedPlayer.setUrl(
-              "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
-          advancedPlayer.resume();
-          soundUrl = "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}";
-        }
+      if (soundUrl !=
+          "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}") {
+        advancedPlayer.setUrl(
+            "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
+        advancedPlayer.resume();
+        soundUrl =
+            "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}";
+      }
 //      });
     });
 
     advancedPlayer.onPlayerStateChanged.listen((state) {
       if (state == AudioPlayerState.COMPLETED) {
         background.setVolume(1.0);
+        setState(() {
+          soundFinish = true;
+        });
       }
     });
   }
@@ -109,10 +123,11 @@ class Bronze extends State<BronzeB> {
         ),
         child: StreamBuilder(
           stream: speedBloc.getAnswerList(widget.question_num),
-          builder: (context, snapshot){
-            if(snapshot.hasData){
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
               String jsonValue = snapshot.data;
-              List<AnswerList> answerList = speedBloc.answerListToList(jsonValue);
+              List<AnswerList> answerList =
+                  speedBloc.answerListToList(jsonValue);
 
               return Stack(
                 children: <Widget>[
@@ -137,63 +152,116 @@ class Bronze extends State<BronzeB> {
                   Positioned(
                     left: 20,
                     top: size.height / 2.5,
-                    child: postIt("A", answerList[0].contents,1),
+                    child: postIt("A", answerList[0].contents, 1),
                   ),
                   Positioned(
                     right: 20,
                     top: size.height / 2.5,
-                    child: postIt("B", answerList[1].contents,2),
+                    child: postIt("B", answerList[1].contents, 2),
                   ),
                   Positioned(
                     left: 20,
                     top: size.height / 1.6,
-                    child: postIt("B", answerList[2].contents,3),
+                    child: postIt("B", answerList[2].contents, 3),
                   ),
                   Positioned(
                     right: 20,
                     top: size.height / 1.6,
-                    child: postIt("A", answerList[3].contents,4),
+                    child: postIt("A", answerList[3].contents, 4),
                   ),
-
-//                Align(
-//                  alignment: AlignmentDirectional.bottomCenter,
-//                  child: nextBtn(size),
-//                ),
+                  soundFinish
+                      ? Container(
+                          width: 0,
+                          height: 0,
+                        )
+                      : Positioned(
+                          left: 20,
+                          top: size.height / 2.5,
+                          child: Container(
+                            width: 160,
+                            height: 160,
+                            color: Colors.transparent,
+                          ),
+                        ),
+                  soundFinish
+                      ? Container(
+                    width: 0,
+                    height: 0,
+                  )
+                      : Positioned(
+                    right: 20,
+                    top: size.height / 2.5,
+                    child: Container(
+                      width: 160,
+                      height: 160,
+                      color: Colors.transparent,
+                    ),
+                  ),
+                  soundFinish
+                      ? Container(
+                    width: 0,
+                    height: 0,
+                  )
+                      : Positioned(
+                    left: 20,
+                    top: size.height / 1.6,
+                    child: Container(
+                      width: 160,
+                      height: 160,
+                      color: Colors.transparent,
+                    ),
+                  ),
+                  soundFinish
+                      ? Container(
+                    width: 0,
+                    height: 0,
+                  )
+                      : Positioned(
+                    right: 20,
+                    top: size.height / 1.6,
+                    child: Container(
+                      width: 160,
+                      height: 160,
+                      color: Colors.transparent,
+                    ),
+                  )
                 ],
               );
             }
 
             return CircularProgressIndicator();
           },
-        )
-    );
+        ));
   }
-
 
   int clickAnswer = 0;
 
-  Widget postIt(String type, String text,int idx) {
+  Widget postIt(String type, String text, int idx) {
     return Container(
       width: 160,
       height: 160,
       child: InkWell(
-        onTap:(){
+        onTap: () {
           answer = idx;
           speedBloc.answer = answer;
-        setState(() {
-          clickAnswer = idx;
-        });
-
+          setState(() {
+            clickAnswer = idx;
+          });
         },
         child: Stack(
           children: <Widget>[
             Image.asset(
               (type == "A") ? A_POSTIT : B_POSTIT,
-              width: (idx == clickAnswer)? 160 : 150,
+              width: (idx == clickAnswer) ? 160 : 150,
               height: 150,
               fit: BoxFit.cover,
             ),
-            Center(child: Text(text, style: speedBronzeQuestionStyle,),)
+            Center(
+              child: Text(
+                text,
+                style: speedBronzeQuestionStyle,
+              ),
+            )
           ],
         ),
       ),
@@ -202,7 +270,7 @@ class Bronze extends State<BronzeB> {
 
   Widget nextBtn(Size size) {
     return InkWell(
-      onTap: (){},
+      onTap: () {},
       child: Container(
         width: size.width,
         height: 40,
@@ -215,4 +283,3 @@ class Bronze extends State<BronzeB> {
     );
   }
 }
-
