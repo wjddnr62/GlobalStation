@@ -87,6 +87,7 @@ class Phonics extends State<PhonicsA> {
       if (state == AudioPlayerState.COMPLETED) {
         background.setVolume(1.0);
         setState(() {
+          print("phA soundFinish : " + soundFinish.toString());
           soundFinish = true;
         });
       }
