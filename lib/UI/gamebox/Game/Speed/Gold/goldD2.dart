@@ -16,6 +16,7 @@ class GoldD2 extends StatefulWidget {
   final String title;
   final String question;
   final AudioPlayer audioPlayer, background;
+  final TextEditingController controller;
 
   GoldD2(
       {Key key,
@@ -25,7 +26,9 @@ class GoldD2 extends StatefulWidget {
       this.question_num,
       this.title,
       this.question,
-      this.audioPlayer, this.background})
+      this.audioPlayer,
+      this.background,
+      this.controller})
       : super(key: key);
 
   @override
@@ -42,17 +45,22 @@ class Gold extends State<GoldD2> {
   AudioPlayer advancedPlayer, background;
   Timer _timer;
   String soundUrl;
+  bool iphonex = false;
+  TextEditingController controller;
+  bool soundFinish = false;
 
-  playSound(String level, String chapter,String stage, String question_num) async {
+  playSound(
+      String level, String chapter, String stage, String question_num) async {
     setState(() {
       advancedPlayer.release();
-      _timer = Timer(Duration(seconds: 1), ()
-      {
-        if (soundUrl != "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}") {
+      _timer = Timer(Duration(milliseconds: 500), () {
+        if (soundUrl !=
+            "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}") {
           advancedPlayer.setUrl(
               "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
           advancedPlayer.resume();
-          soundUrl = "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}";
+          soundUrl =
+              "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}";
         }
       });
     });
@@ -60,6 +68,9 @@ class Gold extends State<GoldD2> {
     advancedPlayer.onPlayerStateChanged.listen((state) {
       if (state == AudioPlayerState.COMPLETED) {
         background.setVolume(1.0);
+        setState(() {
+          soundFinish = true;
+        });
       }
     });
   }
@@ -73,6 +84,7 @@ class Gold extends State<GoldD2> {
   @override
   void initState() {
     super.initState();
+    controller = widget.controller;
     advancedPlayer = widget.audioPlayer;
     background = widget.background;
 //    setState(() {
@@ -104,7 +116,6 @@ class Gold extends State<GoldD2> {
 
   Widget body(Size size) {
     final bool iphonex = MediaQuery.of(context).size.height >= 812.0;
-
     return Container(
       width: size.width,
       height: (iphonex) ? size.height - 97 : size.height - 40,
@@ -163,6 +174,19 @@ class Gold extends State<GoldD2> {
               top: size.height / 2.07,
               child: wood(size),
             ),
+            soundFinish
+                ? Container(
+                    width: 0,
+                    height: 0,
+                  )
+                : Positioned(
+                    top: size.height / 2.07,
+                    child: Container(
+                      width: size.width - 20,
+                      height: (iphonex) ? 70 : 60,
+                      color: Colors.transparent,
+                    ),
+                  )
           ],
         ),
       ),
@@ -172,14 +196,14 @@ class Gold extends State<GoldD2> {
   Widget wood(Size size) {
     return Container(
       width: size.width - 20,
-      height: 60,
+      height: (iphonex) ? 70 : 60,
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Stack(
         children: <Widget>[
           Image.asset(
             goldQue,
             width: size.width - 20,
-            height: 60,
+            height: (iphonex) ? 70 : 60,
             fit: BoxFit.fill,
           ),
           Align(
@@ -192,7 +216,9 @@ class Gold extends State<GoldD2> {
                   focusedBorder: InputBorder.none,
                   enabledBorder: InputBorder.none,
                 ),
+                controller: controller,
                 onChanged: (value) {
+                  print("onChange");
                   speedBloc.answerA = value;
                 },
               ),

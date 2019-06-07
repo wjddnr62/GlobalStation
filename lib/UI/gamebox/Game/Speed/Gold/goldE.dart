@@ -16,6 +16,7 @@ class GoldE extends StatefulWidget {
   final String title;
   final String question;
   final AudioPlayer audioPlayer, background;
+  final TextEditingController controller;
 
   GoldE(
       {Key key,
@@ -25,7 +26,9 @@ class GoldE extends StatefulWidget {
       this.question_num,
       this.title,
       this.question,
-      this.audioPlayer, this.background})
+      this.audioPlayer,
+      this.background,
+      this.controller})
       : super(key: key);
 
   @override
@@ -41,24 +44,32 @@ class Gold extends State<GoldE> {
   AudioPlayer advancedPlayer, background;
   Timer _timer;
   String soundUrl;
+  TextEditingController controller;
+  bool soundFinish = false;
 
-  playSound(String level, String chapter,String stage, String question_num) async {
+  playSound(
+      String level, String chapter, String stage, String question_num) async {
     setState(() {
       advancedPlayer.release();
-      _timer = Timer(Duration(seconds: 1), ()
+      _timer = Timer(Duration(milliseconds: 500), ()
       {
-        if (soundUrl != "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}") {
-          advancedPlayer.setUrl(
-              "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
-          advancedPlayer.resume();
-          soundUrl = "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}";
-        }
+      if (soundUrl !=
+          "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}") {
+        advancedPlayer.setUrl(
+            "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
+        advancedPlayer.resume();
+        soundUrl =
+            "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}";
+      }
       });
     });
 
     advancedPlayer.onPlayerStateChanged.listen((state) {
       if (state == AudioPlayerState.COMPLETED) {
         background.setVolume(1.0);
+        setState(() {
+          soundFinish = true;
+        });
       }
     });
   }
@@ -72,6 +83,7 @@ class Gold extends State<GoldE> {
   @override
   void initState() {
     super.initState();
+    controller = widget.controller;
     advancedPlayer = widget.audioPlayer;
     background = widget.background;
 //    setState(() {
@@ -97,13 +109,12 @@ class Gold extends State<GoldE> {
         advancedPlayer.release();
         Navigator.of(context).pop();
       },
-      child:  body(MediaQuery.of(context).size),
-          );
+      child: body(MediaQuery.of(context).size),
+    );
   }
 
   Widget body(Size size) {
     final bool iphonex = MediaQuery.of(context).size.height >= 812.0;
-
     return Container(
       width: size.width,
       height: (iphonex) ? size.height - 97 : size.height - 40,
@@ -135,6 +146,19 @@ class Gold extends State<GoldE> {
               top: size.height / 2,
               child: answer(size),
             ),
+            soundFinish
+                ? Container(
+              width: 0,
+              height: 0,
+            )
+                : Positioned(
+              top: size.height / 2,
+              child: Container(
+                width: size.width - 20,
+                height: 55,
+                color: Colors.transparent,
+              ),
+            )
           ],
         ),
       ),
@@ -160,7 +184,9 @@ class Gold extends State<GoldE> {
                   filled: true,
                   fillColor: Colors.transparent,
                 ),
+                controller: controller,
                 onChanged: (value) {
+                  print("onChange");
                   speedBloc.answerA = value;
                 },
               ),

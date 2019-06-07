@@ -440,6 +440,7 @@ class GoldM extends State<Gold> {
                                   sizeWidth: MediaQuery.of(context).size.width,
                                   resetGame: () => resetGame(),
                                   memberLevel: memberLevel,
+                                  type: "MATCH",
                                 ),
                               )
                             ],
@@ -495,6 +496,7 @@ class GoldM extends State<Gold> {
                             child: TimerBar(
                               width: size.width,
                               finishTimer: () => finishTimer(),
+                              level: widget.level,
                             ),
                           ),
                 answer_finish
@@ -899,7 +901,6 @@ class GoldM extends State<Gold> {
                           child: Text(
                             param,
                             style: TextStyle(
-                              fontWeight: FontWeight.bold,
                               fontSize: 14,
                               color: Colors.black,
                               fontFamily: 'Jua',
@@ -915,7 +916,6 @@ class GoldM extends State<Gold> {
                           child: Text(
                             param,
                             style: TextStyle(
-                              fontWeight: FontWeight.bold,
                               fontSize: 14,
                               color: Colors.black,
                               fontFamily: 'Jua',

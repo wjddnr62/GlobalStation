@@ -206,6 +206,7 @@ class GameListState extends State<GameList> {
                       child: TimerBar(
                         width: MediaQuery.of(context).size.width,
                         finishTimer: () => finishTimer(),
+                        level: widget.level,
                       ),
                     )
                   : SizedBox(
@@ -256,6 +257,7 @@ class GameListState extends State<GameList> {
                         sizeWidth: double.infinity,
                         resetGame: () => restart(),
                         memberLevel: memberLevel,
+                        type: "QUIZ",
                       ),
                     ),
                     Positioned(
@@ -312,11 +314,13 @@ class GameListState extends State<GameList> {
         quizBloc.getAnswer(quizBloc.question_num).then((value) {
           Map<String, dynamic> json = jsonDecode(value);
 
-          setState(() {
+//          setState(() {
             viewTimer = false;
             answer = json['data'];
             quizBloc.answer = 0;
             quizBloc.question_num = 0;
+//          });
+          setState(() {
           });
 
           if (viewidx == maxLen - 1) {
@@ -374,6 +378,7 @@ class GameListState extends State<GameList> {
     answer = "";
     return Positioned.fill(
       child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 40),
         child: Image.asset(img),
       ),
     );

@@ -160,6 +160,7 @@ class SilverE extends StatelessWidget {
   final String title;
   final String question;
   final AudioPlayer audioPlayer, background;
+  final TextEditingController controller;
 
   SilverE(
       {Key key,
@@ -169,7 +170,8 @@ class SilverE extends StatelessWidget {
       this.question_num,
       this.title,
       this.question,
-      this.audioPlayer, this.background})
+      this.audioPlayer, this.background,
+      this.controller})
       : super(key: key);
 
   final String silverWood = "assets/gamebox/img/speed/sliver_ans.png";
@@ -182,7 +184,7 @@ class SilverE extends StatelessWidget {
     print("phonicsB_play");
 
     audioPlayer.release();
-    _timer = Timer(Duration(seconds: 1), () {
+//    _timer = Timer(Duration(seconds: 1), () {
       if (soundUrl !=
           "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}") {
         audioPlayer.setUrl(
@@ -191,7 +193,7 @@ class SilverE extends StatelessWidget {
         soundUrl =
         "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}";
       }
-    });
+//    });
 
     audioPlayer.onPlayerStateChanged.listen((state) {
       if (state == AudioPlayerState.COMPLETED) {
@@ -276,7 +278,6 @@ class SilverE extends StatelessWidget {
   }
 
   Widget wood(String type, String text, Size size) {
-    final TextEditingController controller = new TextEditingController();
     final FocusNode focus = FocusNode();
     return Container(
       width: size.width - 20,

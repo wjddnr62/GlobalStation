@@ -23,7 +23,7 @@ class LoginProvider {
     final response = await client
         .get(url + '/auth/userData?user_no=' + userNo)
         .catchError((error) {
-          print("login error");
+      print("login error");
     });
 
     return DetailUser(utf8.decode(response.bodyBytes));
@@ -53,14 +53,32 @@ class LoginProvider {
     return response.body;
   }
 
-  Future<String> addCoin(String id, int coin) async {
+  Future<String> addCoin(
+      String id, int coin, String type, String level, int chapter) async {
     final response = await client.put(url +
-        "/auth/addCoin?" +
+        "/auth/result?" +
         "child_key=" +
         id +
         "&coin=" +
-        coin.toString());
+        coin.toString() +
+        "&type=" +
+        type.toString() +
+        "&level=" +
+        level.toString() +
+        "&chapter=" +
+        chapter.toString());
 
     return response.body;
   }
+
+//  Future<String> addCoin(String id, int coin) async {
+//    final response = await client.put(url +
+//        "/auth/addCoin?" +
+//        "child_key=" +
+//        id +
+//        "&coin=" +
+//        coin.toString());
+//
+//    return response.body;
+//  }
 }

@@ -10,7 +10,6 @@ import 'package:lms_flutter/theme.dart';
 int answer = 0;
 
 class GoldC extends StatefulWidget {
-
   final String level;
   final int chapter;
   final int stage;
@@ -19,8 +18,16 @@ class GoldC extends StatefulWidget {
   final String question;
   final AudioPlayer audioPlayer, background;
 
-  GoldC({Key key, this.level, this.chapter, this.stage, this.question_num,this.title,
-    this.question, this.audioPlayer, this.background})
+  GoldC(
+      {Key key,
+      this.level,
+      this.chapter,
+      this.stage,
+      this.question_num,
+      this.title,
+      this.question,
+      this.audioPlayer,
+      this.background})
       : super(key: key);
 
   @override
@@ -34,24 +41,32 @@ class Gold extends State<GoldC> {
   AudioPlayer advancedPlayer, background;
   Timer _timer;
   String soundUrl;
+  bool iphonex = false;
+  bool soundFinish = false;
 
-  playSound(String level, String chapter,String stage, String question_num) async {
+  playSound(
+      String level, String chapter, String stage, String question_num) async {
     setState(() {
       advancedPlayer.release();
-      _timer = Timer(Duration(seconds: 1), ()
+      _timer = Timer(Duration(milliseconds: 500), ()
       {
-        if (soundUrl != "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}") {
-          advancedPlayer.setUrl(
-              "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
-          advancedPlayer.resume();
-          soundUrl = "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}";
-        }
+      if (soundUrl !=
+          "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}") {
+        advancedPlayer.setUrl(
+            "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
+        advancedPlayer.resume();
+        soundUrl =
+            "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}";
+      }
       });
     });
 
     advancedPlayer.onPlayerStateChanged.listen((state) {
       if (state == AudioPlayerState.COMPLETED) {
         background.setVolume(1.0);
+        setState(() {
+          soundFinish = true;
+        });
       }
     });
   }
@@ -67,6 +82,7 @@ class Gold extends State<GoldC> {
     super.initState();
     advancedPlayer = widget.audioPlayer;
     background = widget.background;
+//    iphonex = MediaQuery.of(context).size.height >= 812.0;
 //    setState(() {
 //
 //      advancedPlayer.release();
@@ -79,6 +95,7 @@ class Gold extends State<GoldC> {
 
   @override
   Widget build(BuildContext context) {
+//    iphonex = MediaQuery.of(context).size.height >= 812.0;
     speedBloc.answerType = 1;
     speedBloc.getLevel(widget.level);
     speedBloc.getChapter(widget.chapter);
@@ -101,7 +118,6 @@ class Gold extends State<GoldC> {
 
   Widget body(Size size) {
     final bool iphonex = MediaQuery.of(context).size.height >= 812.0;
-
     return Container(
       width: size.width,
       height: (iphonex) ? size.height - 97 : size.height - 40,
@@ -110,8 +126,8 @@ class Gold extends State<GoldC> {
       ),
       child: StreamBuilder(
         stream: speedBloc.getAnswerList(widget.question_num),
-        builder: (context, snapshot){
-          if(snapshot.hasData) {
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
             String jsonValue = snapshot.data;
             List<AnswerList> answerList = speedBloc.answerListToList(jsonValue);
 
@@ -131,18 +147,17 @@ class Gold extends State<GoldC> {
                       children: <Widget>[
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child:Image.asset(
+                          child: Image.asset(
                             "assets/gamebox/img/speed/gold_que1.png",
                             fit: BoxFit.contain,
                           ),
                         ),
-
                         Positioned(
                           top: 25,
                           left: 55,
                           child: Container(
                             width: size.width - 100,
-                            child:Center(
+                            child: Center(
                               child: Text(
                                 widget.question,
                                 style: speedGoldQuestionStyle,
@@ -168,27 +183,78 @@ class Gold extends State<GoldC> {
                 ),
                 Positioned(
                   top: size.height / 2.22,
-                  child: brick("A", size,1),
+                  child: brick("A", size, 1),
                 ),
                 Positioned(
                   top: size.height / 1.8,
-                  child: brick( "B", size,2),
+                  child: brick("B", size, 2),
                 ),
                 Positioned(
                   top: size.height / 1.52,
-                  child: brick("C", size,3),
+                  child: brick("C", size, 3),
                 ),
                 Positioned(
                   top: size.height / 1.315,
-                  child: brick("D", size,4),
+                  child: brick("D", size, 4),
                 ),
+                soundFinish
+                    ? Container(
+                        width: 0,
+                        height: 0,
+                      )
+                    : Positioned(
+                        top: size.height / 2.22,
+                        child: Container(
+                          width: size.width - 20,
+                          height: 60,
+                          color: Colors.transparent,
+                        ),
+                      ),
+                soundFinish
+                    ? Container(
+                        width: 0,
+                        height: 0,
+                      )
+                    : Positioned(
+                        top: size.height / 1.8,
+                        child: Container(
+                          width: size.width - 20,
+                          height: 60,
+                          color: Colors.transparent,
+                        ),
+                      ),
+                soundFinish
+                    ? Container(
+                        width: 0,
+                        height: 0,
+                      )
+                    : Positioned(
+                        top: size.height / 1.52,
+                        child: Container(
+                          width: size.width - 20,
+                          height: 60,
+                          color: Colors.transparent,
+                        ),
+                      ),
+                soundFinish
+                    ? Container(
+                        width: 0,
+                        height: 0,
+                      )
+                    : Positioned(
+                        top: size.height / 1.315,
+                        child: Container(
+                          width: size.width - 20,
+                          height: 60,
+                          color: Colors.transparent,
+                        ),
+                      )
               ],
             );
           }
           return CircularProgressIndicator();
         },
       ),
-
     );
   }
 
@@ -200,7 +266,7 @@ class Gold extends State<GoldC> {
       height: 60,
       padding: const EdgeInsets.symmetric(horizontal: 15),
       child: InkWell(
-        onTap: (){
+        onTap: () {
           answer = idx;
           speedBloc.answer = answer;
           setState(() {
@@ -211,19 +277,22 @@ class Gold extends State<GoldC> {
           children: <Widget>[
             Image.asset(
               goldBrick,
-              width: (idx == clickAnswer) ? size.width - 30: size.width - 50,
+              width: (idx == clickAnswer) ? size.width - 30 : size.width - 50,
               height: 60,
               fit: BoxFit.fill,
             ),
             Align(
               alignment: AlignmentDirectional.center,
-              child: Text(text, style: (clickAnswer == idx) ? speedGoldQuestionStyleSelect :speedGoldQuestionStyle,),
+              child: Text(
+                text,
+                style: (clickAnswer == idx)
+                    ? speedGoldQuestionStyleSelect
+                    : speedGoldQuestionStyle,
+              ),
             ),
           ],
         ),
       ),
-
     );
   }
-
 }

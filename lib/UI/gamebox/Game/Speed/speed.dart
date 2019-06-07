@@ -32,6 +32,7 @@ class SpeedGame extends StatelessWidget {
   final int stage;
   final List<QuestionList> qList;
   AudioPlayer background;
+  TextEditingController controller;
 
   SpeedGame(
       {Key key,
@@ -39,7 +40,8 @@ class SpeedGame extends StatelessWidget {
       this.chapter,
       this.stage,
       this.qList,
-      this.background})
+      this.background,
+      this.controller})
       : super(key: key);
 
   UserInfo userInfo = UserInfo();
@@ -66,7 +68,8 @@ class SpeedGame extends StatelessWidget {
           item: SpeedPhonics(
                   qList: qList,
                   audioPlayer: audioPlayer,
-                  background: background)
+                  background: background,
+                  controller: controller)
               .getViews(),
           size: size,
           level: level,
@@ -78,7 +81,8 @@ class SpeedGame extends StatelessWidget {
           item: SpeedBronze(
                   qList: qList,
                   audioPlayer: audioPlayer,
-                  background: background)
+                  background: background,
+                  controller: controller)
               .getViews(),
           size: size,
           level: level,
@@ -90,7 +94,8 @@ class SpeedGame extends StatelessWidget {
           item: SpeedSilver(
                   qList: qList,
                   audioPlayer: audioPlayer,
-                  background: background)
+                  background: background,
+                  controller: controller)
               .getViews(),
           size: size,
           level: level,
@@ -99,28 +104,34 @@ class SpeedGame extends StatelessWidget {
           background: background);
     if (level == "G")
       return GameList(
-          item: SpeedGold(
-                  qList: qList,
-                  audioPlayer: audioPlayer,
-                  background: background)
-              .getViews(),
-          size: size,
-          level: level,
-          chapter: chapter,
-          stage: stage,
-          background: background);
+        item: SpeedGold(
+                qList: qList,
+                audioPlayer: audioPlayer,
+                background: background,
+                controller: controller)
+            .getViews(),
+        size: size,
+        level: level,
+        chapter: chapter,
+        stage: stage,
+        background: background,
+        controller: controller,
+      );
     if (level == "D")
       return GameList(
-          item: SpeedDiamond(
-                  qList: qList,
-                  audioPlayer: audioPlayer,
-                  background: background)
-              .getViews(),
-          size: size,
-          level: level,
-          chapter: chapter,
-          stage: stage,
-          background: background);
+        item: SpeedDiamond(
+                qList: qList,
+                audioPlayer: audioPlayer,
+                background: background,
+                controller: controller)
+            .getViews(),
+        size: size,
+        level: level,
+        chapter: chapter,
+        stage: stage,
+        background: background,
+        controller: controller,
+      );
   }
 }
 
@@ -131,6 +142,7 @@ class GameList extends StatefulWidget {
   int chapter;
   int stage;
   AudioPlayer background;
+  TextEditingController controller;
 
   GameList(
       {Key key,
@@ -139,7 +151,8 @@ class GameList extends StatefulWidget {
       this.level,
       this.chapter,
       this.stage,
-      this.background})
+      this.background,
+      this.controller})
       : super(key: key);
 
   @override
@@ -152,9 +165,11 @@ class GameListState extends State<GameList> {
   bool resultView = false;
   bool restartGame = false;
   AudioPlayer background;
+  TextEditingController controller;
 
   @override
   void initState() {
+    controller = widget.controller;
     advancedPlayer.setReleaseMode(ReleaseMode.STOP);
     viewidx = 0;
     answer = "";
@@ -215,6 +230,7 @@ class GameListState extends State<GameList> {
                       child: TimerBar(
                         width: MediaQuery.of(context).size.width,
                         finishTimer: () => finishTimer(),
+                        level: widget.level,
                       ),
                     )
                   : SizedBox(
@@ -250,46 +266,47 @@ class GameListState extends State<GameList> {
         checkAnswer(),
         (resultView)
             ? Stack(
-                  children: <Widget>[
-                    Positioned.fill(
-                        child: Image.asset(
-                            "assets/gamebox/img/effect/result_background.png")),
-                    Positioned.fill(
-                        child: Center(
-                      child: Result(
-                        level: widget.level,
-                        chapter: widget.chapter,
-                        stage: widget.stage,
-                        score: yay,
-                        scoreLength: maxLen,
-                        sizeWidth: double.infinity,
-                        resetGame: () => restart(),
-                        memberLevel: memberLevel,
-                      ),
-                    )),
-                    Positioned(
-                      top: MediaQuery.of(context).size.width / 30,
-                      child: Container(
-                        width: MediaQuery.of(context).size.width - 20,
-                        height: 20,
-                        padding: EdgeInsets.only(right: 15),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            GestureDetector(
-                              child: Image.asset(
-                                  "assets/gamebox/img/close_button.png"),
-                              onTap: () {
-                                Navigator.of(context).pop();
-                              },
-                            )
-                          ],
-                        ),
+                children: <Widget>[
+                  Positioned.fill(
+                      child: Image.asset(
+                          "assets/gamebox/img/effect/result_background.png")),
+                  Positioned.fill(
+                      child: Center(
+                    child: Result(
+                      level: widget.level,
+                      chapter: widget.chapter,
+                      stage: widget.stage,
+                      score: yay,
+                      scoreLength: maxLen,
+                      sizeWidth: double.infinity,
+                      resetGame: () => restart(),
+                      memberLevel: memberLevel,
+                      type: "SPEED",
+                    ),
+                  )),
+                  Positioned(
+                    top: MediaQuery.of(context).size.width / 30,
+                    child: Container(
+                      width: MediaQuery.of(context).size.width - 20,
+                      height: 20,
+                      padding: EdgeInsets.only(right: 15),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          GestureDetector(
+                            child: Image.asset(
+                                "assets/gamebox/img/close_button.png"),
+                            onTap: () {
+                              Navigator.of(context).pop();
+                            },
+                          )
+                        ],
                       ),
                     ),
-                  ],
-                )
+                  ),
+                ],
+              )
             : Positioned(
                 top: 0,
                 child: SizedBox(
@@ -313,6 +330,10 @@ class GameListState extends State<GameList> {
           speedBloc.question_num = 0;
           speedBloc.answerA = "";
           speedBloc.answerType = 0;
+          if (controller != null) {
+            controller.clear();
+          }
+
           setState(() {
             audioPlayer.release();
             background.setVolume(1.0);
@@ -347,6 +368,9 @@ class GameListState extends State<GameList> {
     print("restart");
     viewidx = 0;
     answer = "";
+    if (controller != null) {
+      controller.clear();
+    }
     viewTimer = true;
     resultView = false;
     restartGame = false;
@@ -359,7 +383,7 @@ class GameListState extends State<GameList> {
   AudioCache audioCache;
 
   Widget checkAnswer() {
-    audioPlayer.release();
+//    audioPlayer.release();
     background.setVolume(1.0);
     audioCache = AudioCache(fixedPlayer: advancedPlayer);
     String img = "";
@@ -386,8 +410,12 @@ class GameListState extends State<GameList> {
       );
     }
     answer = "";
+    if (controller != null) {
+      controller.clear();
+    }
     return Positioned.fill(
       child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 40),
         child: Image.asset(img),
       ),
     );
@@ -401,6 +429,9 @@ class GameListState extends State<GameList> {
     _timer = new Timer(timeout, () {
       print("speedTimeout");
       answer = "";
+      if (controller != null) {
+        controller.clear();
+      }
       viewTimer = true;
       viewidx++;
       setState(() {

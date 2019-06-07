@@ -1,9 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:lms_flutter/UI/gamebox/gameDialog.dart';
-import 'package:lms_flutter/bloc/game_public_bloc.dart';
-import 'package:lms_flutter/model/UserInfo.dart';
 import 'package:lms_flutter/bloc/member_bloc.dart';
-import 'dart:convert';
+import 'package:lms_flutter/model/UserInfo.dart';
 
 import '../../../theme.dart';
 
@@ -16,6 +16,7 @@ class Result extends StatefulWidget {
   double sizeWidth;
   VoidCallback resetGame;
   int memberLevel;
+  String type;
 
   Result(
       {Key key,
@@ -26,7 +27,8 @@ class Result extends StatefulWidget {
       this.scoreLength,
       this.sizeWidth,
       this.resetGame,
-      this.memberLevel})
+      this.memberLevel,
+      this.type})
       : super(key: key);
 
   @override
@@ -49,12 +51,18 @@ class ResultView extends State<Result> {
   int coin = 0;
 
   bool coinInsert = false;
+  String level;
+  String type;
+  int chapter;
 
   @override
   void initState() {
     memberLevel = widget.memberLevel;
+    level = widget.level;
+    type = widget.type;
+    chapter = widget.chapter;
 
-    print("resultMember : " + memberLevel.toString());
+    print("resultMember : " + memberLevel.toString() + ", " + widget.level);
 
     if (widget.level == "P") {
       if (widget.chapter == 1) {
@@ -96,6 +104,11 @@ class ResultView extends State<Result> {
       } else if (widget.chapter == 3) {
         idx = 14;
       }
+    }
+
+    if (memberLevel != idx) {
+      coinInsert = true;
+//      setState(() {});
     }
 
     if (idx != null) {
@@ -186,29 +199,43 @@ class ResultView extends State<Result> {
     double parent = widget.score / widget.scoreLength * 100;
     if (parent < 25) {
       resultImgUrl = "assets/gamebox/img/effect/1.png";
-      coin = 0;
+      if (!coinInsert){
+        coin = 0;
+      }
     } else if (parent > 25 && parent < 50) {
       resultImgUrl = "assets/gamebox/img/effect/2.png";
-      coin = 1;
+      if (!coinInsert){
+        coin = 1;
+      }
     } else if (parent > 50 && parent < 75) {
       resultImgUrl = "assets/gamebox/img/effect/3.png";
-      coin = 2;
+      if (!coinInsert){
+        coin = 2;
+      }
     } else if (parent > 75 && parent < 100) {
       resultImgUrl = "assets/gamebox/img/effect/4.png";
-      coin = 3;
+      if (!coinInsert){
+        coin = 3;
+      }
     } else if (parent >= 100) {
       resultImgUrl = "assets/gamebox/img/effect/5.png";
-      coin = 5;
+      if (!coinInsert){
+        coin = 5;
+      }
     }
   }
 
-  updateCoin(){
-    String id= UserInfo().child_user_id;
+  updateCoin() {
+    String id = UserInfo().child_user_id;
     print("id = ${id}, coin = ${coin}");
-    mbloc.addCoin(id, coin).then((value){
+    mbloc.addCoin(id, coin, type, chapter, level).then((value) {
       print("Coin : " + value);
-      if(json.decode(value)['result'] == 1){
+      if (json.decode(value)['result'] == 1) {
         UserInfo().member_coin = json.decode(value)['data']['coin'];
+      } else if (json.decode(value)['result'] == 0) {
+        setState(() {
+          coin = 0;
+        });
       }
     });
     coinInsert = true;
@@ -243,7 +270,6 @@ class ResultView extends State<Result> {
                     style: TextStyle(
                         color: black,
                         fontSize: defaultFontSize + 8,
-                        fontWeight: FontWeight.bold,
                         fontFamily: "Jua"),
                     children: <TextSpan>[
                       TextSpan(
@@ -251,7 +277,6 @@ class ResultView extends State<Result> {
                         style: TextStyle(
                             color: resultStageColor,
                             fontSize: defaultFontSize + 8,
-                            fontWeight: FontWeight.bold,
                             fontFamily: "Jua"),
                       )
                     ]),
@@ -274,7 +299,6 @@ class ResultView extends State<Result> {
                       style: TextStyle(
                           fontSize: defaultFontSize,
                           fontFamily: 'Jua',
-                          fontWeight: FontWeight.bold,
                           color: resultStageColor),
                       children: <TextSpan>[
                         TextSpan(
@@ -282,14 +306,39 @@ class ResultView extends State<Result> {
                             style: TextStyle(
                                 fontSize: defaultFontSize,
                                 fontFamily: 'Jua',
-                                fontWeight: FontWeight.bold,
                                 color: black))
+                      ])),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 20.0),
+              child: RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(
+                      text: "획득 코인 ",
+                      style: TextStyle(
+                          fontSize: defaultFontSize,
+                          fontFamily: 'Jua',
+                          color: black),
+                      children: <TextSpan>[
+                        TextSpan(
+                            text: "${coin}",
+                            style: TextStyle(
+                                fontSize: defaultFontSize,
+                                fontFamily: 'Jua',
+                                color: resultStageColor)),
+                        TextSpan(
+                          text: "개",
+                          style: TextStyle(
+                              fontSize: defaultFontSize,
+                              fontFamily: 'Jua',
+                              color: black),
+                        )
                       ])),
             ),
             Align(
               alignment: Alignment.bottomCenter,
               child: Padding(
-                padding: EdgeInsets.only(top: 80.0),
+                padding: EdgeInsets.only(top: 60.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.end,

@@ -37,11 +37,13 @@ class Gold extends State<GoldD1> {
   AudioPlayer advancedPlayer, background;
   Timer _timer;
   String soundUrl;
+  bool iphonex = false;
+  bool soundFinish = false;
 
   playSound(String level, String chapter,String stage, String question_num) {
     setState(() {
       advancedPlayer.release();
-      _timer = Timer(Duration(seconds: 1), ()
+      _timer = Timer(Duration(milliseconds: 500), ()
       {
         if (soundUrl != "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}") {
           advancedPlayer.setUrl(
@@ -55,6 +57,9 @@ class Gold extends State<GoldD1> {
     advancedPlayer.onPlayerStateChanged.listen((state) {
       if (state == AudioPlayerState.COMPLETED) {
         background.setVolume(1.0);
+        setState(() {
+          soundFinish = true;
+        });
       }
     });
   }
@@ -171,21 +176,53 @@ class Gold extends State<GoldD1> {
                   ),
                 ),
                 Positioned(
-                  top: size.height / 2.22,
+                  top: (iphonex) ? size.height / 2.37 : size.height / 2.22,
                   child: brick("A", answerList[0].contents, size,1),
                 ),
                 Positioned(
-                  top: size.height / 1.8,
+                  top:  (iphonex) ? size.height / 1.93 :size.height / 1.8,
                   child: brick("B", answerList[1].contents, size,2),
                 ),
                 Positioned(
-                  top: size.height / 1.52,
+                  top:  (iphonex) ? size.height / 1.635 :size.height / 1.52,
                   child: brick("C", answerList[2].contents, size,3),
                 ),
                 Positioned(
-                  top: size.height / 1.315,
+                  top: (iphonex) ? size.height / 1.41 : size.height / 1.315,
                   child: brick("D", answerList[3].contents, size,4),
                 ),
+                soundFinish ? Container(width: 0, height: 0,) : Positioned(
+                  top: (iphonex) ? size.height / 2.37 : size.height / 2.22,
+                  child: Container(
+                    width: size.width - 20,
+                    height: (iphonex) ? 70 : 60,
+                    color: Colors.transparent,
+                  ),
+                ),
+                soundFinish ? Container(width: 0, height: 0,) : Positioned(
+                  top:  (iphonex) ? size.height / 1.93 :size.height / 1.8,
+                  child: Container(
+                    width: size.width - 20,
+                    height: (iphonex) ? 70 : 60,
+                    color: Colors.transparent,
+                  ),
+                ),
+                soundFinish ? Container(width: 0, height: 0,) : Positioned(
+                  top:  (iphonex) ? size.height / 1.635 :size.height / 1.52,
+                  child: Container(
+                    width: size.width - 20,
+                    height: (iphonex) ? 70 : 60,
+                    color: Colors.transparent,
+                  ),
+                ),
+                soundFinish ? Container(width: 0, height: 0,) : Positioned(
+                  top: (iphonex) ? size.height / 1.41 : size.height / 1.315,
+                  child: Container(
+                    width: size.width - 20,
+                    height: (iphonex) ? 70 : 60,
+                    color: Colors.transparent,
+                  ),
+                )
               ],
             );
           }
@@ -201,7 +238,7 @@ class Gold extends State<GoldD1> {
   Widget brick(String type, String text, Size size,int idx) {
     return Container(
       width: size.width - 20,
-      height: 60,
+      height: (iphonex) ? 70 : 60,
       padding: const EdgeInsets.symmetric(horizontal: 15),
       child:InkWell(
         onTap: (){

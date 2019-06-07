@@ -6,10 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:lms_flutter/bloc/speed_game_bloc.dart';
 import 'package:lms_flutter/theme.dart';
 
-String answer="";
+String answer = "";
 
 class DiamondE extends StatefulWidget {
-
   final String level;
   final int chapter;
   final int stage;
@@ -17,42 +16,58 @@ class DiamondE extends StatefulWidget {
   final String title;
   final String question;
   final AudioPlayer audioPlayer, background;
+  final TextEditingController controller;
 
-  DiamondE({Key key, this.level, this.chapter, this.stage, this.question_num,this.title,
-    this.question, this.audioPlayer, this.background})
+  DiamondE(
+      {Key key,
+      this.level,
+      this.chapter,
+      this.stage,
+      this.question_num,
+      this.title,
+      this.question,
+      this.audioPlayer,
+      this.background,
+      this.controller})
       : super(key: key);
-
 
   @override
   Diamond createState() => Diamond();
 }
 
 class Diamond extends State<DiamondE> {
-
   final String diaMessage = "assets/gamebox/img/speed/dia_ans.png";
 
   AudioCache audioCache = AudioCache();
   AudioPlayer advancedPlayer, background;
   Timer _timer;
   String soundUrl;
+  TextEditingController controller;
+  bool soundFinish = false;
 
-  playSound(String level, String chapter,String stage, String question_num) async {
+  playSound(
+      String level, String chapter, String stage, String question_num) async {
     setState(() {
       advancedPlayer.release();
-      _timer = Timer(Duration(seconds: 1), ()
+      _timer = Timer(Duration(milliseconds: 500), ()
       {
-        if (soundUrl != "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}") {
-          advancedPlayer.setUrl(
-              "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
-          advancedPlayer.resume();
-          soundUrl = "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}";
-        }
+      if (soundUrl !=
+          "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}") {
+        advancedPlayer.setUrl(
+            "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
+        advancedPlayer.resume();
+        soundUrl =
+            "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}";
+      }
       });
     });
 
     advancedPlayer.onPlayerStateChanged.listen((state) {
       if (state == AudioPlayerState.COMPLETED) {
         background.setVolume(1.0);
+        setState(() {
+          soundFinish = true;
+        });
       }
     });
   }
@@ -66,6 +81,7 @@ class Diamond extends State<DiamondE> {
   @override
   void initState() {
     super.initState();
+    controller = widget.controller;
     advancedPlayer = widget.audioPlayer;
     background = widget.background;
 //    setState(() {
@@ -97,7 +113,6 @@ class Diamond extends State<DiamondE> {
 
   Widget body(Size size) {
     final bool iphonex = MediaQuery.of(context).size.height >= 812.0;
-
     return Container(
       width: size.width,
       height: (iphonex) ? size.height - 97 : size.height - 40,
@@ -129,6 +144,19 @@ class Diamond extends State<DiamondE> {
               top: size.height / 2,
               child: message("A", "___", size),
             ),
+            soundFinish
+                ? Container(
+              width: 0,
+              height: 0,
+            )
+                : Positioned(
+              top: size.height / 2,
+              child: Container(
+                width: size.width - 20,
+                height: 50,
+                color: Colors.transparent,
+              ),
+            ),
           ],
         ),
       ),
@@ -139,7 +167,7 @@ class Diamond extends State<DiamondE> {
     return Container(
       width: size.width - 20,
       height: 50,
-      padding: const EdgeInsets.only(left: 40,right: 10),
+      padding: const EdgeInsets.only(left: 40, right: 10),
       child: Stack(
         children: <Widget>[
           Image.asset(
@@ -160,14 +188,16 @@ class Diamond extends State<DiamondE> {
     );
   }
 
-  Widget input(){
+  Widget input() {
     return TextField(
       decoration: InputDecoration(
         hintText: "_______________________",
         focusedBorder: InputBorder.none,
         enabledBorder: InputBorder.none,
       ),
-      onChanged: (value){
+      controller: controller,
+      onChanged: (value) {
+        print("onChange");
         speedBloc.answerA = value;
       },
     );

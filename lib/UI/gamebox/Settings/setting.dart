@@ -60,6 +60,7 @@ class SettingsPage extends StatelessWidget {
                   child: Text(
                     "Setting",
                     textAlign: TextAlign.center,
+                    style: TextStyle(fontFamily: 'Jua'),
                   ),
                 ),
                 padding: const EdgeInsets.symmetric(vertical: 20),
@@ -98,6 +99,7 @@ class SettingsPage extends StatelessWidget {
                   child: Text(
                     "Ver. 1.0.1",
                     textAlign: TextAlign.right,
+                    style: TextStyle(fontFamily: 'Jua'),
                   ),
                 ),
                 padding:

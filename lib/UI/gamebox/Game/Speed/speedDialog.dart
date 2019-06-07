@@ -35,8 +35,11 @@ class SpeedGameDialog extends StatefulWidget {
 
 class SpeedGameDialogState extends State<SpeedGameDialog> {
 
+  TextEditingController controller;
+
   @override
   void initState() {
+    controller = TextEditingController();
     speedBloc.getLevel(widget.level);
     speedBloc.getChapter(widget.chapter);
     speedBloc.getStage(widget.stage);
@@ -59,6 +62,7 @@ class SpeedGameDialogState extends State<SpeedGameDialog> {
               stage: widget.stage,
               qList: qList,
               background: widget.audioPlayer,
+              controller: controller,
             )));
 //      });
     });

@@ -9,7 +9,6 @@ import 'package:lms_flutter/theme.dart';
 String answer = "";
 
 class DiamondD2 extends StatefulWidget {
-
   final String level;
   final int chapter;
   final int stage;
@@ -17,11 +16,20 @@ class DiamondD2 extends StatefulWidget {
   final String title;
   final String question;
   final AudioPlayer audioPlayer, background;
+  final TextEditingController controller;
 
-  DiamondD2({Key key, this.level, this.chapter, this.stage, this.question_num,this.title,
-    this.question, this.audioPlayer, this.background})
+  DiamondD2(
+      {Key key,
+      this.level,
+      this.chapter,
+      this.stage,
+      this.question_num,
+      this.title,
+      this.question,
+      this.audioPlayer,
+      this.background,
+      this.controller})
       : super(key: key);
-
 
   @override
   Diamond createState() => Diamond();
@@ -37,24 +45,32 @@ class Diamond extends State<DiamondD2> {
   AudioPlayer advancedPlayer, background;
   Timer _timer;
   String soundUrl;
+  TextEditingController controller;
+  bool soundFinish = false;
 
-  playSound(String level, String chapter,String stage, String question_num) async {
+  playSound(
+      String level, String chapter, String stage, String question_num) async {
     setState(() {
       advancedPlayer.release();
-      _timer = Timer(Duration(seconds: 1), ()
+      _timer = Timer(Duration(milliseconds: 500), ()
       {
-        if (soundUrl != "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}") {
-          advancedPlayer.setUrl(
-              "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
-          advancedPlayer.resume();
-          soundUrl = "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}";
-        }
+      if (soundUrl !=
+          "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}") {
+        advancedPlayer.setUrl(
+            "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
+        advancedPlayer.resume();
+        soundUrl =
+            "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}";
+      }
       });
     });
 
     advancedPlayer.onPlayerStateChanged.listen((state) {
       if (state == AudioPlayerState.COMPLETED) {
         background.setVolume(1.0);
+        setState(() {
+          soundFinish = true;
+        });
       }
     });
   }
@@ -68,6 +84,7 @@ class Diamond extends State<DiamondD2> {
   @override
   void initState() {
     super.initState();
+    controller = widget.controller;
     advancedPlayer = widget.audioPlayer;
     background = widget.background;
 //    setState(() {
@@ -131,7 +148,7 @@ class Diamond extends State<DiamondD2> {
                       left: 55,
                       child: Container(
                         width: size.width - 100,
-                        child:Center(
+                        child: Center(
                           child: Text(
                             widget.question,
                             style: speedDiaQuestionStyle,
@@ -159,6 +176,19 @@ class Diamond extends State<DiamondD2> {
               top: size.height / 2,
               child: message(size),
             ),
+            soundFinish
+                ? Container(
+              width: 0,
+              height: 0,
+            )
+                : Positioned(
+              top: size.height / 2,
+              child: Container(
+                width: size.width - 20,
+                height: 50,
+                color: Colors.transparent,
+              ),
+            ),
           ],
         ),
       ),
@@ -169,7 +199,7 @@ class Diamond extends State<DiamondD2> {
     return Container(
       width: size.width - 20,
       height: 50,
-      padding: const EdgeInsets.only(left:20,right: 10.0),
+      padding: const EdgeInsets.only(left: 20, right: 10.0),
       child: Stack(
         children: <Widget>[
           Image.asset(
@@ -188,7 +218,9 @@ class Diamond extends State<DiamondD2> {
                   focusedBorder: InputBorder.none,
                   enabledBorder: InputBorder.none,
                 ),
-                onChanged: (value){
+                controller: controller,
+                onChanged: (value) {
+                  print("onChange");
                   speedBloc.answerA = value;
                 },
               ),
