@@ -1,4 +1,4 @@
-package com.lms.lms_flutter;
+package com.laon.global;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;
