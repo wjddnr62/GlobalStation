@@ -410,8 +410,9 @@ class GameListState extends State<GameList> {
   Widget checkAnswer() {
 //    audioPlayer.release();
     background.setVolume(1.0);
+    print("checkAnswer");
     setState(() {
-      soundFinish = false;
+//      soundFinish = false;
 //      nextStage = true;
 //      nextStage = false;
     });

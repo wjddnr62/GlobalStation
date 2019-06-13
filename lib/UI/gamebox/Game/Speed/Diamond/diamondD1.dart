@@ -281,7 +281,7 @@ class Diamond extends State<DiamondD1> {
             ),
             Align(
               alignment: AlignmentDirectional.center,
-              child: Text(text),
+              child: Text(text, style: speedDiaQuestionStyle,),
             ),
             Align(
                 alignment: AlignmentDirectional.centerStart,
