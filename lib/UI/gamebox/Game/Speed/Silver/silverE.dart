@@ -38,7 +38,7 @@ class Silver extends State<SilverE> {
 
   AudioPlayer advancedPlayer, background;
   Timer _timer;
-  String soundUrl;
+  String soundUrl, soundUrl2;
   bool soundFinish = false;
   TextEditingController controller;
 
@@ -55,7 +55,12 @@ class Silver extends State<SilverE> {
     print("phonicsB_play");
 
     advancedPlayer.release();
-//    _timer = Timer(Duration(seconds: 1), () {
+    if (soundUrl2 !=
+        "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}") {
+      soundFinish = false;
+      soundUrl2 = "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}";
+    }
+    _timer = Timer(Duration(milliseconds: 500), () {
     if (soundUrl !=
         "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}") {
       advancedPlayer.setUrl(
@@ -64,7 +69,7 @@ class Silver extends State<SilverE> {
       soundUrl =
       "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}";
     }
-//    });
+    });
 
     advancedPlayer.onPlayerStateChanged.listen((state) {
       if (state == AudioPlayerState.COMPLETED) {

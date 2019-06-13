@@ -37,12 +37,17 @@ class Diamond extends State<DiamondD1> {
   AudioCache audioCache = AudioCache();
   AudioPlayer advancedPlayer, background;
   Timer _timer;
-  String soundUrl;
+  String soundUrl, soundUrl2;
   bool soundFinish = false;
 
   playSound(String level, String chapter,String stage, String question_num) async {
-    setState(() {
+
       advancedPlayer.release();
+      if (soundUrl2 !=
+          "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}") {
+        soundFinish = false;
+        soundUrl2 = "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}";
+      }
       _timer = Timer(Duration(milliseconds: 500), ()
       {
         if (soundUrl != "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}") {
@@ -52,7 +57,7 @@ class Diamond extends State<DiamondD1> {
           soundUrl = "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}";
         }
       });
-    });
+
 
     advancedPlayer.onPlayerStateChanged.listen((state) {
       if (state == AudioPlayerState.COMPLETED) {

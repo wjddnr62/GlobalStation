@@ -36,25 +36,34 @@ class Phonics extends State<PhonicsB> {
   AudioCache audioCache = AudioCache();
   AudioPlayer advancedPlayer, background;
   Timer _timer;
-  String soundUrl;
+  String soundUrl, soundUrl2;
   bool soundFinish = false;
+  int touch = 1;
 
   playSound(
       String level, String chapter, String stage, String question_num) async {
     print("phonicsB_play");
 
-    setState(() {
-      advancedPlayer.release();
-//      _timer = Timer(Duration(seconds: 1), () {
-        if (soundUrl !=
-            "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}") {
-          advancedPlayer.setUrl(
-              "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
-          advancedPlayer.resume();
-          soundUrl =
-              "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}";
-        }
-//      });
+    advancedPlayer.release();
+    if (soundUrl2 !=
+        "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}") {
+      soundFinish = false;
+      soundUrl2 =
+          "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}";
+    }
+    _timer = Timer(Duration(milliseconds: 500), () {
+      if (soundUrl !=
+          "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}") {
+        print("pb_c");
+//          setState(() {
+//            soundFinish = false;
+//          });
+        advancedPlayer.setUrl(
+            "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
+        advancedPlayer.resume();
+        soundUrl =
+            "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}";
+      }
     });
 
     advancedPlayer.onPlayerStateChanged.listen((state) {
@@ -63,7 +72,10 @@ class Phonics extends State<PhonicsB> {
         setState(() {
           print("phB soundFinish : " + soundFinish.toString());
           soundFinish = true;
+//          touch = 1;
         });
+//        touch = 0;
+//        soundFinish = false;
       }
     });
   }
@@ -77,6 +89,7 @@ class Phonics extends State<PhonicsB> {
   @override
   void initState() {
     super.initState();
+    print("PhB init");
     advancedPlayer = widget.audioPlayer;
     background = widget.background;
 //    soundUrl = "http://ga.oig.kr/laon_api/api/asset/sound/${widget.level}/${widget.chapter}/S${widget.stage}/${widget.question_num}";
@@ -95,6 +108,10 @@ class Phonics extends State<PhonicsB> {
     speedBloc.getStage(widget.stage);
     speedBloc.question_num = widget.question_num;
     clickAnswer = speedBloc.answer;
+//    soundFinish = false;
+//    if(touch != 1 && soundFinish == true) {
+//      soundFinish = false;
+//    }
     setState(() {
       background.setVolume(0.5);
       playSound(widget.level, widget.chapter.toString(),
@@ -169,54 +186,62 @@ class Phonics extends State<PhonicsB> {
                     left: 30,
                     child: questionText(answerList[3].contents, 4),
                   ),
-                  soundFinish ? Container(
-                    width: 0,
-                    height: 0,
-                  ) : Positioned(
-                    top: size.height / 2.5,
-                    right: 30,
-                    child: Container(
-                      width: 160,
-                      height: 280,
-                      color: Colors.transparent,
-                    ),
-                  ),
-                  soundFinish ? Container(
-                    width: 0,
-                    height: 0,
-                  ) : Positioned(
-                    top: size.height / 2.5,
-                    left: 30,
-                    child: Container(
-                      width: 160,
-                      height: 280,
-                      color: Colors.transparent,
-                    ),
-                  ),
-                  soundFinish ? Container(
-                    width: 0,
-                    height: 0,
-                  ) : Positioned(
-                    top: size.height / 1.8,
-                    right: 30,
-                    child: Container(
-                      width: 160,
-                      height: 280,
-                      color: Colors.transparent,
-                    ),
-                  ),
-                  soundFinish ? Container(
-                    width: 0,
-                    height: 0,
-                  ) : Positioned(
-                    top: size.height / 1.8,
-                    left: 30,
-                    child: Container(
-                      width: 160,
-                      height: 280,
-                      color: Colors.transparent,
-                    ),
-                  )
+                  soundFinish
+                      ? Container(
+                          width: 0,
+                          height: 0,
+                        )
+                      : Positioned(
+                          top: size.height / 2.5,
+                          right: 30,
+                          child: Container(
+                            width: 160,
+                            height: 280,
+                            color: Colors.transparent,
+                          ),
+                        ),
+                  soundFinish
+                      ? Container(
+                          width: 0,
+                          height: 0,
+                        )
+                      : Positioned(
+                          top: size.height / 2.5,
+                          left: 30,
+                          child: Container(
+                            width: 160,
+                            height: 280,
+                            color: Colors.transparent,
+                          ),
+                        ),
+                  soundFinish
+                      ? Container(
+                          width: 0,
+                          height: 0,
+                        )
+                      : Positioned(
+                          top: size.height / 1.8,
+                          right: 30,
+                          child: Container(
+                            width: 160,
+                            height: 280,
+                            color: Colors.transparent,
+                          ),
+                        ),
+                  soundFinish
+                      ? Container(
+                          width: 0,
+                          height: 0,
+                        )
+                      : Positioned(
+                          top: size.height / 1.8,
+                          left: 30,
+                          child: Container(
+                            width: 160,
+                            height: 280,
+                            color: Colors.transparent,
+                          ),
+                        )
                 ],
               );
             }
@@ -228,6 +253,7 @@ class Phonics extends State<PhonicsB> {
   int clickAnswer = 0;
 
   Widget questionText(String data, int idx) {
+//    soundFinish = false;
     return Container(
       width: 160,
       height: 280,

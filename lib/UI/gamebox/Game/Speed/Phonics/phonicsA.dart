@@ -62,26 +62,40 @@ class Phonics extends State<PhonicsA> {
   AudioCache audioCache = AudioCache();
   AudioPlayer advancedPlayer, background;
   Timer _timer;
-  String soundUrl;
+  String soundUrl, soundUrl2;
   bool soundFinish = false;
+  int touch = 0;
 
   playSound(String level, String chapter, String stage, String question_num) {
     print("phonicsA_play");
 
-    setState(() {
+
       advancedPlayer.release();
-//      _timer = Timer(Duration(seconds: 1), ()
-//      {
+//      if (touch == 0){
+//        soundFinish = false;
+//        touch = 1;
+//      }
+    if (soundUrl2 !=
+        "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}") {
+      soundFinish = false;
+      soundUrl2 = "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}";
+    }
+      _timer = Timer(Duration(milliseconds: 500), ()
+      {
       if (soundUrl !=
           "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}") {
-        advancedPlayer.setUrl(
-            "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
-        advancedPlayer.resume();
-        soundUrl =
-            "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}";
+        print("pa_c");
+
+
+          advancedPlayer.setUrl(
+              "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
+          advancedPlayer.resume();
+          soundUrl =
+          "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}";
+
       }
-//      });
-    });
+      });
+
 
     advancedPlayer.onPlayerStateChanged.listen((state) {
       if (state == AudioPlayerState.COMPLETED) {
@@ -89,7 +103,9 @@ class Phonics extends State<PhonicsA> {
         setState(() {
           print("phA soundFinish : " + soundFinish.toString());
           soundFinish = true;
+//          touch = 1;
         });
+//        soundFinish = false;
       }
     });
   }
@@ -124,6 +140,10 @@ class Phonics extends State<PhonicsA> {
     speedBloc.getStage(widget.stage);
     speedBloc.question_num = widget.question_num;
     clickAnswer = speedBloc.answer;
+//    if(touch != 1 && soundFinish == true) {
+
+//    }
+//    soundFinish = false;
     print("phonicsAbuild");
     setState(() {
       background.setVolume(0.5);
@@ -263,6 +283,7 @@ class Phonics extends State<PhonicsA> {
   int clickAnswer = 0;
 
   Widget questionPicture(String data, int idx) {
+//    soundFinish = false;
     return Container(
       width: 150,
       height: 280,
