@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:lms_flutter/UI/gamebox/public/Result.dart';
 import 'package:lms_flutter/UI/gamebox/public/Timer.dart';
 import 'package:lms_flutter/UI/gamebox/public/questionStatus.dart';
@@ -15,8 +16,9 @@ class Silver extends StatefulWidget {
   final int chapter;
   final int stage;
   final int question_num;
+  VoidCallback callback2;
 
-  Silver({Key key, this.level, this.chapter, this.stage, this.question_num})
+  Silver({Key key, this.level, this.chapter, this.stage, this.question_num, this.callback2})
       : super(key: key);
 
   @override
@@ -292,7 +294,14 @@ class SilverM extends State<Silver> {
     matchBloc.getChapter(widget.chapter);
     matchBloc.getStage(widget.stage);
     matchBloc.question_num = widget.question_num;
-    return body(MediaQuery.of(context).size);
+    return WillPopScope(
+      onWillPop: () {
+        Navigator.of(context).pop();
+        SchedulerBinding.instance
+            .addPostFrameCallback((_) => widget.callback2());
+      },
+      child: body(MediaQuery.of(context).size),
+    );
   }
 
   Widget body(Size size) {
@@ -455,6 +464,8 @@ class SilverM extends State<Silver> {
                           child: Image.asset(
                               "assets/gamebox/img/close_button.png"),
                           onTap: () {
+                            SchedulerBinding.instance
+                                .addPostFrameCallback((_) => widget.callback2());
                             Navigator.of(context).pop();
                           },
                         )
@@ -520,14 +531,14 @@ class SilverM extends State<Silver> {
                                                       ),
                                                     )),
                                               ),
-                                              Positioned(
+                                              Positioned.fill(
                                                 child: Align(
                                                   alignment:
-                                                      Alignment.topCenter,
+                                                  Alignment.center,
                                                   child: Image.asset(
                                                     "assets/gamebox/img/timeout.png",
-                                                    width: size.width - 20,
-                                                    height: 280,
+                                                    width: size.width - 220,
+                                                    height: 250,
                                                   ),
                                                 ),
                                               )

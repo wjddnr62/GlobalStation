@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lms_flutter/UI/gamebox/public/Result.dart';
 import 'package:lms_flutter/UI/gamebox/public/Timer.dart';
@@ -28,8 +29,9 @@ class QuizGameDialog extends StatefulWidget {
   String level;
   int chapter;
   int stage;
+  VoidCallback callback, callback2;
 
-  QuizGameDialog({Key key, this.level, this.chapter, this.stage})
+  QuizGameDialog({Key key, this.level, this.chapter, this.stage, this.callback, this.callback2})
       : super(key: key);
 
   @override
@@ -46,70 +48,87 @@ class QuizGameDialogState extends State<QuizGameDialog> {
     quizBloc.getLevel(widget.level);
     quizBloc.getChapter(widget.chapter);
     quizBloc.getStage(widget.stage);
-    return Scaffold(
-        backgroundColor: Colors.black.withOpacity(0.5),
-        body: SafeArea(
-          child: Padding(
-            child: StreamBuilder(
-              stream: quizBloc.getQuestionList(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  String jsonValue = snapshot.data;
-                  List<QuestionList> qList =
-                      quizBloc.questListToList(jsonValue);
-                  if (widget.level == "P") {
-                    return GameList(
-                      item: QuizPhonics(qList: qList).getViews(),
-                      size: MediaQuery.of(context).size,
-                      level: widget.level,
-                      chapter: widget.chapter,
-                      stage: widget.stage,
-                      restartView: restartView,
-                    );
-                  } else if (widget.level == "B") {
-                    return GameList(
-                        item: QuizBronze(qList: qList).getViews(),
-                        size: MediaQuery.of(context).size,
-                        level: widget.level,
-                        chapter: widget.chapter,
-                        stage: widget.stage,
-                        restartView: restartView);
-                  } else if (widget.level == "S") {
-                    return GameList(
-                        item: QuizSilver(qList: qList).getViews(),
-                        size: MediaQuery.of(context).size,
-                        level: widget.level,
-                        chapter: widget.chapter,
-                        stage: widget.stage,
-                        restartView: restartView);
-                  } else if (widget.level == "G") {
-                    return GameList(
-                        item: QuizGold(qList: qList).getViews(),
-                        size: MediaQuery.of(context).size,
-                        level: widget.level,
-                        chapter: widget.chapter,
-                        stage: widget.stage,
-                        restartView: restartView);
-                  } else if (widget.level == "D") {
-                    return GameList(
-                        item: QuizDiamond(qList: qList).getViews(),
-                        size: MediaQuery.of(context).size,
-                        level: widget.level,
-                        chapter: widget.chapter,
-                        stage: widget.stage,
-                        restartView: restartView);
+    return WillPopScope(
+      onWillPop: () {
+        SchedulerBinding.instance
+            .addPostFrameCallback((_) => widget.callback2());
+        Navigator.of(context).pop();
+      },
+      child: Scaffold(
+          backgroundColor: Colors.black.withOpacity(0.5),
+          body: SafeArea(
+            child: Padding(
+              child: StreamBuilder(
+                stream: quizBloc.getQuestionList(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    String jsonValue = snapshot.data;
+                    List<QuestionList> qList =
+                    quizBloc.questListToList(jsonValue);
+                    if (widget.level == "P") {
+                      return GameList(
+                          item: QuizPhonics(qList: qList).getViews(),
+                          size: MediaQuery.of(context).size,
+                          level: widget.level,
+                          chapter: widget.chapter,
+                          stage: widget.stage,
+                          restartView: restartView,
+                          callback: widget.callback,
+                          callback2: widget.callback2
+                      );
+                    } else if (widget.level == "B") {
+                      return GameList(
+                          item: QuizBronze(qList: qList).getViews(),
+                          size: MediaQuery.of(context).size,
+                          level: widget.level,
+                          chapter: widget.chapter,
+                          stage: widget.stage,
+                          restartView: restartView,
+                          callback: widget.callback,
+                          callback2: widget.callback2);
+                    } else if (widget.level == "S") {
+                      return GameList(
+                          item: QuizSilver(qList: qList).getViews(),
+                          size: MediaQuery.of(context).size,
+                          level: widget.level,
+                          chapter: widget.chapter,
+                          stage: widget.stage,
+                          restartView: restartView,
+                          callback: widget.callback,
+                          callback2: widget.callback2);
+                    } else if (widget.level == "G") {
+                      return GameList(
+                          item: QuizGold(qList: qList).getViews(),
+                          size: MediaQuery.of(context).size,
+                          level: widget.level,
+                          chapter: widget.chapter,
+                          stage: widget.stage,
+                          restartView: restartView,
+                          callback: widget.callback,
+                          callback2: widget.callback2);
+                    } else if (widget.level == "D") {
+                      return GameList(
+                          item: QuizDiamond(qList: qList).getViews(),
+                          size: MediaQuery.of(context).size,
+                          level: widget.level,
+                          chapter: widget.chapter,
+                          stage: widget.stage,
+                          restartView: restartView,
+                          callback: widget.callback,
+                          callback2: widget.callback2);
+                    }
                   }
-                }
 
-                return SizedBox(
-                  width: 100.0,
-                  height: 100.0,
-                );
-              },
+                  return SizedBox(
+                    width: 100.0,
+                    height: 100.0,
+                  );
+                },
+              ),
+              padding: const EdgeInsets.all(10),
             ),
-            padding: const EdgeInsets.all(10),
-          ),
-        ));
+          )),
+    );
   }
 
   restartView() {
@@ -125,7 +144,7 @@ class GameList extends StatefulWidget {
   String level;
   int chapter;
   int stage;
-  VoidCallback restartView;
+  VoidCallback restartView, callback, callback2;
 
   GameList(
       {Key key,
@@ -134,7 +153,9 @@ class GameList extends StatefulWidget {
       this.level,
       this.chapter,
       this.stage,
-      this.restartView})
+      this.restartView,
+      this.callback,
+      this.callback2})
       : super(key: key);
 
   @override
@@ -149,6 +170,7 @@ class GameListState extends State<GameList> {
 
   @override
   void initState() {
+    SchedulerBinding.instance.addPostFrameCallback((_) => widget.callback());
     viewidx = 0;
     answer = "";
     viewTimer = true;
@@ -234,6 +256,8 @@ class GameListState extends State<GameList> {
               width: 25,
             ),
             onTap: () {
+              SchedulerBinding.instance
+                  .addPostFrameCallback((_) => widget.callback2());
               Navigator.of(context).pop();
             },
           ),
@@ -274,6 +298,8 @@ class GameListState extends State<GameList> {
                               child: Image.asset(
                                   "assets/gamebox/img/close_button.png"),
                               onTap: () {
+                                SchedulerBinding.instance
+                                    .addPostFrameCallback((_) => widget.callback2());
                                 Navigator.of(context).pop();
                               },
                             )
@@ -378,7 +404,7 @@ class GameListState extends State<GameList> {
     answer = "";
     return Positioned.fill(
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 40),
+        padding: const EdgeInsets.symmetric(horizontal: 80),
         child: Image.asset(img),
       ),
     );

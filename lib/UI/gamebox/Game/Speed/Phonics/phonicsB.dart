@@ -274,13 +274,16 @@ class Phonics extends State<PhonicsB> {
             ),
             Align(
               alignment: AlignmentDirectional.topCenter,
-              child: Container(
-                width: 100,
-                height: 100,
-                child: Center(
-                  child: Text(
-                    data,
-                    style: questionTextStyle,
+              child: Padding(
+                padding: EdgeInsets.only(top: 10.0),
+                child: Container(
+                  width: 100,
+                  height: 100,
+                  child: Center(
+                    child: Text(
+                      data,
+                      style: questionTextStyle,
+                    ),
                   ),
                 ),
               ),

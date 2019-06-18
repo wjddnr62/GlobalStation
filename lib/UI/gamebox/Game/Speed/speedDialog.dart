@@ -3,6 +3,7 @@ import 'dart:core';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:lms_flutter/bloc/game_public_bloc.dart';
 import 'package:lms_flutter/model/Speed/questionList.dart';
 
 import 'phonics.dart';
@@ -25,8 +26,9 @@ class SpeedGameDialog extends StatefulWidget {
   int chapter;
   int stage;
   AudioPlayer audioPlayer;
+  VoidCallback callback, callback2;
 
-  SpeedGameDialog({Key key, this.level, this.chapter, this.stage, this.audioPlayer})
+  SpeedGameDialog({Key key, this.level, this.chapter, this.stage, this.audioPlayer, this.callback, this.callback2})
       : super(key: key);
 
   @override
@@ -36,6 +38,7 @@ class SpeedGameDialog extends StatefulWidget {
 class SpeedGameDialogState extends State<SpeedGameDialog> {
 
   TextEditingController controller;
+  GamePublicBloc gamePublicBloc = GamePublicBloc();
 
   @override
   void initState() {
@@ -63,6 +66,8 @@ class SpeedGameDialogState extends State<SpeedGameDialog> {
               qList: qList,
               background: widget.audioPlayer,
               controller: controller,
+              callback: () => widget.callback(),
+              callback2: () => widget.callback2()
             )));
 //      });
     });

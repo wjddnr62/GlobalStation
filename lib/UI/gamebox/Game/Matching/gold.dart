@@ -5,8 +5,9 @@ import 'Gold/gold.dart';
 
 class MatchGold {
   final List<QuestionList> qList;
+  VoidCallback callback2;
 
-  MatchGold({this.qList});
+  MatchGold({this.qList, this.callback2});
 
   List<Widget> views = [];
 
@@ -17,6 +18,7 @@ class MatchGold {
         stage: question.stage,
         chapter: question.chapter,
         question_num: question.question_num,
+        callback2: callback2
       ));
     }
     return views;

@@ -94,9 +94,8 @@ class Silver extends State<QuizS> {
                                     widget.title,
                                     style: TextStyle(
                                       fontSize: defaultFontSize,
-                                      color: black,
+                                      color: white,
                                       fontFamily: 'Jua',
-
                                     ),
                                   ),
                                 ),

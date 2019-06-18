@@ -5,8 +5,9 @@ import 'Phonics/phonics.dart';
 
 class MatchPhonics{
   final List<QuestionList> qList;
+  VoidCallback callback2;
 
-  MatchPhonics({this.qList});
+  MatchPhonics({this.qList, this.callback2});
 
   List<Widget> views = [];
 
@@ -17,6 +18,7 @@ class MatchPhonics{
         stage : question.stage,
         chapter: question.chapter,
         question_num: question.question_num,
+        callback2: callback2
       ));
     }
     return views;

@@ -4,10 +4,10 @@ import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:lms_flutter/bloc/game_public_bloc.dart';
 import 'package:lms_flutter/bloc/speed_game_bloc.dart';
 import 'package:lms_flutter/model/Speed/answerList.dart';
 import 'package:lms_flutter/theme.dart';
-import 'package:flutter/services.dart';
 
 class PhonicsA extends StatefulWidget {
   final String level;
@@ -65,12 +65,12 @@ class Phonics extends State<PhonicsA> {
   String soundUrl, soundUrl2;
   bool soundFinish = false;
   int touch = 0;
+  GamePublicBloc gamePublicBloc = GamePublicBloc();
 
   playSound(String level, String chapter, String stage, String question_num) {
     print("phonicsA_play");
 
-
-      advancedPlayer.release();
+    advancedPlayer.release();
 //      if (touch == 0){
 //        soundFinish = false;
 //        touch = 1;
@@ -78,24 +78,21 @@ class Phonics extends State<PhonicsA> {
     if (soundUrl2 !=
         "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}") {
       soundFinish = false;
-      soundUrl2 = "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}";
+      soundUrl2 =
+          "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}";
     }
-      _timer = Timer(Duration(milliseconds: 500), ()
-      {
+    _timer = Timer(Duration(milliseconds: 500), () {
       if (soundUrl !=
           "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}") {
         print("pa_c");
 
-
-          advancedPlayer.setUrl(
-              "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
-          advancedPlayer.resume();
-          soundUrl =
-          "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}";
-
+        advancedPlayer.setUrl(
+            "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}");
+        advancedPlayer.resume();
+        soundUrl =
+            "http://ga.oig.kr/laon_api/api/asset/sound/${level}/${chapter}/S${stage}/${question_num}";
       }
-      });
-
+    });
 
     advancedPlayer.onPlayerStateChanged.listen((state) {
       if (state == AudioPlayerState.COMPLETED) {
@@ -154,6 +151,9 @@ class Phonics extends State<PhonicsA> {
     return WillPopScope(
       child: body(MediaQuery.of(context).size),
       onWillPop: () {
+        setState(() {
+          gamePublicBloc.Gameing = false;
+        });
         advancedPlayer.release();
         Navigator.of(context).pop();
       },
@@ -306,15 +306,18 @@ class Phonics extends State<PhonicsA> {
             ),
             Align(
               alignment: AlignmentDirectional.topCenter,
-              child: Container(
-                width: 100,
-                height: 100,
-                child: Center(
-                  child: Image.network(
-                    "http://ga.oig.kr/laon_api/api/asset" + data,
-                    fit: BoxFit.contain,
-                    width: 80,
-                    height: 80,
+              child: Padding(
+                padding: EdgeInsets.only(top: 10.0),
+                child: Container(
+                  width: 100,
+                  height: 100,
+                  child: Center(
+                    child: Image.network(
+                      "http://ga.oig.kr/laon_api/api/asset" + data,
+                      fit: BoxFit.contain,
+                      width: 80,
+                      height: 80,
+                    ),
                   ),
                 ),
               ),

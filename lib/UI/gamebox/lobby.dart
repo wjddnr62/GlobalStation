@@ -63,6 +63,8 @@ class LobbyHomePage extends State<LobbyPage> {
   SharedPreferences sharedPreferences;
   bool tutoCheck = false;
 
+  bool Gameing = false;
+
   List<String> lobbyImg = [
     "assets/gamebox/img/lobby/english_basic.png",
     "assets/gamebox/img/lobby/cambodia_lobby_basic.png",
@@ -79,6 +81,24 @@ class LobbyHomePage extends State<LobbyPage> {
     "assets/gamebox/img/lobby/greec_lobby_basic.png",
     "assets/gamebox/img/lobby/mexico_lobby_basic.png",
     "assets/gamebox/img/lobby/china_lobby_basic.png",
+  ];
+
+  List<String> selectImg = [
+    "assets/gamebox/img/background/01_UK.png",
+    "assets/gamebox/img/background/02_Angcorwat.png",
+    "assets/gamebox/img/background/03_Indea.png",
+    "assets/gamebox/img/background/04_USA.png",
+    "assets/gamebox/img/background/05_brazil.png",
+    "assets/gamebox/img/background/06_egypt.png",
+    "assets/gamebox/img/background/07_noth.png",
+    "assets/gamebox/img/background/08_korea.png",
+    "assets/gamebox/img/background/09_paris.png",
+    "assets/gamebox/img/background/10_sydney.png",
+    "assets/gamebox/img/background/11_kenya.png",
+    "assets/gamebox/img/background/12_greece.png",
+    "assets/gamebox/img/background/13_hawaii.png",
+    "assets/gamebox/img/background/14_Mexico.png",
+    "assets/gamebox/img/background/15_china_UK.png",
   ];
 
   Widget body(Size size) {
@@ -289,10 +309,12 @@ class LobbyHomePage extends State<LobbyPage> {
             child: Stack(
               children: <Widget>[
                 Positioned.fill(
-                  child: Image.asset(
-                    lobbyImg[idx],
-                    fit: BoxFit.cover,
-                  ),
+                  child: Gameing
+                      ? Image.asset(selectImg[idx], fit: BoxFit.cover)
+                      : Image.asset(
+                          lobbyImg[idx],
+                          fit: BoxFit.cover,
+                        ),
                 ),
                 (idx > level)
                     ? Positioned.fill(
@@ -315,10 +337,25 @@ class LobbyHomePage extends State<LobbyPage> {
     );
   }
 
+  void gameIngTrue() {
+    setState(() {
+      Gameing = true;
+    });
+  }
+
+  void gameIngFalse() {
+    setState(() {
+      Gameing = false;
+    });
+  }
+
   void gameStart(int idx, String lev, int cap) {
     print("gameStart idx : " + idx.toString());
     gamePublicBloc.idx = idx;
     print("gameBloc idx : " + gamePublicBloc.idx.toString());
+//    setState(() {
+//      Gameing = true;
+//    });
     Navigator.of(context).push(PageRouteBuilder(
         opaque: false,
         pageBuilder: (BuildContext context, _, __) => GameDialog(
@@ -326,7 +363,18 @@ class LobbyHomePage extends State<LobbyPage> {
               lev: lev,
               cap: cap,
               audioPlayer: advancedPlayer,
+              callback: () => gameIngTrue(),
+              callback2: () => gameIngFalse(),
             )));
+//    final result = await Navigator.push(
+//        context,
+//        MaterialPageRoute(
+//            builder: (context) => GameDialog(
+//                  idx: idx,
+//                  lev: lev,
+//                  cap: cap,
+//                  audioPlayer: advancedPlayer,
+//                )));
   }
 
   void settings() {
@@ -428,6 +476,14 @@ class LobbyHomePage extends State<LobbyPage> {
   @override
   Widget build(BuildContext context) {
 //    play();
+    setState(() {
+      print("Gameing2 : " + gamePublicBloc.Gameing.toString());
+      if (gamePublicBloc.Gameing == true) {
+        print("Gameing : " + gamePublicBloc.Gameing.toString());
+        Gameing = true;
+      }
+    });
+
     return WillPopScope(
       onWillPop: () {
         Navigator.of(context).pop();

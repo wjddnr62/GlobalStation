@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lms_flutter/UI/gamebox/Game/Matching/diamond.dart';
 import 'package:lms_flutter/UI/gamebox/Game/Matching/gold.dart';
@@ -19,8 +20,9 @@ class MatchGameDialog extends StatefulWidget {
   String level;
   int chapter;
   int stage;
+  VoidCallback callback, callback2;
 
-  MatchGameDialog({Key key, this.level, this.chapter, this.stage})
+  MatchGameDialog({Key key, this.level, this.chapter, this.stage, this.callback, this.callback2})
       : super(key: key);
 
   @override
@@ -48,28 +50,33 @@ class MatchGameDialogState extends State<MatchGameDialog> {
                       matchBloc.questListToList(jsonValue);
                   if (widget.level == "P") {
                     return GameList(
-                      item: MatchPhonics(qList: qList).getViews(),
+                      item: MatchPhonics(qList: qList, callback2: widget.callback2).getViews(),
                       size: MediaQuery.of(context).size,
+                      callback: widget.callback,
                     );
                   } else if (widget.level == "B") {
                     return GameList(
-                      item: MatchBronze(qList: qList).getViews(),
+                      item: MatchBronze(qList: qList, callback2: widget.callback2).getViews(),
                       size: MediaQuery.of(context).size,
+                        callback: widget.callback,
                     );
                   } else if (widget.level == "S") {
                     return GameList(
-                      item: MatchSilver(qList: qList).getViews(),
+                      item: MatchSilver(qList: qList, callback2: widget.callback2).getViews(),
                       size: MediaQuery.of(context).size,
+                        callback: widget.callback,
                     );
                   } else if (widget.level == "G") {
                     return GameList(
-                      item: MatchGold(qList: qList).getViews(),
+                      item: MatchGold(qList: qList, callback2: widget.callback2).getViews(),
                       size: MediaQuery.of(context).size,
+                        callback: widget.callback,
                     );
                   } else if (widget.level == "D") {
                     return GameList(
-                      item: MatchDiamond(qList: qList).getViews(),
+                      item: MatchDiamond(qList: qList, callback2: widget.callback2).getViews(),
                       size: MediaQuery.of(context).size,
+                        callback: widget.callback,
                     );
                   }
                 }
@@ -88,8 +95,9 @@ class MatchGameDialogState extends State<MatchGameDialog> {
 class GameList extends StatefulWidget {
   final List<Widget> item;
   final Size size;
+  VoidCallback callback, callback2;
 
-  GameList({Key key, this.item, this.size}) : super(key: key);
+  GameList({Key key, this.item, this.size, this.callback, this.callback2}) : super(key: key);
 
   @override
   GameListState createState() => GameListState();
@@ -98,6 +106,7 @@ class GameList extends StatefulWidget {
 class GameListState extends State<GameList> {
   @override
   void initState() {
+    SchedulerBinding.instance.addPostFrameCallback((_) => widget.callback());
     viewidx = 0;
   }
 

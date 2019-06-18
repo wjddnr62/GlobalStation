@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 import 'package:lms_flutter/UI/gamebox/Game/Quiz/quizDialog.dart';
 import 'package:lms_flutter/UI/gamebox/Game/Speed/speedDialog.dart';
@@ -32,8 +33,9 @@ class GameDialog extends StatefulWidget {
   String lev;
   int cap;
   AudioPlayer audioPlayer;
+  VoidCallback callback, callback2;
 
-  GameDialog({Key key, this.idx, this.lev, this.cap, this.audioPlayer}) : super(key: key);
+  GameDialog({Key key, this.idx, this.lev, this.cap, this.audioPlayer, this.callback, this.callback2}) : super(key: key);
 
   @override
   GameDialogState createState() => GameDialogState();
@@ -50,6 +52,7 @@ class GameDialogState extends State<GameDialog> {
   void initState() {
     super.initState();
     dialogType = "K"; // K == GameKind | S == GameState
+
   }
 
   @override
@@ -103,6 +106,8 @@ class GameDialogState extends State<GameDialog> {
                       width: 25,
                     ),
                     onTap: () {
+//                      SchedulerBinding.instance
+//                          .addPostFrameCallback((_) => widget.callback2());
                       Navigator.of(context).pop();
                     },
                   ),
@@ -220,6 +225,9 @@ class GameDialogState extends State<GameDialog> {
                     ),
                     onTap: () {
                       Navigator.of(context).pop();
+//                      SchedulerBinding.instance
+//                          .addPostFrameCallback((_) => widget.callback2());
+//                    Navigator.pop(context, false);
                     },
                   ),
                 ),
@@ -254,9 +262,6 @@ class GameDialogState extends State<GameDialog> {
                             height: 150,
                             child: InkWell(
                               onTap: () {
-//                                setState(() {
-//                                  startGame = true;
-//                                });
 
                                 if (selectGame == "S") {
                                   Navigator.of(context).pop();
@@ -269,6 +274,8 @@ class GameDialogState extends State<GameDialog> {
                                                 chapter: widget.cap,
                                                 stage: stages[idx].stage,
                                                 audioPlayer: widget.audioPlayer,
+                                                callback: () => widget.callback(),
+                                                callback2: () => widget.callback2()
                                               )));
                                 } else if (selectGame == "Q") {
                                   Navigator.of(context).pop();
@@ -280,6 +287,8 @@ class GameDialogState extends State<GameDialog> {
                                                 level: widget.lev,
                                                 chapter: widget.cap,
                                                 stage: stages[idx].stage,
+                                                  callback: () => widget.callback(),
+                                                  callback2: () => widget.callback2()
                                               )));
                                 } else if (selectGame == "M") {
                                   Navigator.of(context).pop();
@@ -292,6 +301,8 @@ class GameDialogState extends State<GameDialog> {
                                                 level: widget.lev,
                                                 chapter: widget.cap,
                                                 stage: stages[idx].stage,
+                                                  callback: () => widget.callback(),
+                                                  callback2: () => widget.callback2()
                                               )));
                                 }
                               },
